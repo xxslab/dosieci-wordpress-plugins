@@ -28,6 +28,17 @@ final class SiteBuilderPage {
 	public function __construct( private Plugin $plugin ) {
 	}
 
+	/**
+	 * Translated strings for assets/site-builder.js, which builds its panels
+	 * in the browser. Passed as window.dosieciAiSiteBuilder.strings by
+	 * AdminMenu::enqueueAssets().
+	 *
+	 * @return array<string, string>
+	 */
+	public static function scriptStrings(): array {
+		return array();
+	}
+
 	public function render(): void {
 		$writesOn = $this->plugin->writesEnabled();
 

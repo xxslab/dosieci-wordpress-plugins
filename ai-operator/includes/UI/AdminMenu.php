@@ -90,6 +90,12 @@ final class AdminMenu {
 				DOSIECI_AI_OPERATOR_VERSION,
 				true
 			);
+
+			wp_localize_script(
+				'dosieci-ai-operator-site-builder',
+				'dosieciAiSiteBuilder',
+				array( 'strings' => SiteBuilderPage::scriptStrings() )
+			);
 		}
 
 		wp_localize_script(

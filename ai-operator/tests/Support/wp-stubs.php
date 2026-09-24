@@ -37,3 +37,52 @@ if ( ! function_exists( 'sanitize_key' ) ) {
 		return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( $key ) ) ?? '';
 	}
 }
+
+/*
+ * Translation and escaping. User-facing messages are written as
+ * __( 'English', 'dosieci-ai-operator' ) even in Domain classes, and
+ * exception messages are escaped where they are built (a WordPress.org
+ * review requirement). With no translations loaded, WordPress returns the
+ * English source text, and these stubs do the same, so tests assert on the
+ * English strings.
+ */
+
+if ( ! function_exists( '__' ) ) {
+	function __( string $text, string $domain = 'default' ): string {
+		return $text;
+	}
+}
+
+if ( ! function_exists( '_x' ) ) {
+	function _x( string $text, string $context, string $domain = 'default' ): string {
+		return $text;
+	}
+}
+
+if ( ! function_exists( '_n' ) ) {
+	function _n( string $single, string $plural, int $number, string $domain = 'default' ): string {
+		return 1 === $number ? $single : $plural;
+	}
+}
+
+if ( ! function_exists( 'esc_html' ) ) {
+	/**
+	 * Real behaviour: encodes &, <, >, " and ' without double-encoding
+	 * existing entities -- the same as this.
+	 */
+	function esc_html( string $text ): string {
+		return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8', false );
+	}
+}
+
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( string $text, string $domain = 'default' ): string {
+		return esc_html( $text );
+	}
+}
+
+if ( ! function_exists( 'esc_attr' ) ) {
+	function esc_attr( string $text ): string {
+		return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8', false );
+	}
+}

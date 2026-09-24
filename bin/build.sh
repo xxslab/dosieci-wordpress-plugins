@@ -20,6 +20,7 @@ declare -A SLUGS=(
 	[seo-doctor-free]=dosieci-seo-doctor
 	[translator-free]=dosieci-translator
 	[wp-doctor-free]=dosieci-wp-doctor
+	[ai-operator]=dosieci-ai-operator
 )
 
 build_one() {
