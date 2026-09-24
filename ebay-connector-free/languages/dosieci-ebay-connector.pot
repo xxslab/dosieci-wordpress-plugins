@@ -1,0 +1,190 @@
+# Copyright (C) 2026 DoSieci
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci eBay Connector 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-ebay-connector\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: dosieci-ebay-connector\n"
+
+#. Plugin Name of the plugin
+#: dosieci-ebay-connector.php
+#: includes/Plugin.php:50
+#: includes/Plugin.php:147
+msgid "DoSieci eBay Connector"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: dosieci-ebay-connector.php
+msgid "https://dosieci.pl/wtyczki/ebay-connector-woocommerce/"
+msgstr ""
+
+#. Description of the plugin
+#: dosieci-ebay-connector.php
+msgid "Connect your site to eBay with your own eBay developer keys: test the connection and browse eBay listings from wp-admin. Read-only, Sandbox by default. Not affiliated with eBay Inc."
+msgstr ""
+
+#. Author of the plugin
+#: dosieci-ebay-connector.php
+msgid "DoSieci"
+msgstr ""
+
+#. Author URI of the plugin
+#: dosieci-ebay-connector.php
+msgid "https://dosieci.pl/"
+msgstr ""
+
+#: includes/Adapter/EbayClient.php:82
+msgid "eBay rejected the application keys. Check the App ID (Client ID) and Cert ID (Client Secret), and that they belong to the selected environment (Sandbox or Production)."
+msgstr ""
+
+#. translators: %d: HTTP status code
+#: includes/Adapter/EbayClient.php:90
+#, php-format
+msgid "eBay returned HTTP error %d while issuing the access token."
+msgstr ""
+
+#. translators: %d: HTTP status code
+#: includes/Adapter/EbayClient.php:147
+#, php-format
+msgid "eBay returned HTTP error %d."
+msgstr ""
+
+#: includes/Domain/ListingMapper.php:41
+msgid "(no title)"
+msgstr ""
+
+#: includes/Domain/OAuthToken.php:42
+msgid "The eBay response contains no access token."
+msgstr ""
+
+#: includes/Plugin.php:51
+msgid "eBay Connector"
+msgstr ""
+
+#: includes/Plugin.php:69
+msgid "Settings"
+msgstr ""
+
+#: includes/Plugin.php:93
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/Plugin.php:133
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/Plugin.php:150
+msgid "Settings saved."
+msgstr ""
+
+#: includes/Plugin.php:155
+msgid "Read-only: tests the connection to eBay and browses listings. It does not publish listings, import orders or change stock levels."
+msgstr ""
+
+#: includes/Plugin.php:156
+msgid "Requests go from this site straight to eBay with your own application keys, never through DoSieci."
+msgstr ""
+
+#: includes/Plugin.php:162
+msgid "The Production environment is active."
+msgstr ""
+
+#: includes/Plugin.php:162
+msgid "Requests go to the live eBay."
+msgstr ""
+
+#: includes/Plugin.php:167
+msgid "eBay application keys"
+msgstr ""
+
+#: includes/Plugin.php:168
+msgid "Create a keyset in the eBay Developers Program (developer.ebay.com) and paste it here. Sandbox and Production have separate keysets."
+msgstr ""
+
+#: includes/Plugin.php:175
+msgid "App ID (Client ID)"
+msgstr ""
+
+#: includes/Plugin.php:179
+msgid "Cert ID (Client Secret)"
+msgstr ""
+
+#: includes/Plugin.php:183
+msgid "Leave empty to keep the saved secret."
+msgstr ""
+
+#: includes/Plugin.php:187
+msgid "Environment"
+msgstr ""
+
+#: includes/Plugin.php:190
+msgid "Sandbox (default)"
+msgstr ""
+
+#: includes/Plugin.php:191
+msgid "Production"
+msgstr ""
+
+#: includes/Plugin.php:196
+msgid "Marketplace"
+msgstr ""
+
+#: includes/Plugin.php:203
+msgid "The eBay site searched, which also decides the currency of the prices."
+msgstr ""
+
+#: includes/Plugin.php:208
+msgid "Save"
+msgstr ""
+
+#: includes/Plugin.php:214
+msgid "Browse listings (read-only)"
+msgstr ""
+
+#: includes/Plugin.php:218
+#: includes/Plugin.php:221
+msgid "Search eBay"
+msgstr ""
+
+#: includes/Plugin.php:220
+msgid "for example: hiking boots"
+msgstr ""
+
+#: includes/Plugin.php:228
+msgid "An administrator needs to enter the eBay application keys first."
+msgstr ""
+
+#. translators: 1: approximate number of listings found, 2: eBay site, e.g. ebay.pl
+#: includes/Plugin.php:247
+#, php-format
+msgid "About %1$d listing found on %2$s."
+msgid_plural "About %1$d listings found on %2$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Plugin.php:257
+msgid "Listing"
+msgstr ""
+
+#: includes/Plugin.php:258
+msgid "Price"
+msgstr ""
+
+#: includes/Plugin.php:259
+msgid "Condition"
+msgstr ""
+
+#: includes/Plugin.php:260
+msgid "Seller"
+msgstr ""
+
+#: includes/Plugin.php:265
+msgid "No results."
+msgstr ""

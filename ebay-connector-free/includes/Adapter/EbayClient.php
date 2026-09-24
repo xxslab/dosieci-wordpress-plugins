@@ -6,18 +6,22 @@ namespace DoSieci\Ebay\Connector\Adapter;
 
 use DoSieci\Ebay\Connector\Domain\EbayEnvironment;
 use DoSieci\Ebay\Connector\Domain\EbayException;
+use DoSieci\Ebay\Connector\Domain\EbayMarketplace;
 use DoSieci\Ebay\Connector\Domain\ListingMapper;
 use DoSieci\Ebay\Connector\Domain\OAuthToken;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * BYOK eBay client: the user's own App ID / Cert ID, called directly from
- * this site. Nothing goes through DoSieci.
+ * eBay client using the site owner's own App ID and Cert ID, called directly
+ * from this site. Nothing goes through DoSieci.
  *
- * Free tier is READ-ONLY -- this class can request an application token and
- * search the Browse API. There is no listing-creation, no order-writing and
- * no inventory-pushing method here at all, which is what makes "the free
- * build cannot accidentally publish to your live eBay account" a structural
- * guarantee rather than a promise.
+ * Read-only by construction: it can obtain an application token and search
+ * the Browse API, and has no method that creates listings, writes orders or
+ * pushes inventory. "It cannot accidentally publish to your eBay account" is
+ * therefore a structural guarantee rather than a promise.
  *
  * The token is cached in a transient so a page refresh does not burn a new
  * one against the account's rate limit.
@@ -30,12 +34,13 @@ final class EbayClient {
 		private string $clientId,
 		private string $clientSecret,
 		private EbayEnvironment $environment,
+		private string $marketplace = EbayMarketplace::DEFAULT,
 		private int $timeoutSeconds = 20
 	) {
 	}
 
 	/**
-	 * @throws EbayException
+	 * @throws EbayException With a message safe to show to the operator.
 	 */
 	public function accessToken(): string {
 		$cached = get_transient( self::TOKEN_TRANSIENT . '_' . $this->environment->name );
@@ -51,43 +56,39 @@ final class EbayClient {
 		$response = wp_remote_post(
 			$this->environment->oauthUrl(),
 			array(
-				'headers'   => array(
-					// Client-credentials grant: the app authenticates as
-					// itself, no per-user consent involved, which is all the
+				'headers' => array(
+					// Client-credentials grant with HTTP Basic authentication:
+					// the application authenticates as itself, which is all the
 					// read-only Browse API needs.
-					'Authorization' => 'Basic ' . base64_encode( $this->clientId . ':' . $this->clientSecret ),
+					'Authorization' => 'Basic ' . base64_encode( $this->clientId . ':' . $this->clientSecret ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- HTTP Basic authentication header.
 					'Content-Type'  => 'application/x-www-form-urlencoded',
 				),
-				'body'      => array(
+				'body'    => array(
 					'grant_type' => 'client_credentials',
 					'scope'      => 'https://api.ebay.com/oauth/api_scope',
 				),
-				'timeout'   => $this->timeoutSeconds,
-				'sslverify' => true,
+				'timeout' => $this->timeoutSeconds,
 			)
 		);
 
 		if ( is_wp_error( $response ) ) {
-			throw new EbayException( $this->redact( $response->get_error_message() ) );
+			throw new EbayException( esc_html( $this->redact( $response->get_error_message() ) ) );
 		}
 
 		$status = (int) wp_remote_retrieve_response_code( $response );
 
 		if ( 400 === $status || 401 === $status ) {
 			throw new EbayException(
-				__( 'eBay odrzucił dane aplikacji. Sprawdź App ID (Client ID) i Cert ID (Client Secret) oraz to, czy pasują do wybranego środowiska.', 'dosieci-ebay-connector' ),
-				$status
+				esc_html__( 'eBay rejected the application keys. Check the App ID (Client ID) and Cert ID (Client Secret), and that they belong to the selected environment (Sandbox or Production).', 'dosieci-ebay-connector' ),
+				(int) $status
 			);
 		}
 
 		if ( $status < 200 || $status >= 300 ) {
 			throw new EbayException(
-				sprintf(
-					/* translators: %d: HTTP status code */
-					__( 'eBay zwrócił błąd HTTP %d podczas pobierania tokenu.', 'dosieci-ebay-connector' ),
-					$status
-				),
-				$status
+				/* translators: %d: HTTP status code */
+				esc_html( sprintf( __( 'eBay returned HTTP error %d while issuing the access token.', 'dosieci-ebay-connector' ), $status ) ),
+				(int) $status
 			);
 		}
 
@@ -96,7 +97,10 @@ final class EbayClient {
 
 		set_transient(
 			self::TOKEN_TRANSIENT . '_' . $this->environment->name,
-			array( 'token' => $token->accessToken, 'expires_at' => $token->expiresAt ),
+			array(
+				'token'      => $token->accessToken,
+				'expires_at' => $token->expiresAt,
+			),
 			max( 60, $token->expiresAt - time() - OAuthToken::EXPIRY_SAFETY_MARGIN_SECONDS )
 		);
 
@@ -104,11 +108,11 @@ final class EbayClient {
 	}
 
 	/**
-	 * Read-only Browse API search.
+	 * Read-only Browse API search on the selected marketplace.
 	 *
 	 * @return array{total:int, items:array<int, array<string, string|null>>}
 	 *
-	 * @throws EbayException
+	 * @throws EbayException With a message safe to show to the operator.
 	 */
 	public function search( string $query, int $limit = 10 ): array {
 		$limit = max( 1, min( 50, $limit ) );
@@ -122,29 +126,26 @@ final class EbayClient {
 				$this->environment->browseUrl() . '/item_summary/search'
 			),
 			array(
-				'headers'   => array(
-					'Authorization' => 'Bearer ' . $this->accessToken(),
-					'Accept'        => 'application/json',
+				'headers' => array(
+					'Authorization'           => 'Bearer ' . $this->accessToken(),
+					'Accept'                  => 'application/json',
+					'X-EBAY-C-MARKETPLACE-ID' => $this->marketplace,
 				),
-				'timeout'   => $this->timeoutSeconds,
-				'sslverify' => true,
+				'timeout' => $this->timeoutSeconds,
 			)
 		);
 
 		if ( is_wp_error( $response ) ) {
-			throw new EbayException( $this->redact( $response->get_error_message() ) );
+			throw new EbayException( esc_html( $this->redact( $response->get_error_message() ) ) );
 		}
 
 		$status = (int) wp_remote_retrieve_response_code( $response );
 
 		if ( $status < 200 || $status >= 300 ) {
 			throw new EbayException(
-				sprintf(
-					/* translators: %d: HTTP status code */
-					__( 'eBay zwrócił błąd HTTP %d.', 'dosieci-ebay-connector' ),
-					$status
-				),
-				$status
+				/* translators: %d: HTTP status code */
+				esc_html( sprintf( __( 'eBay returned HTTP error %d.', 'dosieci-ebay-connector' ), $status ) ),
+				(int) $status
 			);
 		}
 
@@ -158,6 +159,6 @@ final class EbayClient {
 	}
 
 	private function redact( string $message ): string {
-		return str_replace( array( $this->clientSecret, $this->clientId ), '[redacted]', $message );
+		return str_replace( array_filter( array( $this->clientSecret, $this->clientId ) ), '[redacted]', $message );
 	}
 }

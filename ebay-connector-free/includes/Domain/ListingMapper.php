@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\Ebay\Connector\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Turns eBay Browse API items into a flat shape this plugin can display.
  *
@@ -34,7 +38,7 @@ final class ListingMapper {
 
 			$mapped[] = array(
 				'item_id'   => isset( $item['itemId'] ) ? (string) $item['itemId'] : null,
-				'title'     => isset( $item['title'] ) ? (string) $item['title'] : '(bez tytułu)',
+				'title'     => isset( $item['title'] ) ? (string) $item['title'] : __( '(no title)', 'dosieci-ebay-connector' ),
 				'price'     => self::formatPrice( $item['price'] ?? null ),
 				'condition' => isset( $item['condition'] ) ? (string) $item['condition'] : null,
 				'url'       => isset( $item['itemWebUrl'] ) ? (string) $item['itemWebUrl'] : null,

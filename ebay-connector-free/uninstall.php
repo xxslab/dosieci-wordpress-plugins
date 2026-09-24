@@ -18,6 +18,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 delete_option( 'dosieci_ebay_client_id' );
 delete_option( 'dosieci_ebay_client_secret' );
 delete_option( 'dosieci_ebay_environment' );
+delete_option( 'dosieci_ebay_marketplace' );
 
 delete_transient( 'dosieci_ebay_app_token_sandbox' );
 delete_transient( 'dosieci_ebay_app_token_production' );

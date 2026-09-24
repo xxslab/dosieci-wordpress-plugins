@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\Ebay\Connector\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * An eBay application access token with its expiry.
  *
@@ -35,7 +39,7 @@ final class OAuthToken {
 		$token = $payload['access_token'] ?? null;
 
 		if ( ! is_string( $token ) || '' === $token ) {
-			throw new EbayException( 'Odpowiedź eBay nie zawiera tokenu dostępu.' );
+			throw new EbayException( esc_html__( 'The eBay response contains no access token.', 'dosieci-ebay-connector' ) );
 		}
 
 		$expiresIn = isset( $payload['expires_in'] ) && is_numeric( $payload['expires_in'] )

@@ -9,19 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * BYOK key handling rules, as pure functions so they can be tested.
+ * Rules for the site owner's own API key, as pure functions so they can be
+ * tested.
  *
- * The BYOK model here is the OPPOSITE of DoSieci AI Operator's: the user
- * supplies their own provider key, and the request goes straight from this
- * WordPress site to the provider. Nothing is proxied through DoSieci, and
- * DoSieci never sees the key.
- *
- * The rules this class enforces exist because of a specific, audited
- * failure in the legacy plugin this product replaces
- * (audit/wpAIseoGen-AUDIT.md): it logged full request and response bodies,
- * API key included, to error_log(). Hence: keys are never returned to a
- * template in full, never logged, and any value that reaches a UI is
- * masked.
+ * The key is used for requests that go straight from this site to the
+ * provider; DoSieci never sees it. Keys are never returned to a template in
+ * full and never logged, and any provider error text is redacted before it is
+ * shown, because providers sometimes echo the credential back.
  */
 final class ByokKeyStore {
 

@@ -1,0 +1,186 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci eBay Connector 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-ebay-connector\n"
+"Last-Translator: DoSieci\n"
+"Language-Team: Polish\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Domain: dosieci-ebay-connector\n"
+
+#. Plugin Name of the plugin
+#: dosieci-ebay-connector.php
+#: includes/Plugin.php:50
+#: includes/Plugin.php:147
+msgid "DoSieci eBay Connector"
+msgstr "DoSieci eBay Connector"
+
+#. Plugin URI of the plugin
+#: dosieci-ebay-connector.php
+msgid "https://dosieci.pl/wtyczki/ebay-connector-woocommerce/"
+msgstr "https://dosieci.pl/wtyczki/ebay-connector-woocommerce/"
+
+#. Description of the plugin
+#: dosieci-ebay-connector.php
+msgid "Connect your site to eBay with your own eBay developer keys: test the connection and browse eBay listings from wp-admin. Read-only, Sandbox by default. Not affiliated with eBay Inc."
+msgstr "Połączenie witryny z eBay na Twoich własnych kluczach deweloperskich eBay: test połączenia i przeglądanie ofert eBay z wp-admina. Wyłącznie do odczytu, domyślnie Sandbox. Wtyczka nie jest powiązana z eBay Inc."
+
+#. Author of the plugin
+#: dosieci-ebay-connector.php
+msgid "DoSieci"
+msgstr "DoSieci"
+
+#. Author URI of the plugin
+#: dosieci-ebay-connector.php
+msgid "https://dosieci.pl/"
+msgstr "https://dosieci.pl/"
+
+#: includes/Adapter/EbayClient.php:82
+msgid "eBay rejected the application keys. Check the App ID (Client ID) and Cert ID (Client Secret), and that they belong to the selected environment (Sandbox or Production)."
+msgstr "eBay odrzucił klucze aplikacji. Sprawdź App ID (Client ID) i Cert ID (Client Secret) oraz to, czy należą do wybranego środowiska (Sandbox lub Production)."
+
+#. translators: %d: HTTP status code
+#: includes/Adapter/EbayClient.php:90
+msgid "eBay returned HTTP error %d while issuing the access token."
+msgstr "eBay zwrócił błąd HTTP %d podczas wydawania tokenu dostępu."
+
+#. translators: %d: HTTP status code
+#: includes/Adapter/EbayClient.php:147
+msgid "eBay returned HTTP error %d."
+msgstr "eBay zwrócił błąd HTTP %d."
+
+#: includes/Domain/ListingMapper.php:41
+msgid "(no title)"
+msgstr "(bez tytułu)"
+
+#: includes/Domain/OAuthToken.php:42
+msgid "The eBay response contains no access token."
+msgstr "Odpowiedź eBay nie zawiera tokenu dostępu."
+
+#: includes/Plugin.php:51
+msgid "eBay Connector"
+msgstr "eBay Connector"
+
+#: includes/Plugin.php:69
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: includes/Plugin.php:93
+msgid "You do not have permission to do this."
+msgstr "Nie masz uprawnień do wykonania tej operacji."
+
+#: includes/Plugin.php:133
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do tej strony."
+
+#: includes/Plugin.php:150
+msgid "Settings saved."
+msgstr "Zapisano ustawienia."
+
+#: includes/Plugin.php:155
+msgid "Read-only: tests the connection to eBay and browses listings. It does not publish listings, import orders or change stock levels."
+msgstr "Wyłącznie do odczytu: sprawdza połączenie z eBay i przegląda oferty. Nie wystawia ofert, nie importuje zamówień i nie zmienia stanów magazynowych."
+
+#: includes/Plugin.php:156
+msgid "Requests go from this site straight to eBay with your own application keys, never through DoSieci."
+msgstr "Zapytania idą z tej witryny bezpośrednio do eBay na Twoich kluczach aplikacji, nigdy przez DoSieci."
+
+#: includes/Plugin.php:162
+msgid "The Production environment is active."
+msgstr "Aktywne jest środowisko produkcyjne."
+
+#: includes/Plugin.php:162
+msgid "Requests go to the live eBay."
+msgstr "Zapytania trafiają do prawdziwego eBay."
+
+#: includes/Plugin.php:167
+msgid "eBay application keys"
+msgstr "Klucze aplikacji eBay"
+
+#: includes/Plugin.php:168
+msgid "Create a keyset in the eBay Developers Program (developer.ebay.com) and paste it here. Sandbox and Production have separate keysets."
+msgstr "Utwórz zestaw kluczy w eBay Developers Program (developer.ebay.com) i wklej go tutaj. Sandbox i Production mają osobne zestawy kluczy."
+
+#: includes/Plugin.php:175
+msgid "App ID (Client ID)"
+msgstr "App ID (Client ID)"
+
+#: includes/Plugin.php:179
+msgid "Cert ID (Client Secret)"
+msgstr "Cert ID (Client Secret)"
+
+#: includes/Plugin.php:183
+msgid "Leave empty to keep the saved secret."
+msgstr "Zostaw puste, aby zachować zapisany sekret."
+
+#: includes/Plugin.php:187
+msgid "Environment"
+msgstr "Środowisko"
+
+#: includes/Plugin.php:190
+msgid "Sandbox (default)"
+msgstr "Sandbox (domyślnie)"
+
+#: includes/Plugin.php:191
+msgid "Production"
+msgstr "Production"
+
+#: includes/Plugin.php:196
+msgid "Marketplace"
+msgstr "Serwis eBay"
+
+#: includes/Plugin.php:203
+msgid "The eBay site searched, which also decides the currency of the prices."
+msgstr "Przeszukiwany serwis eBay — od niego zależy też waluta cen."
+
+#: includes/Plugin.php:208
+msgid "Save"
+msgstr "Zapisz"
+
+#: includes/Plugin.php:214
+msgid "Browse listings (read-only)"
+msgstr "Przeglądaj oferty (tylko odczyt)"
+
+#: includes/Plugin.php:218
+#: includes/Plugin.php:221
+msgid "Search eBay"
+msgstr "Szukaj w eBay"
+
+#: includes/Plugin.php:220
+msgid "for example: hiking boots"
+msgstr "np. buty trekkingowe"
+
+#: includes/Plugin.php:228
+msgid "An administrator needs to enter the eBay application keys first."
+msgstr "Najpierw administrator musi wprowadzić klucze aplikacji eBay."
+
+#. translators: 1: approximate number of listings found, 2: eBay site, e.g. ebay.pl
+#: includes/Plugin.php:247
+msgid "About %1$d listing found on %2$s."
+msgid_plural "About %1$d listings found on %2$s."
+msgstr[0] "Znaleziono około %1$d oferty w %2$s."
+msgstr[1] "Znaleziono około %1$d ofert w %2$s."
+msgstr[2] "Znaleziono około %1$d ofert w %2$s."
+
+#: includes/Plugin.php:257
+msgid "Listing"
+msgstr "Oferta"
+
+#: includes/Plugin.php:258
+msgid "Price"
+msgstr "Cena"
+
+#: includes/Plugin.php:259
+msgid "Condition"
+msgstr "Stan"
+
+#: includes/Plugin.php:260
+msgid "Seller"
+msgstr "Sprzedawca"
+
+#: includes/Plugin.php:265
+msgid "No results."
+msgstr "Brak wyników."

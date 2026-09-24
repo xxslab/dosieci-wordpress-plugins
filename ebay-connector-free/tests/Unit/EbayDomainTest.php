@@ -6,6 +6,7 @@ namespace DoSieci\Ebay\Connector\Tests\Unit;
 
 use DoSieci\Ebay\Connector\Domain\EbayEnvironment;
 use DoSieci\Ebay\Connector\Domain\EbayException;
+use DoSieci\Ebay\Connector\Domain\EbayMarketplace;
 use DoSieci\Ebay\Connector\Domain\ListingMapper;
 use DoSieci\Ebay\Connector\Domain\OAuthToken;
 use PHPUnit\Framework\TestCase;
@@ -89,7 +90,7 @@ final class EbayDomainTest extends TestCase {
 			array( 'itemSummaries' => array( array( 'itemId' => 'v1|1|0' ) ) )
 		);
 
-		$this->assertSame( '(bez tytułu)', $items[0]['title'] );
+		$this->assertSame( '(no title)', $items[0]['title'] );
 		$this->assertNull( $items[0]['price'] );
 		$this->assertNull( $items[0]['image'] );
 	}
@@ -105,5 +106,19 @@ final class EbayDomainTest extends TestCase {
 		);
 
 		$this->assertCount( 1, $items );
+	}
+
+	public function test_the_marketplace_follows_the_site_locale_and_falls_back_to_ebay_com(): void {
+		$this->assertSame( 'EBAY_PL', EbayMarketplace::forLocale( 'pl_PL' ) );
+		$this->assertSame( 'EBAY_DE', EbayMarketplace::forLocale( 'de_DE' ) );
+		$this->assertSame( 'EBAY_GB', EbayMarketplace::forLocale( 'en_GB' ) );
+		$this->assertSame( 'EBAY_US', EbayMarketplace::forLocale( 'en_US' ) );
+		$this->assertSame( 'EBAY_US', EbayMarketplace::forLocale( 'uk' ) );
+	}
+
+	public function test_marketplaces_are_an_allowlist(): void {
+		$this->assertTrue( EbayMarketplace::isValid( 'EBAY_PL' ) );
+		$this->assertFalse( EbayMarketplace::isValid( 'ebay_pl' ), 'The header value is case-sensitive.' );
+		$this->assertFalse( EbayMarketplace::isValid( "EBAY_US\r\nX-Injected: 1" ) );
 	}
 }

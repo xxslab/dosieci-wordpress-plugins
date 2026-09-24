@@ -12,10 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The outcome of one diagnostic check.
  *
  * Every result carries an explanation and a recommendation, not just a
- * pass/fail flag. An audit that says "FAIL: autoload" without saying what
- * that means or what to do about it is a scoreboard, not a diagnosis --
- * and PRODUCT_SCOPE.md's positioning for this product is explicitly
- * "wyjaśnialny audyt techniczny".
+ * pass/fail flag: an audit that says "FAIL: autoload" without saying what
+ * that means or what to do about it is a scoreboard, not a diagnosis.
  */
 final class CheckResult {
 

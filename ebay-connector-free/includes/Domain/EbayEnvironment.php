@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace DoSieci\Ebay\Connector\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Sandbox vs Production, as an explicit, validated choice.
  *
  * Sandbox is the default everywhere in this plugin, and switching to
- * Production is a deliberate, separate action (PRODUCT_SCOPE.md's explicit
- * requirement for this product). Defaulting a marketplace integration to
- * the live environment is how test listings end up on a real shop.
+ * Production is a deliberate, separate action. Defaulting a marketplace
+ * integration to the live environment is how test calls end up on a real
+ * account.
  */
 final class EbayEnvironment {
 
@@ -30,7 +34,7 @@ final class EbayEnvironment {
 
 	public function __construct( public readonly string $name = self::SANDBOX ) {
 		if ( ! self::isValid( $name ) ) {
-			throw new \InvalidArgumentException( sprintf( 'Unknown eBay environment "%s".', $name ) );
+			throw new \InvalidArgumentException( esc_html( sprintf( 'Unknown eBay environment "%s".', $name ) ) );
 		}
 	}
 
