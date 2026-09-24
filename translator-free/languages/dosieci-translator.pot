@@ -1,0 +1,418 @@
+# Copyright (C) 2026 DoSieci
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci Translator 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-translator\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: dosieci-translator\n"
+
+#. Plugin Name of the plugin
+#: dosieci-translator.php
+#: includes/Plugin.php:55
+#: includes/Plugin.php:359
+msgid "DoSieci Translator"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: dosieci-translator.php
+msgid "https://dosieci.pl/wtyczki/translator-woocommerce/"
+msgstr ""
+
+#. Description of the plugin
+#: dosieci-translator.php
+msgid "Translate the title, short description or description of WooCommerce products, posts and pages with DeepL, using your own API key. Always previewed before saving, and the previous text can be restored with one click."
+msgstr ""
+
+#. Author of the plugin
+#: dosieci-translator.php
+msgid "DoSieci"
+msgstr ""
+
+#. Author URI of the plugin
+#: dosieci-translator.php
+msgid "https://dosieci.pl/"
+msgstr ""
+
+#: includes/Adapter/DeepLClient.php:42
+msgid "Unsupported target language."
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:23
+msgid "Arabic"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:24
+msgid "Bulgarian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:25
+msgid "Czech"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:26
+msgid "Danish"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:27
+msgid "German"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:28
+msgid "Greek"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:29
+msgid "English (British)"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:30
+msgid "English (American)"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:31
+msgid "Spanish"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:32
+msgid "Estonian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:33
+msgid "Finnish"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:34
+msgid "French"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:35
+msgid "Hebrew"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:36
+msgid "Hungarian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:37
+msgid "Indonesian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:38
+msgid "Italian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:39
+msgid "Japanese"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:40
+msgid "Korean"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:41
+msgid "Lithuanian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:42
+msgid "Latvian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:43
+msgid "Norwegian (Bokmål)"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:44
+msgid "Dutch"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:45
+msgid "Polish"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:46
+msgid "Portuguese (Brazilian)"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:47
+msgid "Portuguese (European)"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:48
+msgid "Romanian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:49
+msgid "Russian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:50
+msgid "Slovak"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:51
+msgid "Slovenian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:52
+msgid "Swedish"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:53
+msgid "Thai"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:54
+msgid "Turkish"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:55
+msgid "Ukrainian"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:56
+msgid "Vietnamese"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:57
+msgid "Chinese (simplified)"
+msgstr ""
+
+#: includes/Domain/DeepLLanguages.php:58
+msgid "Chinese (traditional)"
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:30
+msgid "DeepL rejected the API key. Check the key; keys ending in \":fx\" are DeepL API Free keys."
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:31
+msgid "Too many requests to DeepL. Wait a moment and try again."
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:32
+msgid "The character limit of your DeepL plan is used up for this billing period."
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:33
+msgid "The text is too long for a single DeepL request. Split the content into smaller parts."
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:34
+msgid "DeepL is temporarily unavailable. Try again in a moment."
+msgstr ""
+
+#. translators: %d: HTTP status code
+#: includes/Domain/DeepLResponseParser.php:36
+#, php-format
+msgid "DeepL returned HTTP error %d."
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:49
+msgid "The DeepL response contains no translation."
+msgstr ""
+
+#: includes/Domain/DeepLResponseParser.php:55
+msgid "The DeepL response has an unexpected format."
+msgstr ""
+
+#: includes/Plugin.php:56
+msgid "Translator"
+msgstr ""
+
+#: includes/Plugin.php:73
+msgid "Translate"
+msgstr ""
+
+#: includes/Plugin.php:86
+msgid "Open"
+msgstr ""
+
+#: includes/Plugin.php:103
+#: includes/Plugin.php:286
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/Plugin.php:112
+msgid "The DeepL key was removed."
+msgstr ""
+
+#: includes/Plugin.php:116
+msgid "Enter a DeepL API key."
+msgstr ""
+
+#: includes/Plugin.php:120
+msgid "That does not look like a DeepL API key. Paste only the key from your DeepL account."
+msgstr ""
+
+#: includes/Plugin.php:127
+msgid "The DeepL key was saved."
+msgstr ""
+
+#: includes/Plugin.php:135
+msgid "Save your DeepL API key first."
+msgstr ""
+
+#: includes/Plugin.php:158
+msgid "The translation is ready to review below. Nothing has been saved yet."
+msgstr ""
+
+#: includes/Plugin.php:171
+#: includes/Plugin.php:294
+#: includes/Plugin.php:307
+msgid "The item was not found, or you cannot edit it."
+msgstr ""
+
+#: includes/Plugin.php:177
+msgid "The preview has expired. Translate the text again."
+msgstr ""
+
+#: includes/Plugin.php:185
+msgid "The text was changed after the preview was made, so the translation was not saved. Translate it again."
+msgstr ""
+
+#: includes/Plugin.php:204
+msgid "The translation was saved. You can restore the previous text below."
+msgstr ""
+
+#: includes/Plugin.php:213
+msgid "There is nothing to restore for this field."
+msgstr ""
+
+#: includes/Plugin.php:230
+msgid "The previous text was restored."
+msgstr ""
+
+#: includes/Plugin.php:311
+msgid "Choose a field and a target language."
+msgstr ""
+
+#: includes/Plugin.php:317
+msgid "This field is empty, there is nothing to translate."
+msgstr ""
+
+#: includes/Plugin.php:340
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/Plugin.php:353
+msgid "Title"
+msgstr ""
+
+#: includes/Plugin.php:354
+msgid "Excerpt / short description"
+msgstr ""
+
+#: includes/Plugin.php:355
+msgid "Content / description"
+msgstr ""
+
+#: includes/Plugin.php:368
+msgid "Translates one field at a time and replaces its text after you approve the preview. It does not create a second language version of the page. Requests go from this site straight to DeepL with your own key, never through DoSieci."
+msgstr ""
+
+#: includes/Plugin.php:372
+msgid "Translate a field"
+msgstr ""
+
+#: includes/Plugin.php:373
+msgid "Tip: use the \"Translate\" link under any post, page or product in its list."
+msgstr ""
+
+#: includes/Plugin.php:381
+msgid "Post, page or product ID"
+msgstr ""
+
+#: includes/Plugin.php:385
+msgid "(no title)"
+msgstr ""
+
+#: includes/Plugin.php:386
+msgid "Edit"
+msgstr ""
+
+#: includes/Plugin.php:391
+msgid "Field"
+msgstr ""
+
+#: includes/Plugin.php:401
+msgid "Translate into"
+msgstr ""
+
+#: includes/Plugin.php:408
+msgid "DeepL detects the source language by itself."
+msgstr ""
+
+#: includes/Plugin.php:413
+msgid "Preview the translation"
+msgstr ""
+
+#: includes/Plugin.php:418
+msgid "Preview"
+msgstr ""
+
+#. translators: 1: field name, 2: target language, 3: detected source language code
+#: includes/Plugin.php:423
+#, php-format
+msgid "Field: %1$s. Into: %2$s. Detected source language: %3$s. Nothing has been saved yet."
+msgstr ""
+
+#: includes/Plugin.php:433
+msgid "Before"
+msgstr ""
+
+#: includes/Plugin.php:434
+msgid "After"
+msgstr ""
+
+#: includes/Plugin.php:446
+msgid "Save the translation"
+msgstr ""
+
+#: includes/Plugin.php:447
+msgid "The current text is kept, so you can restore it with one click."
+msgstr ""
+
+#: includes/Plugin.php:455
+msgid "Your DeepL API key"
+msgstr ""
+
+#: includes/Plugin.php:457
+msgid "Translations use your own DeepL API key and your own character allowance. Both DeepL API Free and Pro keys work; the right endpoint is picked automatically."
+msgstr ""
+
+#: includes/Plugin.php:463
+msgid "DeepL API key"
+msgstr ""
+
+#: includes/Plugin.php:468
+msgid "Remove the saved key"
+msgstr ""
+
+#: includes/Plugin.php:473
+msgid "Save"
+msgstr ""
+
+#: includes/Plugin.php:476
+msgid "Only an administrator can set the DeepL key."
+msgstr ""
+
+#: includes/Plugin.php:496
+msgid "Restore the text from before a translation"
+msgstr ""
+
+#. translators: 1: date and time, 2: language name
+#: includes/Plugin.php:510
+#, php-format
+msgid "Kept on %1$s, before translating into %2$s."
+msgstr ""
+
+#: includes/Plugin.php:523
+msgid "Restore"
+msgstr ""

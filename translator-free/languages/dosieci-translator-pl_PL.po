@@ -1,0 +1,413 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci Translator 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-translator\n"
+"Last-Translator: DoSieci\n"
+"Language-Team: Polish\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Domain: dosieci-translator\n"
+
+#. Plugin Name of the plugin
+#: dosieci-translator.php
+#: includes/Plugin.php:55
+#: includes/Plugin.php:359
+msgid "DoSieci Translator"
+msgstr "DoSieci Translator"
+
+#. Plugin URI of the plugin
+#: dosieci-translator.php
+msgid "https://dosieci.pl/wtyczki/translator-woocommerce/"
+msgstr "https://dosieci.pl/wtyczki/translator-woocommerce/"
+
+#. Description of the plugin
+#: dosieci-translator.php
+msgid "Translate the title, short description or description of WooCommerce products, posts and pages with DeepL, using your own API key. Always previewed before saving, and the previous text can be restored with one click."
+msgstr "Tłumaczenie tytułu, krótkiego opisu lub opisu produktów WooCommerce, wpisów i stron przez DeepL na Twoim własnym kluczu API. Zawsze z podglądem przed zapisem, a poprzedni tekst można przywrócić jednym kliknięciem."
+
+#. Author of the plugin
+#: dosieci-translator.php
+msgid "DoSieci"
+msgstr "DoSieci"
+
+#. Author URI of the plugin
+#: dosieci-translator.php
+msgid "https://dosieci.pl/"
+msgstr "https://dosieci.pl/"
+
+#: includes/Adapter/DeepLClient.php:42
+msgid "Unsupported target language."
+msgstr "Nieobsługiwany język docelowy."
+
+#: includes/Domain/DeepLLanguages.php:23
+msgid "Arabic"
+msgstr "arabski"
+
+#: includes/Domain/DeepLLanguages.php:24
+msgid "Bulgarian"
+msgstr "bułgarski"
+
+#: includes/Domain/DeepLLanguages.php:25
+msgid "Czech"
+msgstr "czeski"
+
+#: includes/Domain/DeepLLanguages.php:26
+msgid "Danish"
+msgstr "duński"
+
+#: includes/Domain/DeepLLanguages.php:27
+msgid "German"
+msgstr "niemiecki"
+
+#: includes/Domain/DeepLLanguages.php:28
+msgid "Greek"
+msgstr "grecki"
+
+#: includes/Domain/DeepLLanguages.php:29
+msgid "English (British)"
+msgstr "angielski (brytyjski)"
+
+#: includes/Domain/DeepLLanguages.php:30
+msgid "English (American)"
+msgstr "angielski (amerykański)"
+
+#: includes/Domain/DeepLLanguages.php:31
+msgid "Spanish"
+msgstr "hiszpański"
+
+#: includes/Domain/DeepLLanguages.php:32
+msgid "Estonian"
+msgstr "estoński"
+
+#: includes/Domain/DeepLLanguages.php:33
+msgid "Finnish"
+msgstr "fiński"
+
+#: includes/Domain/DeepLLanguages.php:34
+msgid "French"
+msgstr "francuski"
+
+#: includes/Domain/DeepLLanguages.php:35
+msgid "Hebrew"
+msgstr "hebrajski"
+
+#: includes/Domain/DeepLLanguages.php:36
+msgid "Hungarian"
+msgstr "węgierski"
+
+#: includes/Domain/DeepLLanguages.php:37
+msgid "Indonesian"
+msgstr "indonezyjski"
+
+#: includes/Domain/DeepLLanguages.php:38
+msgid "Italian"
+msgstr "włoski"
+
+#: includes/Domain/DeepLLanguages.php:39
+msgid "Japanese"
+msgstr "japoński"
+
+#: includes/Domain/DeepLLanguages.php:40
+msgid "Korean"
+msgstr "koreański"
+
+#: includes/Domain/DeepLLanguages.php:41
+msgid "Lithuanian"
+msgstr "litewski"
+
+#: includes/Domain/DeepLLanguages.php:42
+msgid "Latvian"
+msgstr "łotewski"
+
+#: includes/Domain/DeepLLanguages.php:43
+msgid "Norwegian (Bokmål)"
+msgstr "norweski (bokmål)"
+
+#: includes/Domain/DeepLLanguages.php:44
+msgid "Dutch"
+msgstr "niderlandzki"
+
+#: includes/Domain/DeepLLanguages.php:45
+msgid "Polish"
+msgstr "polski"
+
+#: includes/Domain/DeepLLanguages.php:46
+msgid "Portuguese (Brazilian)"
+msgstr "portugalski (brazylijski)"
+
+#: includes/Domain/DeepLLanguages.php:47
+msgid "Portuguese (European)"
+msgstr "portugalski (europejski)"
+
+#: includes/Domain/DeepLLanguages.php:48
+msgid "Romanian"
+msgstr "rumuński"
+
+#: includes/Domain/DeepLLanguages.php:49
+msgid "Russian"
+msgstr "rosyjski"
+
+#: includes/Domain/DeepLLanguages.php:50
+msgid "Slovak"
+msgstr "słowacki"
+
+#: includes/Domain/DeepLLanguages.php:51
+msgid "Slovenian"
+msgstr "słoweński"
+
+#: includes/Domain/DeepLLanguages.php:52
+msgid "Swedish"
+msgstr "szwedzki"
+
+#: includes/Domain/DeepLLanguages.php:53
+msgid "Thai"
+msgstr "tajski"
+
+#: includes/Domain/DeepLLanguages.php:54
+msgid "Turkish"
+msgstr "turecki"
+
+#: includes/Domain/DeepLLanguages.php:55
+msgid "Ukrainian"
+msgstr "ukraiński"
+
+#: includes/Domain/DeepLLanguages.php:56
+msgid "Vietnamese"
+msgstr "wietnamski"
+
+#: includes/Domain/DeepLLanguages.php:57
+msgid "Chinese (simplified)"
+msgstr "chiński (uproszczony)"
+
+#: includes/Domain/DeepLLanguages.php:58
+msgid "Chinese (traditional)"
+msgstr "chiński (tradycyjny)"
+
+#: includes/Domain/DeepLResponseParser.php:30
+msgid "DeepL rejected the API key. Check the key; keys ending in \":fx\" are DeepL API Free keys."
+msgstr "DeepL odrzucił klucz API. Sprawdź klucz; klucze kończące się na „:fx” to klucze DeepL API Free."
+
+#: includes/Domain/DeepLResponseParser.php:31
+msgid "Too many requests to DeepL. Wait a moment and try again."
+msgstr "Zbyt wiele zapytań do DeepL. Odczekaj chwilę i spróbuj ponownie."
+
+#: includes/Domain/DeepLResponseParser.php:32
+msgid "The character limit of your DeepL plan is used up for this billing period."
+msgstr "Wyczerpano limit znaków w Twoim planie DeepL na ten okres rozliczeniowy."
+
+#: includes/Domain/DeepLResponseParser.php:33
+msgid "The text is too long for a single DeepL request. Split the content into smaller parts."
+msgstr "Tekst jest za długi na jedno zapytanie do DeepL. Podziel treść na mniejsze części."
+
+#: includes/Domain/DeepLResponseParser.php:34
+msgid "DeepL is temporarily unavailable. Try again in a moment."
+msgstr "DeepL jest chwilowo niedostępny. Spróbuj ponownie za chwilę."
+
+#. translators: %d: HTTP status code
+#: includes/Domain/DeepLResponseParser.php:36
+msgid "DeepL returned HTTP error %d."
+msgstr "DeepL zwrócił błąd HTTP %d."
+
+#: includes/Domain/DeepLResponseParser.php:49
+msgid "The DeepL response contains no translation."
+msgstr "Odpowiedź DeepL nie zawiera tłumaczenia."
+
+#: includes/Domain/DeepLResponseParser.php:55
+msgid "The DeepL response has an unexpected format."
+msgstr "Odpowiedź DeepL ma nieoczekiwany format."
+
+#: includes/Plugin.php:56
+msgid "Translator"
+msgstr "Translator"
+
+#: includes/Plugin.php:73
+msgid "Translate"
+msgstr "Przetłumacz"
+
+#: includes/Plugin.php:86
+msgid "Open"
+msgstr "Otwórz"
+
+#: includes/Plugin.php:103
+#: includes/Plugin.php:286
+msgid "You do not have permission to do this."
+msgstr "Nie masz uprawnień do wykonania tej operacji."
+
+#: includes/Plugin.php:112
+msgid "The DeepL key was removed."
+msgstr "Klucz DeepL został usunięty."
+
+#: includes/Plugin.php:116
+msgid "Enter a DeepL API key."
+msgstr "Wpisz klucz API DeepL."
+
+#: includes/Plugin.php:120
+msgid "That does not look like a DeepL API key. Paste only the key from your DeepL account."
+msgstr "To nie wygląda na klucz API DeepL. Wklej sam klucz ze swojego konta DeepL."
+
+#: includes/Plugin.php:127
+msgid "The DeepL key was saved."
+msgstr "Zapisano klucz DeepL."
+
+#: includes/Plugin.php:135
+msgid "Save your DeepL API key first."
+msgstr "Najpierw zapisz swój klucz API DeepL."
+
+#: includes/Plugin.php:158
+msgid "The translation is ready to review below. Nothing has been saved yet."
+msgstr "Tłumaczenie jest gotowe do sprawdzenia poniżej. Nic jeszcze nie zostało zapisane."
+
+#: includes/Plugin.php:171
+#: includes/Plugin.php:294
+#: includes/Plugin.php:307
+msgid "The item was not found, or you cannot edit it."
+msgstr "Nie znaleziono elementu albo nie możesz go edytować."
+
+#: includes/Plugin.php:177
+msgid "The preview has expired. Translate the text again."
+msgstr "Podgląd wygasł. Przetłumacz tekst ponownie."
+
+#: includes/Plugin.php:185
+msgid "The text was changed after the preview was made, so the translation was not saved. Translate it again."
+msgstr "Tekst zmienił się po utworzeniu podglądu, dlatego tłumaczenie nie zostało zapisane. Przetłumacz go ponownie."
+
+#: includes/Plugin.php:204
+msgid "The translation was saved. You can restore the previous text below."
+msgstr "Tłumaczenie zostało zapisane. Poprzedni tekst możesz przywrócić poniżej."
+
+#: includes/Plugin.php:213
+msgid "There is nothing to restore for this field."
+msgstr "Dla tego pola nie ma czego przywracać."
+
+#: includes/Plugin.php:230
+msgid "The previous text was restored."
+msgstr "Przywrócono poprzedni tekst."
+
+#: includes/Plugin.php:311
+msgid "Choose a field and a target language."
+msgstr "Wybierz pole i język docelowy."
+
+#: includes/Plugin.php:317
+msgid "This field is empty, there is nothing to translate."
+msgstr "To pole jest puste — nie ma czego tłumaczyć."
+
+#: includes/Plugin.php:340
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do tej strony."
+
+#: includes/Plugin.php:353
+msgid "Title"
+msgstr "Tytuł"
+
+#: includes/Plugin.php:354
+msgid "Excerpt / short description"
+msgstr "Zajawka / krótki opis"
+
+#: includes/Plugin.php:355
+msgid "Content / description"
+msgstr "Treść / opis"
+
+#: includes/Plugin.php:368
+msgid "Translates one field at a time and replaces its text after you approve the preview. It does not create a second language version of the page. Requests go from this site straight to DeepL with your own key, never through DoSieci."
+msgstr "Tłumaczy jedno pole na raz i podmienia jego tekst po zatwierdzeniu podglądu. Nie tworzy drugiej wersji językowej strony. Zapytania idą z tej witryny bezpośrednio do DeepL na Twoim kluczu, nigdy przez DoSieci."
+
+#: includes/Plugin.php:372
+msgid "Translate a field"
+msgstr "Przetłumacz pole"
+
+#: includes/Plugin.php:373
+msgid "Tip: use the \"Translate\" link under any post, page or product in its list."
+msgstr "Wskazówka: użyj linku „Przetłumacz” pod dowolnym wpisem, stroną lub produktem na liście."
+
+#: includes/Plugin.php:381
+msgid "Post, page or product ID"
+msgstr "ID wpisu, strony lub produktu"
+
+#: includes/Plugin.php:385
+msgid "(no title)"
+msgstr "(bez tytułu)"
+
+#: includes/Plugin.php:386
+msgid "Edit"
+msgstr "Edytuj"
+
+#: includes/Plugin.php:391
+msgid "Field"
+msgstr "Pole"
+
+#: includes/Plugin.php:401
+msgid "Translate into"
+msgstr "Przetłumacz na"
+
+#: includes/Plugin.php:408
+msgid "DeepL detects the source language by itself."
+msgstr "DeepL sam rozpoznaje język źródłowy."
+
+#: includes/Plugin.php:413
+msgid "Preview the translation"
+msgstr "Pokaż podgląd tłumaczenia"
+
+#: includes/Plugin.php:418
+msgid "Preview"
+msgstr "Podgląd"
+
+#. translators: 1: field name, 2: target language, 3: detected source language code
+#: includes/Plugin.php:423
+msgid "Field: %1$s. Into: %2$s. Detected source language: %3$s. Nothing has been saved yet."
+msgstr "Pole: %1$s. Na: %2$s. Rozpoznany język źródłowy: %3$s. Nic jeszcze nie zostało zapisane."
+
+#: includes/Plugin.php:433
+msgid "Before"
+msgstr "Przed"
+
+#: includes/Plugin.php:434
+msgid "After"
+msgstr "Po"
+
+#: includes/Plugin.php:446
+msgid "Save the translation"
+msgstr "Zapisz tłumaczenie"
+
+#: includes/Plugin.php:447
+msgid "The current text is kept, so you can restore it with one click."
+msgstr "Obecny tekst zostanie zachowany, więc przywrócisz go jednym kliknięciem."
+
+#: includes/Plugin.php:455
+msgid "Your DeepL API key"
+msgstr "Twój klucz API DeepL"
+
+#: includes/Plugin.php:457
+msgid "Translations use your own DeepL API key and your own character allowance. Both DeepL API Free and Pro keys work; the right endpoint is picked automatically."
+msgstr "Tłumaczenia korzystają z Twojego klucza API DeepL i Twojego limitu znaków. Działają klucze DeepL API Free i Pro — właściwy endpoint jest wybierany automatycznie."
+
+#: includes/Plugin.php:463
+msgid "DeepL API key"
+msgstr "Klucz API DeepL"
+
+#: includes/Plugin.php:468
+msgid "Remove the saved key"
+msgstr "Usuń zapisany klucz"
+
+#: includes/Plugin.php:473
+msgid "Save"
+msgstr "Zapisz"
+
+#: includes/Plugin.php:476
+msgid "Only an administrator can set the DeepL key."
+msgstr "Klucz DeepL może ustawić wyłącznie administrator."
+
+#: includes/Plugin.php:496
+msgid "Restore the text from before a translation"
+msgstr "Przywróć tekst sprzed tłumaczenia"
+
+#. translators: 1: date and time, 2: language name
+#: includes/Plugin.php:510
+msgid "Kept on %1$s, before translating into %2$s."
+msgstr "Zachowany %1$s, przed tłumaczeniem na: %2$s."
+
+#: includes/Plugin.php:523
+msgid "Restore"
+msgstr "Przywróć"

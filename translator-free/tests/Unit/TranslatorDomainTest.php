@@ -29,7 +29,7 @@ final class TranslatorDomainTest extends TestCase {
 			$this->fail( 'Expected TranslationException.' );
 		} catch ( TranslationException $e ) {
 			$this->assertSame( 456, $e->statusCode );
-			$this->assertStringContainsString( 'limit znaków', $e->getMessage() );
+			$this->assertStringContainsString( 'character limit', $e->getMessage() );
 		}
 	}
 
@@ -38,12 +38,12 @@ final class TranslatorDomainTest extends TestCase {
 			DeepLResponseParser::assertOk( 403, '' );
 			$this->fail( 'Expected TranslationException.' );
 		} catch ( TranslationException $e ) {
-			$this->assertStringContainsString( 'Free vs Pro', $e->getMessage() );
+			$this->assertStringContainsString( ':fx', $e->getMessage() );
 		}
 	}
 
 	public function test_rate_limit_and_payload_too_large_are_distinguished(): void {
-		foreach ( array( 429 => 'Zbyt wiele zapytań', 413 => 'za długi' ) as $status => $needle ) {
+		foreach ( array( 429 => 'Too many requests', 413 => 'too long' ) as $status => $needle ) {
 			try {
 				DeepLResponseParser::assertOk( $status, '' );
 				$this->fail( "Expected TranslationException for HTTP {$status}." );
@@ -55,7 +55,7 @@ final class TranslatorDomainTest extends TestCase {
 
 	public function test_a_server_error_is_reported_as_temporary(): void {
 		$this->expectException( TranslationException::class );
-		$this->expectExceptionMessage( 'chwilowo niedostępny' );
+		$this->expectExceptionMessage( 'temporarily unavailable' );
 
 		DeepLResponseParser::assertOk( 503, '' );
 	}
@@ -89,5 +89,33 @@ final class TranslatorDomainTest extends TestCase {
 		$this->assertTrue( TranslationJob::isSupportedField( TranslationJob::FIELD_TITLE ) );
 		$this->assertTrue( TranslationJob::isSupportedField( TranslationJob::FIELD_CONTENT ) );
 		$this->assertFalse( TranslationJob::isSupportedField( 'post_status' ) );
+	}
+
+	public function test_languages_include_the_current_deepl_targets_and_are_sorted_by_name(): void {
+		foreach ( array( 'KO', 'NB', 'TR', 'PT-BR', 'ZH-HANS', 'UK', 'PL' ) as $code ) {
+			$this->assertTrue( DeepLLanguages::isSupported( $code ), $code );
+		}
+
+		$names = array_values( DeepLLanguages::all() );
+		$sorted = $names;
+		natcasesort( $sorted );
+
+		$this->assertSame( array_values( $sorted ), $names );
+	}
+
+	public function test_every_field_maps_to_its_own_posts_column(): void {
+		$this->assertSame( 'post_title', TranslationJob::column( TranslationJob::FIELD_TITLE ) );
+		$this->assertSame( 'post_excerpt', TranslationJob::column( TranslationJob::FIELD_EXCERPT ) );
+		$this->assertSame( 'post_content', TranslationJob::column( TranslationJob::FIELD_CONTENT ) );
+	}
+
+	public function test_an_error_message_is_escaped_for_display(): void {
+		try {
+			DeepLResponseParser::assertOk( 403, '' );
+			$this->fail( 'Expected TranslationException.' );
+		} catch ( TranslationException $e ) {
+			$this->assertStringContainsString( '&quot;:fx&quot;', $e->getMessage() );
+			$this->assertSame( 403, $e->statusCode );
+		}
 	}
 }
