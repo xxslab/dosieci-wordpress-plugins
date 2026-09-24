@@ -1,0 +1,12 @@
+/tests
+/vendor
+/node_modules
+composer.json
+composer.lock
+phpunit.xml.dist
+.phpunit.cache
+.phpunit.result.cache
+.gitignore
+.gitkeep
+.DS_Store
+*.po~

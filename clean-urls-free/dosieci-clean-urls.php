@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DoSieci Clean URLs
  * Plugin URI: https://dosieci.pl/wtyczki/clean-urls/
- * Description: Bezpieczna migracja adresów URL: podgląd zmian, skaner kolizji i automatyczne przekierowania 301 bez łańcuchów i pętli. Nic nie zmienia się bez Twojej akceptacji.
+ * Description: Safe URL clean-up for posts, pages and WooCommerce products: a preview of every change, a collision scanner, and 301 redirects without chains or loops. Nothing changes until you approve it.
  * Version: 1.0.0
  * Requires at least: 6.4
  * Requires PHP: 8.1
@@ -25,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'DOSIECI_CLEAN_URLS_VERSION', '1.0.0' );
 define( 'DOSIECI_CLEAN_URLS_FILE', __FILE__ );
 define( 'DOSIECI_CLEAN_URLS_PATH', plugin_dir_path( __FILE__ ) );
-define( 'DOSIECI_CLEAN_URLS_URL', plugin_dir_url( __FILE__ ) );
 
 spl_autoload_register(
 	static function ( string $class ): void {
@@ -46,17 +45,23 @@ spl_autoload_register(
 register_activation_hook(
 	__FILE__,
 	static function (): void {
-		add_option( 'dosieci_clean_urls_post_type', 'post', '', false );
+		// Not autoloaded: the map is only needed when a request 404s.
 		add_option( 'dosieci_clean_urls_redirects', array(), '', false );
 	}
 );
 
-/**
- * Deactivation is non-destructive and this matters more here than in most
- * plugins: the stored redirect map is the ONLY record of where the old URLs
- * went. Deleting it on deactivate would 404 every migrated URL.
+/*
+ * No deactivation cleanup on purpose: the stored redirect map is the only
+ * record of where old URLs went, and deleting it would break every one of them.
  */
-register_deactivation_hook( __FILE__, static function (): void {} );
+
+add_action(
+	'init',
+	static function (): void {
+		// Bundled Polish translation; language packs from WordPress.org still take precedence.
+		load_plugin_textdomain( 'dosieci-clean-urls', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
+	}
+);
 
 add_action(
 	'plugins_loaded',

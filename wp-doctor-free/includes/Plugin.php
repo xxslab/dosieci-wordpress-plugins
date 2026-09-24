@@ -8,13 +8,15 @@ use DoSieci\WP\Doctor\Adapter\WordPressFactsCollector;
 use DoSieci\WP\Doctor\Domain\CheckResult;
 use DoSieci\WP\Doctor\Domain\DiagnosticEngine;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * DoSieci WP Doctor — free tier: a read-only, explainable technical audit.
+ * DoSieci WP Doctor: a read-only, explainable technical audit.
  *
- * There is intentionally no repair action of any kind in this build. See
- * DiagnosticEngine's docblock for why (the legacy plugin's unconditional
- * autofix is a documented, audited failure this product exists not to
- * repeat).
+ * There is intentionally no repair action of any kind in this plugin. See
+ * DiagnosticEngine's docblock for why.
  */
 final class Plugin {
 
@@ -32,6 +34,7 @@ final class Plugin {
 
 	public function boot(): void {
 		add_action( 'admin_menu', array( $this, 'registerPage' ) );
+		add_filter( 'plugin_action_links_' . plugin_basename( DOSIECI_WP_DOCTOR_FILE ), array( $this, 'actionLinks' ) );
 	}
 
 	public function registerPage(): void {
@@ -44,9 +47,27 @@ final class Plugin {
 		);
 	}
 
+	/**
+	 * @param array<int|string, string> $links
+	 *
+	 * @return array<int|string, string>
+	 */
+	public function actionLinks( array $links ): array {
+		array_unshift(
+			$links,
+			sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( admin_url( 'tools.php?page=' . self::PAGE_SLUG ) ),
+				esc_html__( 'Run scan', 'dosieci-wp-doctor' )
+			)
+		);
+
+		return $links;
+	}
+
 	public function renderPage(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Brak uprawnień.', 'dosieci-wp-doctor' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'dosieci-wp-doctor' ), '', array( 'response' => 403 ) );
 		}
 
 		$engine  = new DiagnosticEngine();
@@ -55,9 +76,9 @@ final class Plugin {
 
 		$badges = array(
 			CheckResult::STATUS_GOOD     => array( '#dcfce7', '#166534', __( 'OK', 'dosieci-wp-doctor' ) ),
-			CheckResult::STATUS_WARNING  => array( '#fef3c7', '#78350f', __( 'UWAGA', 'dosieci-wp-doctor' ) ),
-			CheckResult::STATUS_CRITICAL => array( '#fee2e2', '#991b1b', __( 'KRYTYCZNE', 'dosieci-wp-doctor' ) ),
-			CheckResult::STATUS_INFO     => array( '#e0e7ff', '#3730a3', __( 'INFO', 'dosieci-wp-doctor' ) ),
+			CheckResult::STATUS_WARNING  => array( '#fef3c7', '#78350f', __( 'Warning', 'dosieci-wp-doctor' ) ),
+			CheckResult::STATUS_CRITICAL => array( '#fee2e2', '#991b1b', __( 'Critical', 'dosieci-wp-doctor' ) ),
+			CheckResult::STATUS_INFO     => array( '#e0e7ff', '#3730a3', __( 'Info', 'dosieci-wp-doctor' ) ),
 		);
 		?>
 		<div class="wrap">
@@ -67,8 +88,8 @@ final class Plugin {
 				<strong><?php echo esc_html( (string) $summary['score'] ); ?>/100</strong> &middot;
 				<?php
 				printf(
-					/* translators: 1: good count, 2: warning count, 3: critical count */
-					esc_html__( '%1$d OK, %2$d ostrzeżeń, %3$d krytycznych', 'dosieci-wp-doctor' ),
+					/* translators: 1: number of passed checks, 2: number of warnings, 3: number of critical problems */
+					esc_html__( 'OK: %1$d, warnings: %2$d, critical: %3$d', 'dosieci-wp-doctor' ),
 					(int) $summary['good'],
 					(int) $summary['warning'],
 					(int) $summary['critical']
@@ -77,20 +98,20 @@ final class Plugin {
 			</p>
 
 			<p class="description">
-				<?php esc_html_e( 'Wynik służy wyłącznie do porównywania kolejnych skanów. Wysoki wynik nie oznacza, że witryna jest bezpieczna — to skrót, nie gwarancja.', 'dosieci-wp-doctor' ); ?>
+				<?php esc_html_e( 'The score is only meant for comparing one scan with the next. A high score does not mean the site is secure: it is a summary, not a guarantee.', 'dosieci-wp-doctor' ); ?>
 			</p>
 
 			<div class="notice notice-info inline">
-				<p><?php esc_html_e( 'Ten skan jest wyłącznie do odczytu. Wtyczka niczego nie zmienia, nie usuwa i nie optymalizuje automatycznie.', 'dosieci-wp-doctor' ); ?></p>
+				<p><?php esc_html_e( 'This scan is read-only. The plugin never changes, deletes or optimizes anything automatically.', 'dosieci-wp-doctor' ); ?></p>
 			</div>
 
 			<table class="widefat striped" style="margin-top:1rem;">
 				<thead>
 					<tr>
 						<th style="width:130px;"><?php esc_html_e( 'Status', 'dosieci-wp-doctor' ); ?></th>
-						<th><?php esc_html_e( 'Sprawdzenie', 'dosieci-wp-doctor' ); ?></th>
-						<th><?php esc_html_e( 'Wynik', 'dosieci-wp-doctor' ); ?></th>
-						<th><?php esc_html_e( 'Zalecenie', 'dosieci-wp-doctor' ); ?></th>
+						<th><?php esc_html_e( 'Check', 'dosieci-wp-doctor' ); ?></th>
+						<th><?php esc_html_e( 'Result', 'dosieci-wp-doctor' ); ?></th>
+						<th><?php esc_html_e( 'Recommendation', 'dosieci-wp-doctor' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>

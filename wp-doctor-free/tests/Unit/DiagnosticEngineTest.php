@@ -11,6 +11,9 @@ use PHPUnit\Framework\TestCase;
 
 final class DiagnosticEngineTest extends TestCase {
 
+	/** 2026-09-24 12:00:00 UTC: PHP 8.4 active, 8.2/8.3 security-only, 8.1 end of life. */
+	private const NOW = 1790251200;
+
 	private DiagnosticEngine $engine;
 
 	protected function setUp(): void {
@@ -23,8 +26,8 @@ final class DiagnosticEngineTest extends TestCase {
 	 */
 	private function healthySite( array $overrides = array() ): SiteFacts {
 		$defaults = array(
-			'phpVersion'              => '8.3.0',
-			'wordPressVersion'        => '6.9',
+			'phpVersion'              => '8.4.12',
+			'wordPressVersion'        => '7.1',
 			'isHttps'                 => true,
 			'debugEnabled'            => false,
 			'debugDisplayEnabled'     => false,
@@ -35,9 +38,9 @@ final class DiagnosticEngineTest extends TestCase {
 			'postCount'               => 100,
 			'transientCount'          => 50,
 			'plugins'                 => array( array( 'name' => 'A', 'version' => '1', 'active' => true ) ),
-			'cronEvents'              => array( array( 'hook' => 'wp_version_check', 'timestamp' => 2000 ) ),
+			'cronEvents'              => array( array( 'hook' => 'wp_version_check', 'timestamp' => self::NOW + 1000 ) ),
 			'memoryLimitBytes'        => 256 * 1024 * 1024,
-			'now'                     => 1000,
+			'now'                     => self::NOW,
 		);
 
 		$f = array_merge( $defaults, $overrides );
@@ -74,10 +77,34 @@ final class DiagnosticEngineTest extends TestCase {
 		$this->assertNotSame( '', $result->recommendation, 'Every problem must come with a recommendation.' );
 	}
 
-	public function test_supported_but_not_recommended_php_is_only_a_warning(): void {
+	public function test_php_past_its_security_support_is_critical_even_if_the_plugin_still_runs_on_it(): void {
 		$this->assertSame(
-			CheckResult::STATUS_WARNING,
+			CheckResult::STATUS_CRITICAL,
 			$this->check( $this->healthySite( array( 'phpVersion' => '8.1.20' ) ), 'php_version' )->status
+		);
+	}
+
+	public function test_security_only_php_is_a_warning(): void {
+		foreach ( array( '8.2.29', '8.3.10' ) as $version ) {
+			$result = $this->check( $this->healthySite( array( 'phpVersion' => $version ) ), 'php_version' );
+
+			$this->assertSame( CheckResult::STATUS_WARNING, $result->status, $version );
+			$this->assertNotSame( '', $result->recommendation );
+		}
+	}
+
+	public function test_the_php_verdict_follows_the_clock_not_a_fixed_version(): void {
+		$in2027 = $this->check( $this->healthySite( array( 'phpVersion' => '8.4.1', 'now' => 1811851200 ) ), 'php_version' );
+		$in2029 = $this->check( $this->healthySite( array( 'phpVersion' => '8.4.1', 'now' => 1861920000 ) ), 'php_version' );
+
+		$this->assertSame( CheckResult::STATUS_WARNING, $in2027->status, '8.4 is security-only after 2026-12-31' );
+		$this->assertSame( CheckResult::STATUS_CRITICAL, $in2029->status, '8.4 is end of life after 2028-12-31' );
+	}
+
+	public function test_a_php_branch_newer_than_the_table_is_treated_as_supported(): void {
+		$this->assertSame(
+			CheckResult::STATUS_GOOD,
+			$this->check( $this->healthySite( array( 'phpVersion' => '9.0.0' ) ), 'php_version' )->status
 		);
 	}
 
@@ -135,7 +162,7 @@ final class DiagnosticEngineTest extends TestCase {
 		$result = $this->check( $this->healthySite( array( 'revisionCount' => 2000, 'postCount' => 100 ) ), 'revisions' );
 
 		$this->assertSame( CheckResult::STATUS_WARNING, $result->status );
-		$this->assertStringContainsString( 'kopii zapasowej', $result->recommendation );
+		$this->assertStringContainsString( 'backup', $result->recommendation );
 	}
 
 	public function test_a_site_with_no_posts_does_not_divide_by_zero(): void {

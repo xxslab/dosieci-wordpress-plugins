@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\WP\Doctor\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * The outcome of one diagnostic check.
  *

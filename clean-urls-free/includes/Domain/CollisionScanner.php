@@ -4,22 +4,26 @@ declare(strict_types=1);
 
 namespace DoSieci\Clean\Urls\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * The preflight step of the Safe Migration Engine (PRODUCT_SCOPE.md): work
- * out which proposed slug changes are safe BEFORE anything is written.
+ * The preflight: work out which proposed slug changes are safe BEFORE
+ * anything is written.
  *
- * Three classes of problem are detected:
- *  - reserved slug        -> blocker (the URL would be unreachable)
- *  - empty slug           -> blocker (nothing sensible to redirect to)
- *  - duplicate target     -> blocker for all but the first claimant, because
- *                            two posts cannot own one URL and WordPress
- *                            would silently append "-2", producing a URL
- *                            nobody asked for and a redirect that points at
- *                            the wrong page
- *  - collides with an existing, unchanged post's slug -> blocker
+ * Problems detected here, each a blocker:
+ *  - empty slug       (nothing sensible to redirect to)
+ *  - reserved slug    (the URL would be unreachable)
+ *  - taken slug       (collides with a post that is not being renamed)
+ *  - duplicate target (two proposals want the same URL; WordPress would
+ *                      silently append "-2", producing an address nobody
+ *                      asked for and a redirect to the wrong page)
  *
- * Nothing here writes. The scanner's whole job is to be run and read before
- * the operator decides to apply anything.
+ * Duplicates only count among siblings: WordPress keeps slugs unique per
+ * parent, so two pages under different parents may share one.
+ *
+ * Nothing here writes.
  */
 final class CollisionScanner {
 
@@ -27,12 +31,12 @@ final class CollisionScanner {
 	}
 
 	/**
-	 * @param UrlChange[]           $proposed
-	 * @param array<string, int>    $existingSlugs slug => post id, for posts NOT in $proposed
+	 * @param UrlChange[]        $proposed
+	 * @param array<string, int> $existingSlugs "parentId/slug" => post id, for posts NOT in $proposed
 	 *
 	 * @return UrlChange[] same order, annotated with severity/issue
 	 */
-	public function scan( array $proposed, array $existingSlugs ): array {
+	public function scan( array $proposed, array $existingSlugs = array() ): array {
 		$claimed  = array();
 		$reviewed = array();
 
@@ -42,34 +46,38 @@ final class CollisionScanner {
 				continue;
 			}
 
+			$key = self::key( $change->parentId, $change->proposedSlug );
+
 			if ( '' === $change->proposedSlug ) {
-				$reviewed[] = $change->withIssue( UrlChange::SEVERITY_BLOCKER, 'Wygenerowany slug jest pusty.' );
+				$reviewed[] = $change->withIssue( UrlChange::SEVERITY_BLOCKER, __( 'The generated slug is empty.', 'dosieci-clean-urls' ) );
 				continue;
 			}
 
 			if ( $this->normalizer->isReserved( $change->proposedSlug ) ) {
-				$reviewed[] = $change->withIssue( UrlChange::SEVERITY_BLOCKER, 'Slug jest zarezerwowany przez WordPressa.' );
+				$reviewed[] = $change->withIssue( UrlChange::SEVERITY_BLOCKER, __( 'WordPress reserves this slug.', 'dosieci-clean-urls' ) );
 				continue;
 			}
 
-			if ( isset( $existingSlugs[ $change->proposedSlug ] ) && $existingSlugs[ $change->proposedSlug ] !== $change->postId ) {
+			if ( isset( $existingSlugs[ $key ] ) && $existingSlugs[ $key ] !== $change->postId ) {
 				$reviewed[] = $change->withIssue(
 					UrlChange::SEVERITY_BLOCKER,
-					sprintf( 'Slug jest już zajęty przez wpis #%d.', $existingSlugs[ $change->proposedSlug ] )
+					/* translators: %d: post ID */
+					sprintf( __( 'The slug is already used by post #%d.', 'dosieci-clean-urls' ), $existingSlugs[ $key ] )
 				);
 				continue;
 			}
 
-			if ( isset( $claimed[ $change->proposedSlug ] ) ) {
+			if ( isset( $claimed[ $key ] ) ) {
 				$reviewed[] = $change->withIssue(
 					UrlChange::SEVERITY_BLOCKER,
-					sprintf( 'Ten sam slug proponowany również dla wpisu #%d.', $claimed[ $change->proposedSlug ] )
+					/* translators: %d: post ID */
+					sprintf( __( 'The same slug is also proposed for post #%d.', 'dosieci-clean-urls' ), $claimed[ $key ] )
 				);
 				continue;
 			}
 
-			$claimed[ $change->proposedSlug ] = $change->postId;
-			$reviewed[]                       = $change;
+			$claimed[ $key ] = $change->postId;
+			$reviewed[]      = $change;
 		}
 
 		return $reviewed;
@@ -101,5 +109,9 @@ final class CollisionScanner {
 			'blockers'   => $blockers,
 			'unchanged'  => $unchanged,
 		);
+	}
+
+	public static function key( int $parentId, string $slug ): string {
+		return $parentId . '/' . $slug;
 	}
 }

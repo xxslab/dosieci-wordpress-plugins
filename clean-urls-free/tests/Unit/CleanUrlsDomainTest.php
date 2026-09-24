@@ -68,7 +68,7 @@ final class CleanUrlsDomainTest extends TestCase {
 	public function test_colliding_with_an_untouched_existing_post_is_a_blocker(): void {
 		$scanned = $this->scanner->scan(
 			array( new UrlChange( 5, 'Nowe', 'stary', 'zajety' ) ),
-			array( 'zajety' => 99 )
+			array( '0/zajety' => 99 )
 		);
 
 		$this->assertSame( UrlChange::SEVERITY_BLOCKER, $scanned[0]->severity );
@@ -78,7 +78,7 @@ final class CleanUrlsDomainTest extends TestCase {
 	public function test_a_post_keeping_its_own_slug_is_not_a_collision_with_itself(): void {
 		$scanned = $this->scanner->scan(
 			array( new UrlChange( 7, 'Bez zmian', 'ten-sam', 'ten-sam' ) ),
-			array( 'ten-sam' => 7 )
+			array( '0/ten-sam' => 7 )
 		);
 
 		$this->assertSame( UrlChange::SEVERITY_OK, $scanned[0]->severity );
@@ -139,5 +139,68 @@ final class CleanUrlsDomainTest extends TestCase {
 		$map->add( 'https://example.test/stary', 'https://example.test/nowy' );
 
 		$this->assertSame( '/nowy', $map->target( '/stary' ) );
+	}
+
+	public function test_other_accented_letters_go_through_the_injected_transliterator(): void {
+		$withoutWordPress = new SlugNormalizer();
+		$withWordPress    = new SlugNormalizer( static fn( string $text ): string => strtr( $text, array( 'Č' => 'C', 'á' => 'a' ) ) );
+
+		$this->assertSame( 'okol-da', $withoutWordPress->normalize( 'Čokoláda' ) );
+		$this->assertSame( 'cokolada', $withWordPress->normalize( 'Čokoláda' ) );
+	}
+
+	public function test_only_messy_current_slugs_count_as_unclean(): void {
+		$this->assertTrue( ( new UrlChange( 1, 'x', 'buty-meskie-40', 'y' ) )->isCurrentSlugClean() );
+		$this->assertFalse( ( new UrlChange( 1, 'x', 'za%c5%bc%c3%b3%c5%82k', 'y' ) )->isCurrentSlugClean() );
+		$this->assertTrue( ( new UrlChange( 1, 'x', 'refund_returns', 'y' ) )->isCurrentSlugClean() );
+		$this->assertFalse( ( new UrlChange( 1, 'x', '', 'y' ) )->isCurrentSlugClean() );
+	}
+
+	public function test_the_same_slug_under_different_parents_is_not_a_duplicate(): void {
+		$scanned = $this->scanner->scan(
+			array(
+				new UrlChange( 10, 'Zespół', 'zesp%c3%b3%c5%82', 'zespol', UrlChange::SEVERITY_OK, null, 1 ),
+				new UrlChange( 11, 'Zespół', 'zesp%c3%b3%c5%82', 'zespol', UrlChange::SEVERITY_OK, null, 2 ),
+				new UrlChange( 12, 'Zespół', 'zesp%c3%b3%c5%82-2', 'zespol', UrlChange::SEVERITY_OK, null, 2 ),
+			)
+		);
+
+		$this->assertTrue( $scanned[0]->isApplicable() );
+		$this->assertTrue( $scanned[1]->isApplicable() );
+		$this->assertSame( UrlChange::SEVERITY_BLOCKER, $scanned[2]->severity, 'Siblings may not share a slug.' );
+	}
+
+	public function test_an_old_address_matches_regardless_of_percent_encoding_or_case(): void {
+		$map = new RedirectMap();
+		$map->add( '/za%c5%bc%c3%b3%c5%82k/', '/zazolk/' );
+
+		$this->assertSame( '/zazolk/', $map->target( '/za%C5%BC%C3%B3%C5%82k' ) );
+		$this->assertSame( '/zazolk/', $map->target( '/Zażółk/' ) );
+		$this->assertSame( '/zazolk/', $map->target( '/ZA%C5%BC%C3%B3%C5%82K/' ) );
+	}
+
+	public function test_a_target_is_percent_encoded_for_the_location_header(): void {
+		$map = new RedirectMap();
+		$map->add( '/old/', '/nowy-żółw/' );
+
+		$this->assertSame( '/nowy-%C5%BC%C3%B3%C5%82w/', $map->target( '/old' ) );
+	}
+
+	public function test_the_home_page_is_never_redirected(): void {
+		$map = new RedirectMap();
+		$map->add( '/', '/somewhere/' );
+		$map->add( 'https://example.test', '/somewhere/' );
+
+		$this->assertSame( 0, $map->count() );
+	}
+
+	public function test_a_stored_map_survives_a_round_trip(): void {
+		$map = new RedirectMap();
+		$map->add( '/stary-wpis/', '/nowy-wpis/' );
+
+		$restored = new RedirectMap( $map->all() );
+
+		$this->assertSame( '/nowy-wpis/', $restored->target( '/stary-wpis/' ) );
+		$this->assertSame( 1, $restored->count() );
 	}
 }

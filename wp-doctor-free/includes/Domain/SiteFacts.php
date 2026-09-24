@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\WP\Doctor\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Everything the checks need to know about a site, collected once by the
  * WordPress adapter and then handed to pure functions.

@@ -1,0 +1,190 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci Clean URLs 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-clean-urls\n"
+"Last-Translator: DoSieci\n"
+"Language-Team: Polish\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Domain: dosieci-clean-urls\n"
+
+#. Plugin Name of the plugin
+#: dosieci-clean-urls.php
+#: includes/Plugin.php:56
+#: includes/Plugin.php:414
+msgid "DoSieci Clean URLs"
+msgstr "DoSieci Clean URLs"
+
+#. Plugin URI of the plugin
+#: dosieci-clean-urls.php
+msgid "https://dosieci.pl/wtyczki/clean-urls/"
+msgstr "https://dosieci.pl/wtyczki/clean-urls/"
+
+#. Description of the plugin
+#: dosieci-clean-urls.php
+msgid "Safe URL clean-up for posts, pages and WooCommerce products: a preview of every change, a collision scanner, and 301 redirects without chains or loops. Nothing changes until you approve it."
+msgstr "Bezpieczne porządkowanie adresów URL wpisów, stron i produktów WooCommerce: podgląd każdej zmiany, skaner kolizji i przekierowania 301 bez łańcuchów i pętli. Nic się nie zmienia bez Twojej akceptacji."
+
+#. Author of the plugin
+#: dosieci-clean-urls.php
+msgid "DoSieci"
+msgstr "DoSieci"
+
+#. Author URI of the plugin
+#: dosieci-clean-urls.php
+msgid "https://dosieci.pl/"
+msgstr "https://dosieci.pl/"
+
+#: includes/Domain/CollisionScanner.php:52
+msgid "The generated slug is empty."
+msgstr "Wygenerowany slug jest pusty."
+
+#: includes/Domain/CollisionScanner.php:57
+msgid "WordPress reserves this slug."
+msgstr "Ten slug jest zarezerwowany przez WordPressa."
+
+#. translators: %d: post ID
+#: includes/Domain/CollisionScanner.php:65
+msgid "The slug is already used by post #%d."
+msgstr "Ten slug jest już używany przez wpis #%d."
+
+#. translators: %d: post ID
+#: includes/Domain/CollisionScanner.php:74
+msgid "The same slug is also proposed for post #%d."
+msgstr "Ten sam slug zaproponowano również dla wpisu #%d."
+
+#: includes/Plugin.php:57
+msgid "Clean URLs"
+msgstr "Clean URLs"
+
+#: includes/Plugin.php:75
+msgid "Preview"
+msgstr "Podgląd"
+
+#: includes/Plugin.php:133
+msgid "Posts"
+msgstr "Wpisy"
+
+#: includes/Plugin.php:134
+msgid "Pages"
+msgstr "Strony"
+
+#: includes/Plugin.php:138
+msgid "Products"
+msgstr "Produkty"
+
+#. translators: %s: the slug WordPress would use instead
+#: includes/Plugin.php:242
+msgid "This address is already taken, WordPress would save it as \"%s\"."
+msgstr "Ten adres jest już zajęty — WordPress zapisałby go jako „%s”."
+
+#: includes/Plugin.php:248
+msgid "You do not have permission to do this."
+msgstr "Nie masz uprawnień do wykonania tej operacji."
+
+#: includes/Plugin.php:394
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do tej strony."
+
+#. translators: %d: number of renamed items
+#: includes/Plugin.php:422
+msgid "Renamed %d item. Its old address now redirects with a 301."
+msgid_plural "Renamed %d items. Their old addresses now redirect with a 301."
+msgstr[0] "Zmieniono adres %d elementu. Stary adres przekierowuje teraz kodem 301."
+msgstr[1] "Zmieniono adresy %d elementów. Stare adresy przekierowują teraz kodem 301."
+msgstr[2] "Zmieniono adresy %d elementów. Stare adresy przekierowują teraz kodem 301."
+
+#. translators: %d: number of skipped items
+#: includes/Plugin.php:430
+msgid "%d item was skipped because it changed after the preview. Check it again below."
+msgid_plural "%d items were skipped because they changed after the preview. Check them again below."
+msgstr[0] "%d element pominięto, bo zmienił się po podglądzie. Sprawdź go ponownie poniżej."
+msgstr[1] "%d elementy pominięto, bo zmieniły się po podglądzie. Sprawdź je ponownie poniżej."
+msgstr[2] "%d elementów pominięto, bo zmieniły się po podglądzie. Sprawdź je ponownie poniżej."
+
+#: includes/Plugin.php:439
+msgid "Preview the new addresses before anything changes. Only the rows you tick are renamed, and every old address keeps working through a 301 redirect."
+msgstr "Zobacz nowe adresy, zanim cokolwiek się zmieni. Zmieniane są tylko zaznaczone wiersze, a każdy stary adres dalej działa dzięki przekierowaniu 301."
+
+#: includes/Plugin.php:443
+msgid "Content type:"
+msgstr "Typ treści:"
+
+#: includes/Plugin.php:449
+msgid "Scan"
+msgstr "Skanuj"
+
+#: includes/Plugin.php:453
+msgid "Can be renamed:"
+msgstr "Do zmiany:"
+
+#: includes/Plugin.php:454
+msgid "Blocked:"
+msgstr "Zablokowane:"
+
+#: includes/Plugin.php:455
+msgid "No change needed:"
+msgstr "Bez zmian:"
+
+#: includes/Plugin.php:456
+msgid "Stored redirects:"
+msgstr "Zapisane przekierowania:"
+
+#: includes/Plugin.php:460
+msgid "Every address of this content type already matches its title. Nothing to do."
+msgstr "Każdy adres tego typu treści pasuje już do tytułu. Nie ma nic do zrobienia."
+
+#: includes/Plugin.php:467
+msgid "Encoded or messy addresses are ticked for you. Clean addresses that simply differ from the title are usually chosen on purpose, so they are left unticked."
+msgstr "Zakodowane lub nieczytelne adresy są zaznaczone automatycznie. Czyste adresy, które po prostu różnią się od tytułu, zwykle wybrano celowo, dlatego pozostają niezaznaczone."
+
+#: includes/Plugin.php:473
+msgid "Select all"
+msgstr "Zaznacz wszystkie"
+
+#: includes/Plugin.php:476
+msgid "Title"
+msgstr "Tytuł"
+
+#: includes/Plugin.php:477
+msgid "Current slug"
+msgstr "Obecny slug"
+
+#: includes/Plugin.php:478
+msgid "New slug"
+msgstr "Nowy slug"
+
+#: includes/Plugin.php:479
+msgid "Status"
+msgstr "Status"
+
+#: includes/Plugin.php:494
+msgid "(no title)"
+msgstr "(bez tytułu)"
+
+#: includes/Plugin.php:501
+msgid "Blocked"
+msgstr "Zablokowane"
+
+#: includes/Plugin.php:504
+msgid "Custom slug"
+msgstr "Własny slug"
+
+#: includes/Plugin.php:506
+msgid "Ready"
+msgstr "Gotowe"
+
+#. translators: %d: number of rows not shown
+#: includes/Plugin.php:519
+msgid "%d more item is not listed yet. It will appear here after you apply this batch."
+msgid_plural "%d more items are not listed yet. They will appear here after you apply this batch."
+msgstr[0] "Jeszcze %d element nie jest widoczny na liście. Pojawi się tutaj po zastosowaniu tej partii."
+msgstr[1] "Jeszcze %d elementy nie są widoczne na liście. Pojawią się tutaj po zastosowaniu tej partii."
+msgstr[2] "Jeszcze %d elementów nie jest widocznych na liście. Pojawią się tutaj po zastosowaniu tej partii."
+
+#: includes/Plugin.php:527
+msgid "Rename the ticked items (with 301 redirects)"
+msgstr "Zmień adresy zaznaczonych elementów (z przekierowaniem 301)"

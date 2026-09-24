@@ -4,19 +4,29 @@ declare(strict_types=1);
 
 namespace DoSieci\Clean\Urls\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * old path -> new path, with two guarantees the Safe Migration Engine
- * requires (PRODUCT_SCOPE.md): no redirect chains, and no loops.
+ * old path -> new path, with two guarantees: no redirect chains, and no
+ * loops.
  *
- * Chains matter because each hop costs a request and dilutes the signal
- * search engines pass through; loops matter because they take the URL
- * permanently offline. Both are prevented at insert time rather than
- * detected later: if A->B already exists and B->C is added, A is rewritten
- * to point straight at C.
+ * Chains cost a request per hop and dilute the signal search engines pass
+ * through; loops take the URL offline. Both are prevented at insert time: if
+ * A->B exists and B->C is added, A is rewritten to point straight at C.
+ *
+ * Old paths are matched in a canonical form -- percent-decoded, lower-cased,
+ * without a trailing slash -- because the same old address arrives as
+ * "/za%c5%bc%c3%b3%c5%82k/" from a link WordPress printed,
+ * "/za%C5%BC%C3%B3%C5%82k" from a browser that encoded it itself, and
+ * "/Zażółk/" from someone who typed it. Targets keep the exact shape of the
+ * permalink they were recorded from, so the redirect lands on the canonical
+ * URL without an extra hop.
  */
 final class RedirectMap {
 
-	/** @var array<string, string> */
+	/** @var array<string, string> canonical old path => decoded target path */
 	private array $map = array();
 
 	/**
@@ -29,50 +39,62 @@ final class RedirectMap {
 	}
 
 	public function add( string $from, string $to ): void {
-		$from = self::normalisePath( $from );
-		$to   = self::normalisePath( $to );
+		$fromKey = self::canonical( $from );
+		$to      = self::decodedPath( $to );
 
-		if ( '' === $from || '' === $to || $from === $to ) {
-			// A self-redirect is the simplest possible loop.
+		if ( '/' === $fromKey || self::canonical( $to ) === $fromKey ) {
+			// Never hijack the home page; a self-redirect is the simplest loop.
 			return;
 		}
 
 		// If the destination itself redirects somewhere, skip the hop.
-		$finalTarget = $this->resolve( $to );
+		$final    = $this->resolve( $to );
+		$finalKey = self::canonical( $final );
 
-		if ( $finalTarget === $from ) {
+		if ( $finalKey === $fromKey ) {
 			// Adding this would create a cycle; refuse rather than build one.
 			return;
 		}
 
-		$this->map[ $from ] = $finalTarget;
+		$this->map[ $fromKey ] = $final;
 
 		// Re-point anything that pointed at $from so no chain survives.
 		foreach ( $this->map as $existingFrom => $existingTo ) {
-			if ( $existingTo === $from && $existingFrom !== $finalTarget ) {
-				$this->map[ $existingFrom ] = $finalTarget;
+			if ( self::canonical( $existingTo ) === $fromKey && $existingFrom !== $finalKey ) {
+				$this->map[ $existingFrom ] = $final;
 			}
 		}
 	}
 
+	/**
+	 * Follows the map from $path to its final destination (decoded path).
+	 */
 	public function resolve( string $path ): string {
-		$path = self::normalisePath( $path );
+		$path = self::decodedPath( $path );
+		$key  = self::canonical( $path );
 		$seen = array();
 
-		while ( isset( $this->map[ $path ] ) && ! isset( $seen[ $path ] ) ) {
-			$seen[ $path ] = true;
-			$path          = $this->map[ $path ];
+		while ( isset( $this->map[ $key ] ) && ! isset( $seen[ $key ] ) ) {
+			$seen[ $key ] = true;
+			$path         = $this->map[ $key ];
+			$key          = self::canonical( $path );
 		}
 
 		return $path;
 	}
 
 	public function has( string $from ): bool {
-		return isset( $this->map[ self::normalisePath( $from ) ] );
+		return isset( $this->map[ self::canonical( $from ) ] );
 	}
 
+	/**
+	 * The target of $from as a percent-encoded URL path ready for a Location
+	 * header, or null when $from is not redirected.
+	 */
 	public function target( string $from ): ?string {
-		return $this->map[ self::normalisePath( $from ) ] ?? null;
+		$target = $this->map[ self::canonical( $from ) ] ?? null;
+
+		return null === $target ? null : implode( '/', array_map( 'rawurlencode', explode( '/', $target ) ) );
 	}
 
 	/** @return array<string, string> */
@@ -84,11 +106,22 @@ final class RedirectMap {
 		return count( $this->map );
 	}
 
-	private static function normalisePath( string $path ): string {
-		$path = trim( $path );
-		$path = parse_url( $path, PHP_URL_PATH ) ?: $path;
-		$path = '/' . ltrim( $path, '/' );
+	public static function canonical( string $path ): string {
+		$path = rtrim( mb_strtolower( self::decodedPath( $path ), 'UTF-8' ), '/' );
 
-		return rtrim( $path, '/' ) ?: '/';
+		return '' === $path ? '/' : $path;
+	}
+
+	private static function decodedPath( string $path ): string {
+		$parts = wp_parse_url( trim( $path ) );
+
+		if ( ! is_array( $parts ) ) {
+			return '/';
+		}
+
+		// A full URL without a path ("https://example.test") is the home page.
+		$path = $parts['path'] ?? ( isset( $parts['host'] ) ? '/' : '' );
+
+		return '/' . ltrim( rawurldecode( $path ), '/' );
 	}
 }

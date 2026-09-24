@@ -1,0 +1,333 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci WP Doctor 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-wp-doctor\n"
+"Last-Translator: DoSieci\n"
+"Language-Team: Polish\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Domain: dosieci-wp-doctor\n"
+
+#. Plugin Name of the plugin
+#: dosieci-wp-doctor.php
+#: includes/Plugin.php:42
+#: includes/Plugin.php:85
+msgid "DoSieci WP Doctor"
+msgstr "DoSieci WP Doctor"
+
+#. Plugin URI of the plugin
+#: dosieci-wp-doctor.php
+msgid "https://dosieci.pl/wtyczki/wp-doctor/"
+msgstr "https://dosieci.pl/wtyczki/wp-doctor/"
+
+#. Description of the plugin
+#: dosieci-wp-doctor.php
+msgid "An explainable, read-only technical audit of WordPress and WooCommerce. It shows what is wrong and what to do about it, but never changes anything automatically."
+msgstr "Wyjaśnialny audyt techniczny WordPressa i WooCommerce. Wyłącznie do odczytu — pokazuje, co jest nie tak i co z tym zrobić, ale niczego nie zmienia automatycznie."
+
+#. Author of the plugin
+#: dosieci-wp-doctor.php
+msgid "DoSieci"
+msgstr "DoSieci"
+
+#. Author URI of the plugin
+#: dosieci-wp-doctor.php
+msgid "https://dosieci.pl/"
+msgstr "https://dosieci.pl/"
+
+#: includes/Domain/DiagnosticEngine.php:92
+msgid "PHP version"
+msgstr "Wersja PHP"
+
+#. translators: %s: PHP version, e.g. 8.6.1
+#: includes/Domain/DiagnosticEngine.php:105
+msgid "PHP %s is a current release."
+msgstr "PHP %s to aktualne wydanie."
+
+#. translators: 1: PHP version, 2: date (YYYY-MM-DD)
+#: includes/Domain/DiagnosticEngine.php:127
+msgid "PHP %1$s only receives security fixes, until %2$s."
+msgstr "PHP %1$s otrzymuje już tylko poprawki bezpieczeństwa, do %2$s."
+
+#: includes/Domain/DiagnosticEngine.php:131
+msgid "Plan the upgrade to a newer PHP version with your host before that date."
+msgstr "Zaplanuj z hostingiem przejście na nowszą wersję PHP przed tą datą."
+
+#. translators: %s: PHP version
+#: includes/Domain/DiagnosticEngine.php:141
+msgid "PHP %s is actively supported."
+msgstr "PHP %s jest aktywnie wspierane."
+
+#. translators: %s: PHP version
+#: includes/Domain/DiagnosticEngine.php:156
+msgid "PHP %s no longer receives security fixes."
+msgstr "PHP %s nie otrzymuje już poprawek bezpieczeństwa."
+
+#: includes/Domain/DiagnosticEngine.php:157
+msgid "Ask your host to move the site to a supported PHP version and test the site after the switch."
+msgstr "Poproś hosting o przeniesienie witryny na wspieraną wersję PHP i sprawdź witrynę po zmianie."
+
+#: includes/Domain/DiagnosticEngine.php:163
+msgid "HTTPS"
+msgstr "HTTPS"
+
+#: includes/Domain/DiagnosticEngine.php:166
+msgid "The site is served over HTTPS."
+msgstr "Witryna działa po HTTPS."
+
+#: includes/Domain/DiagnosticEngine.php:171
+msgid "The site does not use HTTPS."
+msgstr "Witryna nie używa HTTPS."
+
+#: includes/Domain/DiagnosticEngine.php:172
+msgid "Enable an SSL certificate (for example Let's Encrypt) and change the site address to https://."
+msgstr "Włącz certyfikat SSL (np. Let's Encrypt) i przestaw adres witryny na https://."
+
+#: includes/Domain/DiagnosticEngine.php:177
+msgid "Debug mode"
+msgstr "Tryb debugowania"
+
+#: includes/Domain/DiagnosticEngine.php:184
+msgid "WP_DEBUG_DISPLAY is on, so error messages can be shown to visitors."
+msgstr "WP_DEBUG_DISPLAY jest włączone — komunikaty błędów mogą być widoczne dla odwiedzających."
+
+#: includes/Domain/DiagnosticEngine.php:185
+msgid "Set WP_DEBUG_DISPLAY to false in wp-config.php. Log errors to a file, not to the screen."
+msgstr "Ustaw WP_DEBUG_DISPLAY na false w wp-config.php. Błędy zapisuj w pliku, nie wyświetlaj na ekranie."
+
+#: includes/Domain/DiagnosticEngine.php:194
+msgid "WP_DEBUG is on (without displaying errors on screen)."
+msgstr "WP_DEBUG jest włączone (bez wyświetlania błędów na ekranie)."
+
+#: includes/Domain/DiagnosticEngine.php:195
+msgid "On a production site it should usually be off."
+msgstr "Na witrynie produkcyjnej zwykle powinno być wyłączone."
+
+#: includes/Domain/DiagnosticEngine.php:199
+msgid "Debugging is off."
+msgstr "Debugowanie jest wyłączone."
+
+#: includes/Domain/DiagnosticEngine.php:203
+msgid "Search engine visibility"
+msgstr "Widoczność w wyszukiwarkach"
+
+#: includes/Domain/DiagnosticEngine.php:210
+msgid "The site asks search engines not to index it."
+msgstr "Witryna prosi wyszukiwarki o nieindeksowanie."
+
+#: includes/Domain/DiagnosticEngine.php:211
+msgid "Untick \"Discourage search engines from indexing this site\" in Settings > Reading, unless this is intentional (for example on a staging site)."
+msgstr "Odznacz „Proś wyszukiwarki o nieindeksowanie tej witryny” w Ustawienia → Czytanie, o ile nie jest to celowe (np. na witrynie testowej)."
+
+#: includes/Domain/DiagnosticEngine.php:213
+msgid "The site can be indexed."
+msgstr "Witryna może być indeksowana."
+
+#: includes/Domain/DiagnosticEngine.php:217
+msgid "Permalink structure"
+msgstr "Struktura bezpośrednich odnośników"
+
+#: includes/Domain/DiagnosticEngine.php:224
+msgid "Plain permalinks (?p=123) are in use."
+msgstr "Używane są proste odnośniki (?p=123)."
+
+#: includes/Domain/DiagnosticEngine.php:225
+msgid "Switch to a structure based on the post name in Settings > Permalinks."
+msgstr "Przełącz na strukturę opartą na nazwie wpisu w Ustawienia → Bezpośrednie odnośniki."
+
+#: includes/Domain/DiagnosticEngine.php:227
+msgid "A readable permalink structure is in use."
+msgstr "Używana jest czytelna struktura odnośników."
+
+#: includes/Domain/DiagnosticEngine.php:231
+msgid "Autoloaded options"
+msgstr "Autoładowane opcje"
+
+#. translators: %d: size in kilobytes
+#: includes/Domain/DiagnosticEngine.php:236
+msgid "%d KB of options is loaded on every request."
+msgstr "Przy każdym żądaniu ładuje się %d KB opcji."
+
+#: includes/Domain/DiagnosticEngine.php:244
+msgid "Find the largest autoloaded entries and turn autoload off where it is not needed. Unused plugins and abandoned transients are the usual cause."
+msgstr "Znajdź największe wpisy autoload i wyłącz autoload tam, gdzie nie jest potrzebny. Zwykle winne są nieużywane wtyczki i porzucone transienty."
+
+#: includes/Domain/DiagnosticEngine.php:255
+msgid "The recommended limit is about 800 KB. Review the largest entries."
+msgstr "Zalecany limit to ok. 800 KB. Sprawdź największe wpisy."
+
+#. translators: %d: size in kilobytes
+#: includes/Domain/DiagnosticEngine.php:265
+msgid "%d KB, below the recommended threshold."
+msgstr "%d KB — poniżej zalecanego progu."
+
+#: includes/Domain/DiagnosticEngine.php:272
+msgid "Post revisions"
+msgstr "Rewizje wpisów"
+
+#: includes/Domain/DiagnosticEngine.php:275
+msgid "There are no posts to assess."
+msgstr "Brak wpisów do oceny."
+
+#. translators: 1: number of revisions, 2: number of posts, 3: average revisions per post
+#: includes/Domain/DiagnosticEngine.php:287
+msgid "Revisions: %1$d, posts: %2$d (%3$.1f revisions per post on average)."
+msgstr "Rewizje: %1$d, wpisy: %2$d (średnio %3$.1f rewizji na wpis)."
+
+#: includes/Domain/DiagnosticEngine.php:292
+msgid "Consider limiting WP_POST_REVISIONS. Do not bulk-delete revisions without a backup: it cannot be undone."
+msgstr "Rozważ ograniczenie WP_POST_REVISIONS. Nie usuwaj rewizji hurtowo bez kopii zapasowej — tego nie da się cofnąć."
+
+#. translators: 1: number of revisions, 2: number of posts
+#: includes/Domain/DiagnosticEngine.php:306
+msgid "Revisions: %1$d, posts: %2$d."
+msgstr "Rewizje: %1$d, wpisy: %2$d."
+
+#: includes/Domain/DiagnosticEngine.php:314
+msgid "Transients"
+msgstr "Transienty"
+
+#. translators: %d: number of transients
+#: includes/Domain/DiagnosticEngine.php:322
+msgid "The database holds %d transient."
+msgid_plural "The database holds %d transients."
+msgstr[0] "W bazie jest %d transient."
+msgstr[1] "W bazie są %d transienty."
+msgstr[2] "W bazie jest %d transientów."
+
+#: includes/Domain/DiagnosticEngine.php:323
+msgid "A large number of transients usually means there is no persistent object cache. Consider Redis or Memcached rather than clearing them by hand."
+msgstr "Duża liczba transientów zwykle oznacza brak trwałego cache obiektowego. Rozważ Redis lub Memcached zamiast ręcznego czyszczenia."
+
+#. translators: %d: number of transients
+#: includes/Domain/DiagnosticEngine.php:331
+msgid "%d transient."
+msgid_plural "%d transients."
+msgstr[0] "%d transient."
+msgstr[1] "%d transienty."
+msgstr[2] "%d transientów."
+
+#: includes/Domain/DiagnosticEngine.php:336
+msgid "PHP memory limit"
+msgstr "Limit pamięci PHP"
+
+#. translators: %d: memory limit in megabytes
+#: includes/Domain/DiagnosticEngine.php:344
+msgid "The memory limit is %d MB."
+msgstr "Limit pamięci wynosi %d MB."
+
+#: includes/Domain/DiagnosticEngine.php:345
+msgid "WooCommerce needs at least 128 MB (often 256 MB)."
+msgstr "WooCommerce potrzebuje co najmniej 128 MB (często 256 MB)."
+
+#: includes/Domain/DiagnosticEngine.php:348
+msgid "The memory limit is sufficient."
+msgstr "Limit pamięci jest wystarczający."
+
+#: includes/Domain/DiagnosticEngine.php:352
+msgid "Scheduled tasks (cron)"
+msgstr "Zadania cron"
+
+#. translators: %d: number of overdue scheduled tasks
+#: includes/Domain/DiagnosticEngine.php:364
+msgid "%d scheduled task is more than an hour overdue."
+msgid_plural "%d scheduled tasks are more than an hour overdue."
+msgstr[0] "%d zaplanowane zadanie jest opóźnione o ponad godzinę."
+msgstr[1] "%d zaplanowane zadania są opóźnione o ponad godzinę."
+msgstr[2] "%d zaplanowanych zadań jest opóźnionych o ponad godzinę."
+
+#: includes/Domain/DiagnosticEngine.php:365
+msgid "WP-Cron only runs when the site gets traffic. On a low-traffic site, set up a system cron job that calls wp-cron.php."
+msgstr "WP-Cron uruchamia się tylko przy ruchu na witrynie. Przy małym ruchu skonfiguruj systemowy cron wywołujący wp-cron.php."
+
+#. translators: %d: number of scheduled tasks
+#: includes/Domain/DiagnosticEngine.php:376
+msgid "%d scheduled task, none overdue."
+msgid_plural "%d scheduled tasks, none overdue."
+msgstr[0] "%d zaplanowane zadanie, bez opóźnień."
+msgstr[1] "%d zaplanowane zadania, bez opóźnień."
+msgstr[2] "%d zaplanowanych zadań, bez opóźnień."
+
+#: includes/Domain/DiagnosticEngine.php:381
+msgid "Inactive plugins"
+msgstr "Nieaktywne wtyczki"
+
+#. translators: %d: number of inactive plugins
+#: includes/Domain/DiagnosticEngine.php:390
+msgid "%d inactive plugin is still installed."
+msgid_plural "%d inactive plugins are still installed."
+msgstr[0] "%d nieaktywna wtyczka wciąż jest zainstalowana."
+msgstr[1] "%d nieaktywne wtyczki wciąż są zainstalowane."
+msgstr[2] "%d nieaktywnych wtyczek wciąż jest zainstalowanych."
+
+#: includes/Domain/DiagnosticEngine.php:391
+msgid "Inactive plugins can still contain vulnerable code reachable from the web. Delete the ones you do not plan to use."
+msgstr "Nieaktywne wtyczki nadal mogą zawierać podatny kod dostępny z sieci. Usuń te, których nie planujesz używać."
+
+#. translators: %d: number of inactive plugins
+#: includes/Domain/DiagnosticEngine.php:402
+msgid "%d inactive plugin."
+msgid_plural "%d inactive plugins."
+msgstr[0] "%d nieaktywna wtyczka."
+msgstr[1] "%d nieaktywne wtyczki."
+msgstr[2] "%d nieaktywnych wtyczek."
+
+#: includes/Plugin.php:43
+msgid "WP Doctor"
+msgstr "WP Doctor"
+
+#: includes/Plugin.php:61
+msgid "Run scan"
+msgstr "Uruchom skan"
+
+#: includes/Plugin.php:70
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do tej strony."
+
+#: includes/Plugin.php:78
+msgid "OK"
+msgstr "OK"
+
+#: includes/Plugin.php:79
+msgid "Warning"
+msgstr "Uwaga"
+
+#: includes/Plugin.php:80
+msgid "Critical"
+msgstr "Krytyczne"
+
+#: includes/Plugin.php:81
+msgid "Info"
+msgstr "Info"
+
+#. translators: 1: number of passed checks, 2: number of warnings, 3: number of critical problems
+#: includes/Plugin.php:92
+msgid "OK: %1$d, warnings: %2$d, critical: %3$d"
+msgstr "OK: %1$d, ostrzeżenia: %2$d, krytyczne: %3$d"
+
+#: includes/Plugin.php:101
+msgid "The score is only meant for comparing one scan with the next. A high score does not mean the site is secure: it is a summary, not a guarantee."
+msgstr "Wynik służy wyłącznie do porównywania kolejnych skanów. Wysoki wynik nie oznacza, że witryna jest bezpieczna — to skrót, nie gwarancja."
+
+#: includes/Plugin.php:105
+msgid "This scan is read-only. The plugin never changes, deletes or optimizes anything automatically."
+msgstr "Ten skan jest wyłącznie do odczytu. Wtyczka niczego nie zmienia, nie usuwa i nie optymalizuje automatycznie."
+
+#: includes/Plugin.php:111
+msgid "Status"
+msgstr "Status"
+
+#: includes/Plugin.php:112
+msgid "Check"
+msgstr "Sprawdzenie"
+
+#: includes/Plugin.php:113
+msgid "Result"
+msgstr "Wynik"
+
+#: includes/Plugin.php:114
+msgid "Recommendation"
+msgstr "Zalecenie"
