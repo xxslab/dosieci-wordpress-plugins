@@ -31,12 +31,44 @@ final class HubGateway implements ChatGatewayInterface {
 		private Connection $connection,
 		private ToolRegistry $toolRegistry = new ToolRegistry(),
 		private bool $writesEnabled = false,
-		private string $operatorVersion = ''
+		private string $operatorVersion = '',
+		private string $systemPrompt = '',
+		private ?ToolSchemaExporter $tools = null
 	) {
 	}
 
 	public function chat( string $requestId, array $conversation ): array {
-		return $this->hub->chat( $this->connection, $requestId, $conversation, $this->capabilities() );
+		return $this->hub->chat( $this->connection, $requestId, $conversation, $this->capabilities(), $this->guidance() );
+	}
+
+	/**
+	 * The same system prompt and tool descriptions the BYOK modes send.
+	 * Advisory only: the Hub decides what it passes to the model (a Hub
+	 * that predates these fields ignores them), and none of this widens
+	 * what the Hub will authorise -- tool access is negotiated by
+	 * capabilities() and enforced on both sides.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function guidance(): array {
+		$guidance = array();
+
+		if ( '' !== $this->systemPrompt ) {
+			$guidance['system'] = $this->systemPrompt;
+		}
+
+		if ( null !== $this->tools ) {
+			$descriptions = array();
+			foreach ( $this->tools->available() as $tool ) {
+				$descriptions[ $tool->name ] = $tool->description;
+			}
+
+			if ( array() !== $descriptions ) {
+				$guidance['tool_descriptions'] = $descriptions;
+			}
+		}
+
+		return $guidance;
 	}
 
 	/** @return array<string, mixed> */

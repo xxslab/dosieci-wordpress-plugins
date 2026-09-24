@@ -32,19 +32,27 @@ final class OpenAiGateway implements ChatGatewayInterface {
 	}
 
 	public function label(): string {
-		return sprintf( 'OpenAI — własny klucz (%s)', $this->settings->effectiveModel() );
+		/* translators: %s: model identifier, e.g. gpt-5 */
+		return sprintf( __( 'OpenAI, your own API key (%s)', 'dosieci-ai-operator' ), $this->settings->effectiveModel() );
 	}
 
 	public function chat( string $requestId, array $conversation ): array {
 		$payload = array(
-			'model'      => $this->settings->effectiveModel(),
-			'max_tokens' => $this->settings->maxTokens,
-			'messages'   => $this->toOpenAiMessages( $conversation ),
+			'model'                 => $this->settings->effectiveModel(),
+			// Not max_tokens: reasoning models (the gpt-5 and o families)
+			// reject it with a 400, and max_completion_tokens works on
+			// every current chat model.
+			'max_completion_tokens' => $this->settings->maxTokens,
+			'messages'              => $this->toOpenAiMessages( $conversation ),
 		);
 
 		$toolSchemas = $this->tools->forOpenAi();
 		if ( array() !== $toolSchemas ) {
 			$payload['tools'] = $toolSchemas;
+
+			// One tool call per response -- see toWireFormat() for why a
+			// parallel batch cannot be honoured.
+			$payload['parallel_tool_calls'] = false;
 		}
 
 		$response = $this->transport->post(
@@ -62,7 +70,7 @@ final class OpenAiGateway implements ChatGatewayInterface {
 		$decoded = is_array( $decoded ) ? $decoded : array();
 
 		if ( $response['status'] < 200 || $response['status'] >= 300 ) {
-			throw $this->mapError( $response['status'], $decoded );
+			$this->throwProviderError( $response['status'], $decoded );
 		}
 
 		return $this->toWireFormat( $decoded );
@@ -147,7 +155,7 @@ final class OpenAiGateway implements ChatGatewayInterface {
 
 		if ( ! is_array( $message ) ) {
 			throw new HubException(
-				'OpenAI zwrócił odpowiedź bez wiadomości.',
+				'OpenAI returned a response with no message.',
 				502,
 				'provider_bad_response',
 				false
@@ -182,8 +190,20 @@ final class OpenAiGateway implements ChatGatewayInterface {
 		$content = isset( $message['content'] ) ? (string) $message['content'] : '';
 
 		if ( '' === trim( $content ) ) {
+			// A reasoning model can spend the whole token budget thinking
+			// and return nothing. That needs different advice from a
+			// genuinely broken response.
+			if ( 'length' === ( $decoded['choices'][0]['finish_reason'] ?? '' ) ) {
+				throw new HubException(
+					'OpenAI used up the token limit before answering.',
+					502,
+					'provider_output_truncated',
+					false
+				);
+			}
+
 			throw new HubException(
-				'OpenAI zwrócił pustą odpowiedź.',
+				'OpenAI returned an empty answer.',
 				502,
 				'provider_bad_response',
 				false
@@ -198,8 +218,10 @@ final class OpenAiGateway implements ChatGatewayInterface {
 
 	/**
 	 * @param array<string, mixed> $decoded
+	 *
+	 * @throws HubException always
 	 */
-	private function mapError( int $status, array $decoded ): HubException {
+	private function throwProviderError( int $status, array $decoded ): never {
 		$providerMessage = '';
 		if ( isset( $decoded['error']['message'] ) && is_string( $decoded['error']['message'] ) ) {
 			$providerMessage = $decoded['error']['message'];
@@ -219,11 +241,11 @@ final class OpenAiGateway implements ChatGatewayInterface {
 			default                                    => array( 'provider_bad_response', false ),
 		};
 
-		return new HubException(
-			sprintf( 'OpenAI HTTP %d: %s', $status, $providerMessage ),
-			$status,
-			$code,
-			$retryable
+		throw new HubException(
+			sprintf( 'OpenAI HTTP %d: %s', (int) $status, esc_html( $providerMessage ) ),
+			(int) $status,
+			esc_html( $code ),
+			(bool) $retryable
 		);
 	}
 }

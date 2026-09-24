@@ -96,7 +96,7 @@ final class ChatSession {
 				'content'     => (string) json_encode(
 					array(
 						'error'   => 'rejected_by_user',
-						'message' => 'Użytkownik odrzucił tę zmianę.',
+						'message' => 'The user rejected this change.',
 					)
 				),
 				'tool_name'   => $toolName,
@@ -178,7 +178,7 @@ final class ChatSession {
 			}
 
 			if ( 'tool_call' !== $type && 'tool_call_denied' !== $type ) {
-				throw new HubException( 'Unexpected response type from the gateway: "' . $type . '".' );
+				throw new HubException( sprintf( 'Unexpected response type from the gateway: “%s”.', esc_html( $type ) ) );
 			}
 
 			$toolName  = isset( $response['tool_name'] ) ? (string) $response['tool_name'] : '';
@@ -189,18 +189,26 @@ final class ChatSession {
 				// Without the correlation id the provider cannot pair our
 				// result to its request, so continuing would produce a
 				// protocol error on the next call. Fail loudly instead.
-				throw new HubException( 'The gateway asked for tool "' . $toolName . '" without a tool_use_id.' );
+				throw new HubException( sprintf( 'The gateway asked for tool “%s” without a tool_use_id.', esc_html( $toolName ) ) );
 			}
 
 			// Replay the model's own tool_use turn, then our result -- both
 			// are required for the provider to accept the next call.
-			$conversation[] = array(
+			$toolUse = array(
 				'role'        => 'assistant_tool_use',
 				'content'     => '',
 				'tool_name'   => $toolName,
 				'tool_use_id' => $toolUseId,
 				'arguments'   => $arguments,
 			);
+
+			// Opaque per-provider data a gateway needs back on the next
+			// call (e.g. a Gemini thought signature). Carried, never read.
+			if ( isset( $response['provider_state'] ) && is_array( $response['provider_state'] ) && array() !== $response['provider_state'] ) {
+				$toolUse['provider_state'] = $response['provider_state'];
+			}
+
+			$conversation[] = $toolUse;
 
 			if ( 'tool_call_denied' === $type ) {
 				// The HUB refused it. We still have to tell the model,
@@ -260,7 +268,7 @@ final class ChatSession {
 			);
 		}
 
-		$message        = 'Przerwano: model poprosił o zbyt wiele kolejnych narzędzi w jednej turze.';
+		$message        = __( 'Stopped: the model asked for too many tools in a row in one turn.', 'dosieci-ai-operator' );
 		$conversation[] = array(
 			'role'    => 'assistant',
 			'content' => $message,

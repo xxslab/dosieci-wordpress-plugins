@@ -33,11 +33,11 @@ final class ToolDefinition {
 		public readonly mixed $handler
 	) {
 		if ( ! in_array( $riskLevel, array( self::RISK_READ_ONLY, self::RISK_REVERSIBLE_WRITE, self::RISK_DESTRUCTIVE ), true ) ) {
-			throw new \InvalidArgumentException( sprintf( 'Unknown risk level "%s" for tool "%s".', $riskLevel, $name ) );
+			throw new \InvalidArgumentException( sprintf( 'Unknown risk level “%s” for tool “%s”.', esc_html( $riskLevel ), esc_html( $name ) ) );
 		}
 
 		if ( ! is_callable( $handler ) ) {
-			throw new \InvalidArgumentException( sprintf( 'Tool "%s" has no callable handler.', $name ) );
+			throw new \InvalidArgumentException( sprintf( 'Tool “%s” has no callable handler.', esc_html( $name ) ) );
 		}
 	}
 }

@@ -17,6 +17,7 @@ use DoSieci\AiOperator\Adapter\WordPress\Tools\ReadOnlyToolFactory;
 use DoSieci\AiOperator\Adapter\WordPress\Tools\SiteBuilderToolFactory;
 use DoSieci\AiOperator\Adapter\WordPress\Tools\WriteToolFactory;
 use DoSieci\AiOperator\Adapter\WordPress\WpCapabilityChecker;
+use DoSieci\AiOperator\Adapter\WordPress\WpAiClientGateway;
 use DoSieci\AiOperator\Adapter\WordPress\WpdbAuditLog;
 use DoSieci\AiOperator\Adapter\WordPress\WpHttpTransport;
 use DoSieci\AiOperator\Domain\Audit\AuditLogInterface;
@@ -204,7 +205,7 @@ final class Plugin {
 
 			if ( null === $connection ) {
 				throw new HubException(
-					'Witryna nie jest sparowana z DoSieci.',
+					'This site is not paired with DoSieci.',
 					409,
 					'not_connected',
 					false
@@ -216,34 +217,64 @@ final class Plugin {
 				$connection,
 				$this->toolRegistry(),
 				$this->writesEnabled(),
-				DOSIECI_AI_OPERATOR_VERSION
+				DOSIECI_AI_OPERATOR_VERSION,
+				$this->systemPrompt(),
+				$this->toolExporter()
+			);
+		}
+
+		if ( ProviderSettings::MODE_WORDPRESS === $settings->mode ) {
+			if ( ! WpAiClientGateway::isAvailable() ) {
+				throw new HubException(
+					'The WordPress AI client is not available on this site.',
+					409,
+					'wp_ai_unavailable',
+					false
+				);
+			}
+
+			return new WpAiClientGateway(
+				$this->toolExporter(),
+				$this->systemPrompt(),
+				trim( $settings->model ),
+				$settings->maxTokens
 			);
 		}
 
 		if ( ! $settings->isUsable() ) {
 			throw new HubException(
-				'Wybrano własnego dostawcę AI, ale nie zapisano klucza API.',
+				'A provider with your own key is selected, but no API key is saved.',
 				409,
 				'byok_key_missing',
 				false
 			);
 		}
 
-		$exporter = new ToolSchemaExporter(
+		return ProviderSettings::MODE_OPENAI === $settings->mode
+			? new OpenAiGateway( new WpHttpTransport(), $settings, $this->toolExporter(), $this->systemPrompt() )
+			: new AnthropicGateway( new WpHttpTransport(), $settings, $this->toolExporter(), $this->systemPrompt() );
+	}
+
+	/**
+	 * The tools the model may be offered: registered, within the site's
+	 * risk ceiling, and allowed for the logged-in user.
+	 */
+	private function toolExporter(): ToolSchemaExporter {
+		return new ToolSchemaExporter(
 			$this->toolRegistry(),
 			static fn( string $capability ): bool => current_user_can( $capability ),
 			$this->maxRiskLevel()
 		);
+	}
 
-		$prompt = SystemPrompt::build(
+	private function systemPrompt(): string {
+		return SystemPrompt::build(
 			home_url( '/' ),
 			(string) get_bloginfo( 'name' ),
-			$this->writesEnabled()
+			$this->writesEnabled(),
+			(string) get_locale(),
+			(string) get_user_locale()
 		);
-
-		return ProviderSettings::MODE_OPENAI === $settings->mode
-			? new OpenAiGateway( new WpHttpTransport(), $settings, $exporter, $prompt )
-			: new AnthropicGateway( new WpHttpTransport(), $settings, $exporter, $prompt );
 	}
 
 	/**

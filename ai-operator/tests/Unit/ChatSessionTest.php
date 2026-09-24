@@ -195,7 +195,7 @@ final class ChatSessionTest extends TestCase {
 
 		$result = $this->session( new FakeTransport( $responses ) )->send( 'loop', array(), 1 );
 
-		$this->assertStringContainsString( 'zbyt wiele', $result['answer'] );
+		$this->assertStringContainsString( 'too many tools', $result['answer'] );
 	}
 
 	public function test_each_hub_call_uses_a_distinct_request_id(): void {

@@ -49,7 +49,7 @@ final class ArgumentsValidator {
 
 		foreach ( $required as $name ) {
 			if ( ! array_key_exists( $name, $arguments ) ) {
-				throw new InvalidArgumentsException( sprintf( 'Tool "%s": missing required argument "%s".', $toolName, $name ) );
+				throw new InvalidArgumentsException( sprintf( 'Tool “%s”: missing required argument “%s”.', esc_html( $toolName ), esc_html( (string) $name ) ) );
 			}
 		}
 
@@ -57,7 +57,7 @@ final class ArgumentsValidator {
 
 		foreach ( $arguments as $name => $value ) {
 			if ( ! isset( $properties[ $name ] ) ) {
-				throw new InvalidArgumentsException( sprintf( 'Tool "%s": unknown argument "%s".', $toolName, (string) $name ) );
+				throw new InvalidArgumentsException( sprintf( 'Tool “%s”: unknown argument “%s”.', esc_html( $toolName ), esc_html( (string) $name ) ) );
 			}
 
 			$validated[ $name ] = $this->coerce( $toolName, (string) $name, (array) $properties[ $name ], $value );
@@ -75,26 +75,26 @@ final class ArgumentsValidator {
 		$coerced = match ( $type ) {
 			'integer' => is_int( $value ) || ( is_string( $value ) && ctype_digit( ltrim( $value, '-' ) ) )
 				? (int) $value
-				: throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" must be an integer.', $toolName, $name ) ),
+				: throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” must be an integer.', esc_html( $toolName ), esc_html( $name ) ) ),
 			'number'  => is_int( $value ) || is_float( $value ) || ( is_string( $value ) && is_numeric( $value ) )
 				? (float) $value
-				: throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" must be a number.', $toolName, $name ) ),
+				: throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” must be a number.', esc_html( $toolName ), esc_html( $name ) ) ),
 			'boolean' => is_bool( $value )
 				? $value
-				: throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" must be a boolean.', $toolName, $name ) ),
+				: throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” must be a boolean.', esc_html( $toolName ), esc_html( $name ) ) ),
 			'array'   => is_array( $value ) && array_is_list( $value )
 				? $this->coerceList( $toolName, $name, $property, $value )
-				: throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" must be an array.', $toolName, $name ) ),
+				: throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” must be an array.', esc_html( $toolName ), esc_html( $name ) ) ),
 			'object'  => is_array( $value ) && ! array_is_list( $value )
 				? $this->coerceObject( $toolName, $name, $property, $value )
-				: throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" must be an object.', $toolName, $name ) ),
+				: throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” must be an object.', esc_html( $toolName ), esc_html( $name ) ) ),
 			default   => is_scalar( $value )
 				? (string) $value
-				: throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" must be a string.', $toolName, $name ) ),
+				: throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” must be a string.', esc_html( $toolName ), esc_html( $name ) ) ),
 		};
 
 		if ( isset( $property['enum'] ) && is_array( $property['enum'] ) && ! in_array( $coerced, $property['enum'], true ) ) {
-			throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s" is not one of the allowed values.', $toolName, $name ) );
+			throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s” is not one of the allowed values.', esc_html( $toolName ), esc_html( $name ) ) );
 		}
 
 		return $coerced;
@@ -128,7 +128,7 @@ final class ArgumentsValidator {
 			// untrusted as any other model-supplied value.
 			if ( 'object' === $itemType ) {
 				if ( ! is_array( $item ) || array_is_list( $item ) ) {
-					throw new InvalidArgumentsException( sprintf( 'Tool "%s": argument "%s[%d]" must be an object.', $toolName, $name, $index ) );
+					throw new InvalidArgumentsException( sprintf( 'Tool “%s”: argument “%s[%d]” must be an object.', esc_html( $toolName ), esc_html( $name ), (int) $index ) );
 				}
 
 				$coercedItems[] = $this->validateObjectProperties( $toolName, sprintf( '%s[%d]', $name, $index ), $itemSchema, $item );
@@ -170,14 +170,14 @@ final class ArgumentsValidator {
 
 		foreach ( $required as $requiredName ) {
 			if ( ! array_key_exists( $requiredName, $value ) ) {
-				throw new InvalidArgumentsException( sprintf( 'Tool "%s": "%s" is missing required field "%s".', $toolName, $path, $requiredName ) );
+				throw new InvalidArgumentsException( sprintf( 'Tool “%s”: “%s” is missing required field “%s”.', esc_html( $toolName ), esc_html( $path ), esc_html( (string) $requiredName ) ) );
 			}
 		}
 
 		$validated = array();
 		foreach ( $value as $key => $item ) {
 			if ( ! isset( $properties[ $key ] ) ) {
-				throw new InvalidArgumentsException( sprintf( 'Tool "%s": "%s" has unknown field "%s".', $toolName, $path, (string) $key ) );
+				throw new InvalidArgumentsException( sprintf( 'Tool “%s”: “%s” has unknown field “%s”.', esc_html( $toolName ), esc_html( $path ), esc_html( (string) $key ) ) );
 			}
 
 			$validated[ $key ] = $this->coerce( $toolName, sprintf( '%s.%s', $path, $key ), (array) $properties[ $key ], $item );

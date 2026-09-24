@@ -51,7 +51,7 @@ final class HubClient {
 
 		foreach ( array( 'site_id', 'key_id', 'secret' ) as $required ) {
 			if ( ! isset( $response[ $required ] ) || ! is_string( $response[ $required ] ) || '' === $response[ $required ] ) {
-				throw new HubException( 'Hub pairing response is missing "' . $required . '".' );
+				throw new HubException( sprintf( 'The Hub pairing response is missing “%s”.', esc_html( $required ) ), 502, 'bad_pairing_response' );
 			}
 		}
 
@@ -82,14 +82,19 @@ final class HubClient {
 	 * treats that identically to an explicit read-only declaration. See
 	 * HubGateway::capabilities() for how this is built.
 	 *
+	 * $guidance carries optional top-level fields (`system`,
+	 * `tool_descriptions`) that help the model but authorise nothing; the
+	 * reserved keys above always win over it.
+	 *
 	 * @param array<int, array<string, mixed>> $conversation
 	 * @param array<string, mixed>|null        $capabilities
+	 * @param array<string, mixed>             $guidance
 	 *
 	 * @return array<string, mixed>
 	 *
 	 * @throws HubException|TransportException
 	 */
-	public function chat( Connection $connection, string $requestId, array $conversation, ?array $capabilities = null ): array {
+	public function chat( Connection $connection, string $requestId, array $conversation, ?array $capabilities = null, array $guidance = array() ): array {
 		$payload = array(
 			'request_id'   => $requestId,
 			'conversation' => $conversation,
@@ -98,6 +103,8 @@ final class HubClient {
 		if ( null !== $capabilities ) {
 			$payload['capabilities'] = $capabilities;
 		}
+
+		$payload += $guidance;
 
 		$body = (string) json_encode( $payload );
 
@@ -128,9 +135,9 @@ final class HubClient {
 			$errorCode = isset( $decoded['error'] ) && is_string( $decoded['error'] ) ? $decoded['error'] : 'hub_error';
 
 			throw new HubException(
-				sprintf( 'Hub returned HTTP %d (%s).', $response['status'], $errorCode ),
-				$response['status'],
-				$errorCode,
+				sprintf( 'Hub returned HTTP %d (%s).', (int) $response['status'], esc_html( $errorCode ) ),
+				(int) $response['status'],
+				esc_html( $errorCode ),
 				(bool) ( $decoded['retryable'] ?? false )
 			);
 		}
@@ -145,7 +152,7 @@ final class HubClient {
 			// A pairing token or a signed request sent over plain http is a
 			// credential leak, so this is refused rather than silently
 			// upgraded -- an operator who typed http:// deserves to know.
-			throw new HubException( 'The Hub URL must start with https://.' );
+			throw new HubException( 'The Hub URL must start with https://.', 0, 'https_required' );
 		}
 
 		return $hubUrl;

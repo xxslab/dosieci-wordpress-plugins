@@ -23,8 +23,8 @@ use DoSieci\AiOperator\Domain\HubException;
  *  - Map every documented failure to a HubException with a stable error
  *    code, so AjaxController's existing humanise() switch keeps working
  *    unchanged in BYOK mode. A 401 from Anthropic must not surface to the
- *    user as a generic "błąd komunikacji" -- it means their key is wrong,
- *    and only this class knows that.
+ *    user as a generic "communication error" -- it means their key is
+ *    wrong, and only this class knows that.
  *
  * The API key is sent in a header and never logged, never returned in any
  * response shape, and never written into the conversation history.
@@ -43,7 +43,8 @@ final class AnthropicGateway implements ChatGatewayInterface {
 	}
 
 	public function label(): string {
-		return sprintf( 'Anthropic — własny klucz (%s)', $this->settings->effectiveModel() );
+		/* translators: %s: model identifier, e.g. claude-sonnet-5 */
+		return sprintf( __( 'Anthropic, your own API key (%s)', 'dosieci-ai-operator' ), $this->settings->effectiveModel() );
 	}
 
 	public function chat( string $requestId, array $conversation ): array {
@@ -57,6 +58,14 @@ final class AnthropicGateway implements ChatGatewayInterface {
 		$toolSchemas = $this->tools->forAnthropic();
 		if ( array() !== $toolSchemas ) {
 			$payload['tools'] = $toolSchemas;
+
+			// One tool per response: ChatSession runs a single tool per
+			// round and replays its result, so a second tool_use block in
+			// the same response would be dropped (see toWireFormat()).
+			$payload['tool_choice'] = array(
+				'type'                      => 'auto',
+				'disable_parallel_tool_use' => true,
+			);
 		}
 
 		$response = $this->transport->post(
@@ -75,7 +84,7 @@ final class AnthropicGateway implements ChatGatewayInterface {
 		$decoded = is_array( $decoded ) ? $decoded : array();
 
 		if ( $response['status'] < 200 || $response['status'] >= 300 ) {
-			throw $this->mapError( $response['status'], $decoded );
+			$this->throwProviderError( $response['status'], $decoded );
 		}
 
 		return $this->toWireFormat( $decoded );
@@ -185,7 +194,7 @@ final class AnthropicGateway implements ChatGatewayInterface {
 
 		if ( '' === trim( $text ) ) {
 			throw new HubException(
-				'Anthropic zwrócił odpowiedź bez treści.',
+				'Anthropic returned a response with no text.',
 				502,
 				'provider_bad_response',
 				false
@@ -200,8 +209,10 @@ final class AnthropicGateway implements ChatGatewayInterface {
 
 	/**
 	 * @param array<string, mixed> $decoded
+	 *
+	 * @throws HubException always
 	 */
-	private function mapError( int $status, array $decoded ): HubException {
+	private function throwProviderError( int $status, array $decoded ): never {
 		$providerMessage = '';
 		if ( isset( $decoded['error']['message'] ) && is_string( $decoded['error']['message'] ) ) {
 			$providerMessage = $decoded['error']['message'];
@@ -215,11 +226,11 @@ final class AnthropicGateway implements ChatGatewayInterface {
 			default                            => array( 'provider_bad_response', false ),
 		};
 
-		return new HubException(
-			sprintf( 'Anthropic HTTP %d: %s', $status, $providerMessage ),
-			$status,
-			$code,
-			$retryable
+		throw new HubException(
+			sprintf( 'Anthropic HTTP %d: %s', (int) $status, esc_html( $providerMessage ) ),
+			(int) $status,
+			esc_html( $code ),
+			(bool) $retryable
 		);
 	}
 }

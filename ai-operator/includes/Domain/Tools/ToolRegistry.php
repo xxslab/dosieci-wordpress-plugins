@@ -20,7 +20,7 @@ final class ToolRegistry {
 
 	public function register( ToolDefinition $tool ): void {
 		if ( isset( $this->tools[ $tool->name ] ) ) {
-			throw new \InvalidArgumentException( sprintf( 'Tool "%s" is already registered.', $tool->name ) );
+			throw new \InvalidArgumentException( sprintf( 'Tool “%s” is already registered.', esc_html( $tool->name ) ) );
 		}
 
 		$this->tools[ $tool->name ] = $tool;
@@ -35,7 +35,7 @@ final class ToolRegistry {
 	 */
 	public function get( string $name ): ToolDefinition {
 		if ( ! isset( $this->tools[ $name ] ) ) {
-			throw new UnknownToolException( sprintf( 'Unknown tool "%s".', $name ) );
+			throw new UnknownToolException( sprintf( 'Unknown tool “%s”.', esc_html( $name ) ) );
 		}
 
 		return $this->tools[ $name ];

@@ -113,6 +113,44 @@ final class HubGatewayCapabilitiesTest extends TestCase {
 		$this->assertNotContains( 'install_theme', $capabilities['supported_tools'] );
 	}
 
+	public function test_the_system_prompt_and_tool_descriptions_are_sent_as_guidance(): void {
+		$registry = new ToolRegistry();
+		$registry->register( $this->readOnlyTool( 'get_site_info' ) );
+
+		$transport = new FakeTransport( array( self::finalAnswerResponse() ) );
+		$gateway   = new HubGateway(
+			new HubClient( $transport, new RequestSigner() ),
+			$this->connection(),
+			$registry,
+			false,
+			'1.2.0',
+			'You are the WordPress operator.',
+			new \DoSieci\AiOperator\Domain\Gateway\ToolSchemaExporter( $registry, static fn(): bool => true )
+		);
+
+		$gateway->chat( 'req-g', array() );
+
+		$body = $transport->lastBodyDecoded();
+
+		$this->assertSame( 'You are the WordPress operator.', $body['system'] );
+		$this->assertSame( array( 'get_site_info' => 'test' ), $body['tool_descriptions'] );
+		// Guidance never displaces the fields the Hub authorises on.
+		$this->assertSame( 'req-g', $body['request_id'] );
+		$this->assertArrayHasKey( 'capabilities', $body );
+	}
+
+	public function test_without_guidance_the_payload_is_unchanged(): void {
+		$transport = new FakeTransport( array( self::finalAnswerResponse() ) );
+		$gateway   = new HubGateway( new HubClient( $transport, new RequestSigner() ), $this->connection() );
+
+		$gateway->chat( 'req-n', array() );
+
+		$body = $transport->lastBodyDecoded();
+
+		$this->assertArrayNotHasKey( 'system', $body );
+		$this->assertArrayNotHasKey( 'tool_descriptions', $body );
+	}
+
 	private function readOnlyTool( string $name ): ToolDefinition {
 		return new ToolDefinition(
 			$name,

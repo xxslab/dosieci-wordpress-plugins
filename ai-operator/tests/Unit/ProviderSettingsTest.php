@@ -28,6 +28,17 @@ final class ProviderSettingsTest extends TestCase {
 		$this->assertSame( ProviderSettings::MODE_HUB, $settings->mode );
 	}
 
+	public function test_the_wordpress_mode_needs_no_key_of_its_own(): void {
+		$settings = ProviderSettings::fromArray( array( 'mode' => ProviderSettings::MODE_WORDPRESS ) );
+
+		$this->assertSame( ProviderSettings::MODE_WORDPRESS, $settings->mode );
+		$this->assertTrue( $settings->isByok() );
+		$this->assertFalse( $settings->needsApiKey() );
+		$this->assertTrue( $settings->isUsable() );
+		// WordPress picks the model unless the site asks for one.
+		$this->assertSame( '', $settings->effectiveModel() );
+	}
+
 	public function test_a_byok_mode_without_a_key_is_not_usable(): void {
 		$settings = ProviderSettings::fromArray( array( 'mode' => ProviderSettings::MODE_ANTHROPIC ) );
 

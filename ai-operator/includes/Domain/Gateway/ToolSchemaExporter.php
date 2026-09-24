@@ -120,6 +120,24 @@ final class ToolSchemaExporter {
 	 *
 	 * @return array<string, mixed>
 	 */
+	/**
+	 * Provider-neutral shape for the WordPress AI client, which turns each
+	 * entry into a FunctionDeclaration and maps it to whichever provider
+	 * the site connected.
+	 *
+	 * @return array<int, array{name: string, description: string, parameters: array<string, mixed>}>
+	 */
+	public function forFunctionDeclarations(): array {
+		return array_map(
+			static fn( ToolDefinition $tool ): array => array(
+				'name'        => $tool->name,
+				'description' => $tool->description,
+				'parameters'  => self::normaliseSchema( $tool->argumentsSchema ),
+			),
+			$this->available()
+		);
+	}
+
 	private static function normaliseSchema( array $schema ): array {
 		if ( array() === $schema ) {
 			return array(

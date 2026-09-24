@@ -50,6 +50,45 @@ final class OpenAiGatewayTest extends TestCase {
 		return array( 'status' => $status, 'body' => (string) json_encode( $payload ) );
 	}
 
+	public function test_the_token_budget_uses_max_completion_tokens_and_tools_run_one_at_a_time(): void {
+		$transport = new FakeTransport(
+			array( self::response( array( 'choices' => array( array( 'message' => array( 'content' => 'ok' ) ) ) ) ) )
+		);
+
+		$this->gateway( $transport )->chat( 'r', array( array( 'role' => 'user', 'content' => 'hi' ) ) );
+
+		$sent = json_decode( $transport->requests[0]['body'], true );
+
+		// max_tokens is rejected by the reasoning models (gpt-5, o-series).
+		$this->assertArrayNotHasKey( 'max_tokens', $sent );
+		$this->assertSame( ProviderSettings::DEFAULT_MAX_TOKENS, $sent['max_completion_tokens'] );
+		$this->assertFalse( $sent['parallel_tool_calls'] );
+	}
+
+	public function test_an_answer_cut_off_by_the_token_limit_says_so(): void {
+		$transport = new FakeTransport(
+			array(
+				self::response(
+					array(
+						'choices' => array(
+							array(
+								'message'       => array( 'content' => '' ),
+								'finish_reason' => 'length',
+							),
+						),
+					)
+				),
+			)
+		);
+
+		try {
+			$this->gateway( $transport )->chat( 'r', array( array( 'role' => 'user', 'content' => 'hi' ) ) );
+			$this->fail( 'Expected a HubException.' );
+		} catch ( HubException $e ) {
+			$this->assertSame( 'provider_output_truncated', $e->errorCode );
+		}
+	}
+
 	public function test_a_content_response_becomes_a_final_answer(): void {
 		$transport = new FakeTransport(
 			array(

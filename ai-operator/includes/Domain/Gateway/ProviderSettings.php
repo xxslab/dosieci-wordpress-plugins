@@ -9,9 +9,12 @@ namespace DoSieci\AiOperator\Domain\Gateway;
  *
  * MODE_HUB routes through DoSieci: the site never holds a provider key,
  * and usage is metered against the workspace's DoSieci credits.
- * MODE_ANTHROPIC / MODE_OPENAI are BYOK -- the site owner's own key, their
- * own bill, no DoSieci credits consumed and no dependency on the Hub being
- * reachable for chat (pairing is still required for licensing).
+ * MODE_WORDPRESS uses the AI connectors built into WordPress 7.0+
+ * (Settings > Connectors): the site owner's own key, stored and managed by
+ * WordPress, with whichever provider they connected there.
+ * MODE_ANTHROPIC / MODE_OPENAI are BYOK with a key stored by this plugin,
+ * for sites without the WordPress connectors or for a specific model.
+ * None of the BYOK modes consume DoSieci credits or need the Hub.
  *
  * The key is deliberately NOT part of the value object's string
  * representation anywhere: __toString is not implemented, and
@@ -22,6 +25,7 @@ namespace DoSieci\AiOperator\Domain\Gateway;
 final class ProviderSettings {
 
 	public const MODE_HUB       = 'hub';
+	public const MODE_WORDPRESS = 'wordpress';
 	public const MODE_ANTHROPIC = 'anthropic';
 	public const MODE_OPENAI    = 'openai';
 
@@ -31,23 +35,34 @@ final class ProviderSettings {
 	 * stored model string is what is sent, so a site can move to a newer
 	 * model without a plugin update.
 	 */
-	public const DEFAULT_ANTHROPIC_MODEL = 'claude-sonnet-4-5';
-	public const DEFAULT_OPENAI_MODEL    = 'gpt-4o';
+	public const DEFAULT_ANTHROPIC_MODEL = 'claude-sonnet-5';
+	public const DEFAULT_OPENAI_MODEL    = 'gpt-5';
+
+	/**
+	 * Output budget per model call. Generous on purpose: reasoning models
+	 * spend part of it thinking, and a budget that runs out mid-answer
+	 * costs more (a failed turn, a retry) than the unused headroom.
+	 */
+	public const DEFAULT_MAX_TOKENS = 8192;
 
 	public function __construct(
 		public readonly string $mode = self::MODE_HUB,
 		public readonly string $apiKey = '',
 		public readonly string $model = '',
-		public readonly int $maxTokens = 4096,
+		public readonly int $maxTokens = self::DEFAULT_MAX_TOKENS,
 		public readonly int $timeoutSeconds = 60
 	) {
 	}
 
+	/**
+	 * @return array<string, string> mode => label for the settings screen
+	 */
 	public static function modes(): array {
 		return array(
-			self::MODE_HUB       => 'DoSieci Hub (kredyty z Twojego planu)',
-			self::MODE_ANTHROPIC => 'Anthropic — własny klucz API',
-			self::MODE_OPENAI    => 'OpenAI — własny klucz API',
+			self::MODE_HUB       => __( 'DoSieci Hub: AI credits from your DoSieci plan', 'dosieci-ai-operator' ),
+			self::MODE_WORDPRESS => __( 'WordPress AI connectors: your own key, set in Settings > Connectors (WordPress 7.0+)', 'dosieci-ai-operator' ),
+			self::MODE_ANTHROPIC => __( 'Anthropic: your own API key', 'dosieci-ai-operator' ),
+			self::MODE_OPENAI    => __( 'OpenAI: your own API key', 'dosieci-ai-operator' ),
 		);
 	}
 
@@ -56,11 +71,21 @@ final class ProviderSettings {
 	}
 
 	/**
-	 * A BYOK mode without a key is not usable, and saying so up front is
-	 * far better than a 401 from the provider halfway through a chat turn.
+	 * Whether this mode needs the API key stored by this plugin. The
+	 * WordPress mode uses the key WordPress itself stores for the connector.
+	 */
+	public function needsApiKey(): bool {
+		return self::MODE_ANTHROPIC === $this->mode || self::MODE_OPENAI === $this->mode;
+	}
+
+	/**
+	 * A key-based mode without a key is not usable, and saying so up front
+	 * is far better than a 401 from the provider halfway through a chat
+	 * turn. (Whether a WordPress connector is configured is checked where
+	 * WordPress is available -- see WpAiClientGateway::isConfigured().)
 	 */
 	public function isUsable(): bool {
-		if ( ! $this->isByok() ) {
+		if ( ! $this->needsApiKey() ) {
 			return true;
 		}
 
@@ -118,7 +143,7 @@ final class ProviderSettings {
 			$mode,
 			isset( $stored['api_key'] ) ? (string) $stored['api_key'] : '',
 			isset( $stored['model'] ) ? (string) $stored['model'] : '',
-			isset( $stored['max_tokens'] ) ? max( 256, min( 32000, (int) $stored['max_tokens'] ) ) : 4096,
+			isset( $stored['max_tokens'] ) ? max( 256, min( 32000, (int) $stored['max_tokens'] ) ) : self::DEFAULT_MAX_TOKENS,
 			isset( $stored['timeout'] ) ? max( 10, min( 300, (int) $stored['timeout'] ) ) : 60
 		);
 	}

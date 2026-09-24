@@ -60,6 +60,16 @@ final class AnthropicGatewayTest extends TestCase {
 		return array( 'status' => $status, 'body' => (string) json_encode( $payload ) );
 	}
 
+	public function test_parallel_tool_use_is_switched_off_when_tools_are_offered(): void {
+		$transport = new FakeTransport( array( self::response( array( 'content' => array( array( 'type' => 'text', 'text' => 'ok' ) ) ) ) ) );
+
+		$this->gateway( $transport )->chat( 'r', array( array( 'role' => 'user', 'content' => 'hi' ) ) );
+
+		$sent = json_decode( $transport->requests[0]['body'], true );
+
+		$this->assertSame( array( 'type' => 'auto', 'disable_parallel_tool_use' => true ), $sent['tool_choice'] );
+	}
+
 	public function test_a_text_response_becomes_a_final_answer(): void {
 		$transport = new FakeTransport(
 			array(
