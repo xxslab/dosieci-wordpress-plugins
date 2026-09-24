@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoSieci\Instant\Search\Tests\Unit;
 
+use DoSieci\Instant\Search\Adapter\WpdbSearchRepository;
 use DoSieci\Instant\Search\Domain\ResultRanker;
 use DoSieci\Instant\Search\Domain\SearchQuery;
 use DoSieci\Instant\Search\Domain\SearchResult;
@@ -37,13 +38,52 @@ final class SearchDomainTest extends TestCase {
 		$this->assertSame( 'czarne buty', SearchQuery::fromString( "  czarne \n\t  buty  " )->normalised );
 	}
 
-	public function test_the_default_pattern_is_a_prefix_not_a_leading_wildcard(): void {
-		// A leading % makes the title index unusable -- this is the single
-		// performance decision the whole product rests on.
-		$pattern = SearchQuery::fromString( 'buty' )->prefixPattern();
+	public function test_each_word_must_start_a_word_in_the_title(): void {
+		$patterns = SearchQuery::fromString( 'shirt blue' )->wordStartPatterns();
 
-		$this->assertSame( 'buty%', $pattern );
-		$this->assertStringStartsNotWith( '%', $pattern );
+		$this->assertSame(
+			array(
+				array( 'shirt%', '% shirt%', '%-shirt%' ),
+				array( 'blue%', '% blue%', '%-blue%' ),
+			),
+			$patterns
+		);
+	}
+
+	public function test_the_like_escape_character_is_stripped(): void {
+		$this->assertSame( 'buty a', SearchQuery::fromString( 'buty\\a' )->normalised );
+	}
+
+	public function test_the_number_of_words_is_bounded_and_duplicates_are_dropped(): void {
+		$query = SearchQuery::fromString( 'a b a c d e f g' );
+
+		$this->assertSame( array( 'a', 'b', 'c', 'd', 'e' ), $query->tokens );
+		$this->assertCount( SearchQuery::MAX_TOKENS, $query->wordStartPatterns() );
+	}
+
+	public function test_a_multi_word_query_prefers_titles_containing_every_word(): void {
+		$ranked = ( new ResultRanker() )->rank(
+			SearchQuery::fromString( 'shoes black' ),
+			array(
+				new SearchResult( 1, 'Black hat', 'https://x/1' ),
+				new SearchResult( 2, 'Black running shoes', 'https://x/2' ),
+			)
+		);
+
+		$this->assertSame( 2, $ranked[0]->id );
+	}
+
+	public function test_a_word_after_a_hyphen_counts_as_a_word_start(): void {
+		$ranked = ( new ResultRanker() )->rank(
+			SearchQuery::fromString( 'shirt' ),
+			array(
+				new SearchResult( 1, 'Shirtless tank top', 'https://x/1' ),
+				new SearchResult( 2, 'Blue T-shirt', 'https://x/2' ),
+				new SearchResult( 3, 'Undershirt', 'https://x/3' ),
+			)
+		);
+
+		$this->assertSame( array( 1, 2, 3 ), array_map( static fn( SearchResult $r ): int => $r->id, $ranked ) );
 	}
 
 	public function test_an_exact_title_match_outranks_a_prefix_match(): void {
@@ -94,5 +134,27 @@ final class SearchDomainTest extends TestCase {
 
 		$this->assertSame( array( 'id', 'title', 'url', 'sku', 'price', 'image' ), array_keys( $array ) );
 		$this->assertArrayNotHasKey( 'score', $array, 'Internal ranking score is not part of the public payload.' );
+	}
+
+	public function test_a_sale_price_is_reduced_to_the_current_price_in_plain_text(): void {
+		$html = '<del aria-hidden="true"><span class="woocommerce-Price-amount amount"><bdi>100,00&nbsp;<span class="woocommerce-Price-currencySymbol">&#122;&#322;</span></bdi></span></del> '
+			. '<span class="screen-reader-text">Original price was: 100,00&nbsp;&#122;&#322;.</span>'
+			. '<ins aria-hidden="true"><span class="woocommerce-Price-amount amount"><bdi>80,00&nbsp;<span class="woocommerce-Price-currencySymbol">&#122;&#322;</span></bdi></span></ins>'
+			. '<span class="screen-reader-text">Current price is: 80,00&nbsp;&#122;&#322;.</span>';
+
+		$this->assertSame( "80,00 zł", WpdbSearchRepository::plainPrice( $html ) );
+	}
+
+	public function test_a_price_range_keeps_both_ends(): void {
+		$html = '<span class="woocommerce-Price-amount amount" aria-hidden="true"><bdi>10,00&nbsp;<span class="woocommerce-Price-currencySymbol">&#122;&#322;</span></bdi></span>'
+			. ' <span aria-hidden="true">&ndash;</span> '
+			. '<span class="woocommerce-Price-amount amount" aria-hidden="true"><bdi>20,00&nbsp;<span class="woocommerce-Price-currencySymbol">&#122;&#322;</span></bdi></span>'
+			. '<span class="screen-reader-text">Price range: 10,00&nbsp;&#122;&#322; through 20,00&nbsp;&#122;&#322;</span>';
+
+		$this->assertSame( "10,00 zł – 20,00 zł", WpdbSearchRepository::plainPrice( $html ) );
+	}
+
+	public function test_an_empty_price_is_null(): void {
+		$this->assertNull( WpdbSearchRepository::plainPrice( '' ) );
 	}
 }

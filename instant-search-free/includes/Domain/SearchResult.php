@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\Instant\Search\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 final class SearchResult {
 
 	public function __construct(

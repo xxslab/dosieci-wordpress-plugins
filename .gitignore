@@ -14,3 +14,6 @@ node_modules/
 # Artefakty builda / paczki dystrybucyjne
 dist/
 *.zip
+
+# Dev-only Composer tooling (PHPUnit); each plugin ships no runtime dependencies.
+composer.lock
