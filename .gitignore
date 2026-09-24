@@ -1,0 +1,16 @@
+# Zależności Composer/Node (dev-only — narzędzia do testów, wtyczki nie mają
+# runtime'owych zależności, patrz composer.json każdej wtyczki)
+vendor/
+node_modules/
+
+# Lokalne środowisko
+.env
+.DS_Store
+
+# Cache wyników PHPUnit (per-wtyczka)
+.phpunit.cache/
+.phpunit.result.cache
+
+# Artefakty builda / paczki dystrybucyjne
+dist/
+*.zip

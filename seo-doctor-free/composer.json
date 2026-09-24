@@ -1,0 +1,22 @@
+{
+    "name": "dosieci/seo-doctor-free",
+    "description": "DoSieci SEO Doctor — WordPress plugin. Ships NO runtime Composer dependencies on purpose (see the autoloader comment in the main plugin file); everything below is dev-only tooling.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0 || ^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DoSieci\\SEO\\Doctor\\": "includes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DoSieci\\SEO\\Doctor\\Tests\\": "tests/"
+        }
+    }
+}

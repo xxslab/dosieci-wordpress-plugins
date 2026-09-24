@@ -1,0 +1,134 @@
+.dosieci-ai-chat-log {
+	max-width: 900px;
+	max-height: 520px;
+	overflow-y: auto;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	padding: 1rem;
+	margin: 1rem 0;
+}
+
+.dosieci-ai-turn {
+	margin-bottom: 1rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.dosieci-ai-turn:last-child {
+	border-bottom: 0;
+	margin-bottom: 0;
+}
+
+.dosieci-ai-turn strong {
+	display: block;
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #50575e;
+	margin-bottom: 0.25rem;
+}
+
+.dosieci-ai-turn pre,
+.dosieci-ai-turn p {
+	margin: 0;
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-family: inherit;
+}
+
+.dosieci-ai-turn--assistant_tool_use pre,
+.dosieci-ai-turn--tool_result pre {
+	font-family: Menlo, Consolas, monospace;
+	font-size: 0.8rem;
+	background: #f6f7f7;
+	padding: 0.5rem;
+	border-radius: 3px;
+}
+
+.dosieci-ai-chat-form {
+	max-width: 900px;
+	display: flex;
+	gap: 0.5rem;
+	align-items: flex-start;
+}
+
+.dosieci-ai-chat-form textarea {
+	flex: 1;
+}
+
+.dosieci-ai-badge {
+	display: inline-block;
+	padding: 0.1rem 0.5rem;
+	border-radius: 999px;
+	font-size: 0.75rem;
+	font-weight: 600;
+}
+
+.dosieci-ai-badge.ok {
+	background: #dcfce7;
+	color: #14532d;
+}
+
+.dosieci-ai-badge.warn {
+	background: #fef3c7;
+	color: #78350f;
+}
+
+.dosieci-ai-tools {
+	font-size: 0.8rem;
+	color: #50575e;
+	margin-top: 0.35rem;
+}
+
+.dosieci-ai-table code {
+	word-break: break-all;
+}
+
+/* Confirmation card: shown when the operator asks to change something and
+   the turn is paused waiting for a human decision. Visually distinct from
+   ordinary chat turns on purpose -- this is a control, not a message. */
+.dosieci-ai-confirm {
+	border: 2px solid #d63638;
+	border-left-width: 6px;
+	border-radius: 4px;
+	background: #fff;
+	padding: 0.9rem 1.1rem;
+	margin: 0.75rem 0;
+}
+
+.dosieci-ai-confirm > strong {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-size: 1.02rem;
+}
+
+.dosieci-ai-confirm__tool {
+	margin: 0.2rem 0 0.6rem;
+	color: #1d2327;
+}
+
+.dosieci-ai-confirm__warning {
+	color: #b32d2e;
+	font-weight: 600;
+	margin: 0.5rem 0;
+}
+
+.dosieci-ai-args {
+	margin: 0 0 0.7rem;
+	padding: 0.5rem 0.75rem;
+	background: #f6f7f7;
+	border-radius: 3px;
+	font-size: 0.9rem;
+}
+
+.dosieci-ai-args dt {
+	font-weight: 600;
+	color: #50575e;
+}
+
+.dosieci-ai-args dd {
+	margin: 0 0 0.45rem;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
