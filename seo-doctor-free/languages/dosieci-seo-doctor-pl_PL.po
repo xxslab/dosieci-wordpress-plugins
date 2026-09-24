@@ -1,0 +1,393 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci SEO Doctor 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-seo-doctor\n"
+"Last-Translator: DoSieci\n"
+"Language-Team: Polish\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Domain: dosieci-seo-doctor\n"
+
+#. Plugin Name of the plugin
+#: dosieci-seo-doctor.php
+#: includes/Plugin.php:58
+#: includes/Plugin.php:234
+msgid "DoSieci SEO Doctor"
+msgstr "DoSieci SEO Doctor"
+
+#. Plugin URI of the plugin
+#: dosieci-seo-doctor.php
+msgid "https://dosieci.pl/wtyczki/seo-doctor/"
+msgstr "https://dosieci.pl/wtyczki/seo-doctor/"
+
+#. Description of the plugin
+#: dosieci-seo-doctor.php
+msgid "A read-only SEO audit of posts, pages and WooCommerce products, with optional AI suggestions for titles and descriptions. Works alongside Yoast SEO, Rank Math, All in One SEO and SEOPress instead of replacing them."
+msgstr "Audyt SEO wpisów, stron i produktów WooCommerce wyłącznie do odczytu, z opcjonalnymi podpowiedziami AI dla tytułów i opisów. Współpracuje z Yoast SEO, Rank Math, All in One SEO i SEOPress zamiast je zastępować."
+
+#. Author of the plugin
+#: dosieci-seo-doctor.php
+msgid "DoSieci"
+msgstr "DoSieci"
+
+#. Author URI of the plugin
+#: dosieci-seo-doctor.php
+msgid "https://dosieci.pl/"
+msgstr "https://dosieci.pl/"
+
+#: includes/Adapter/OpenAiClient.php:70
+msgid "OpenAI rejected the API key. Check the key in the settings below."
+msgstr "OpenAI odrzuciło klucz API. Sprawdź klucz w ustawieniach poniżej."
+
+#: includes/Adapter/OpenAiClient.php:74
+msgid "OpenAI does not recognise this model name, or your key has no access to it. Check the model in the settings below."
+msgstr "OpenAI nie rozpoznaje tej nazwy modelu albo Twój klucz nie ma do niego dostępu. Sprawdź model w ustawieniach poniżej."
+
+#: includes/Adapter/OpenAiClient.php:78
+msgid "OpenAI rate limit or quota reached. Try again in a moment, or check the billing of your OpenAI account."
+msgstr "Osiągnięto limit zapytań lub budżetu w OpenAI. Spróbuj ponownie za chwilę albo sprawdź rozliczenia swojego konta OpenAI."
+
+#. translators: %d: HTTP status code
+#: includes/Adapter/OpenAiClient.php:84
+msgid "OpenAI returned HTTP error %d."
+msgstr "OpenAI zwróciło błąd HTTP %d."
+
+#: includes/Adapter/OpenAiClient.php:92
+msgid "OpenAI returned an empty answer."
+msgstr "OpenAI zwróciło pustą odpowiedź."
+
+#: includes/Domain/SeoAuditor.php:53
+msgid "There is no title."
+msgstr "Brak tytułu."
+
+#: includes/Domain/SeoAuditor.php:54
+msgid "Add a title. Without one, search engines make up their own."
+msgstr "Dodaj tytuł — bez niego wyszukiwarka wymyśli własny."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:63
+msgid "The title is %d character long, which is short."
+msgid_plural "The title is %d characters long, which is short."
+msgstr[0] "Tytuł ma tylko %d znak — to za mało."
+msgstr[1] "Tytuł ma tylko %d znaki — to za mało."
+msgstr[2] "Tytuł ma tylko %d znaków — to za mało."
+
+#. translators: 1: minimum number of characters, 2: maximum number of characters
+#: includes/Domain/SeoAuditor.php:65
+msgid "Expand it to %1$d-%2$d characters to use the space in search results."
+msgstr "Rozwiń go do %1$d–%2$d znaków, żeby wykorzystać miejsce w wynikach wyszukiwania."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:74
+msgid "The title is %d characters long and will be cut off in search results."
+msgstr "Tytuł jest za długi (liczba znaków: %d) i zostanie ucięty w wynikach wyszukiwania."
+
+#. translators: %d: maximum number of characters
+#: includes/Domain/SeoAuditor.php:76
+#: includes/Domain/SeoAuditor.php:120
+msgid "Shorten it to %d characters at most."
+msgstr "Skróć go do maksymalnie %d znaków."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:84
+msgid "The title is %d characters long."
+msgstr "Liczba znaków w tytule: %d."
+
+#: includes/Domain/SeoAuditor.php:96
+msgid "There is no meta description."
+msgstr "Brak meta opisu."
+
+#. translators: 1: minimum number of characters, 2: maximum number of characters
+#: includes/Domain/SeoAuditor.php:98
+msgid "Add a description of %1$d-%2$d characters. Without one, the search engine picks a snippet of the content you have no control over."
+msgstr "Dodaj opis o długości %1$d–%2$d znaków. Bez niego wyszukiwarka wybierze fragment treści, na który nie masz wpływu."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:107
+msgid "The meta description is %d character long, which is short."
+msgid_plural "The meta description is %d characters long, which is short."
+msgstr[0] "Meta opis ma tylko %d znak — to za mało."
+msgstr[1] "Meta opis ma tylko %d znaki — to za mało."
+msgstr[2] "Meta opis ma tylko %d znaków — to za mało."
+
+#. translators: 1: minimum number of characters, 2: maximum number of characters
+#: includes/Domain/SeoAuditor.php:109
+msgid "Expand it to %1$d-%2$d characters."
+msgstr "Rozwiń go do %1$d–%2$d znaków."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:118
+msgid "The meta description is %d characters long and will be cut off."
+msgstr "Meta opis jest za długi (liczba znaków: %d) i zostanie ucięty."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:128
+msgid "The meta description is %d characters long."
+msgstr "Liczba znaków w meta opisie: %d."
+
+#. translators: %d: number of words
+#: includes/Domain/SeoAuditor.php:136
+msgid "The content has about %d word."
+msgid_plural "The content has about %d words."
+msgstr[0] "Treść ma około %d słowa."
+msgstr[1] "Treść ma około %d słów."
+msgstr[2] "Treść ma około %d słów."
+
+#. translators: %d: number of words
+#: includes/Domain/SeoAuditor.php:144
+msgid "Below about %d words, content is often seen as thin. Add real information, not filler."
+msgstr "Poniżej ok. %d słów treść bywa oceniana jako uboga. Dodaj konkretne informacje, nie wypełniacz."
+
+#: includes/Domain/SeoAuditor.php:154
+msgid "There are no images in the content."
+msgstr "W treści nie ma obrazków."
+
+#. translators: 1: number of images without alt text, 2: total number of images
+#: includes/Domain/SeoAuditor.php:167
+msgid "%1$d of %2$d image has no alternative text."
+msgid_plural "%1$d of %2$d images have no alternative text."
+msgstr[0] "Bez tekstu alternatywnego: %1$d z %2$d obrazka."
+msgstr[1] "Bez tekstu alternatywnego: %1$d z %2$d obrazków."
+msgstr[2] "Bez tekstu alternatywnego: %1$d z %2$d obrazków."
+
+#: includes/Domain/SeoAuditor.php:171
+msgid "Fill in the alt attribute: it helps both accessibility and image search."
+msgstr "Uzupełnij atrybut alt — pomaga zarówno dostępności, jak i wyszukiwarce grafiki."
+
+#. translators: %d: number of images
+#: includes/Domain/SeoAuditor.php:178
+msgid "%d image has alternative text."
+msgid_plural "All %d images have alternative text."
+msgstr[0] "%d obrazek ma tekst alternatywny."
+msgstr[1] "Wszystkie %d obrazki mają tekst alternatywny."
+msgstr[2] "Wszystkich %d obrazków ma tekst alternatywny."
+
+#: includes/Domain/SeoAuditor.php:190
+msgid "There is no slug yet."
+msgstr "Nie ma jeszcze sluga."
+
+#: includes/Domain/SeoAuditor.php:191
+msgid "Set a readable URL before publishing."
+msgstr "Ustaw czytelny adres URL przed publikacją."
+
+#. translators: %s: the slug
+#: includes/Domain/SeoAuditor.php:200
+msgid "The slug \"%s\" is just a number."
+msgstr "Slug „%s” to sam numer."
+
+#: includes/Domain/SeoAuditor.php:201
+msgid "Use a slug that describes the content: a numeric address tells neither people nor search engines anything."
+msgstr "Użyj sluga opisującego treść — numeryczny adres nic nie mówi ani ludziom, ani wyszukiwarkom."
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:210
+msgid "The slug is %d characters long."
+msgstr "Liczba znaków w slugu: %d."
+
+#: includes/Domain/SeoAuditor.php:211
+msgid "Shorten the address: long slugs are harder to share and more often cut off."
+msgstr "Skróć adres — długie slugi gorzej się udostępnia i częściej są ucinane."
+
+#. translators: %s: the slug
+#: includes/Domain/SeoAuditor.php:219
+msgid "The slug \"%s\" looks fine."
+msgstr "Slug „%s” wygląda dobrze."
+
+#: includes/Domain/SuggestionPrompt.php:85
+msgid "The AI model did not return valid JSON. Try again."
+msgstr "Model AI nie zwrócił poprawnego JSON-a. Spróbuj ponownie."
+
+#. translators: %s: name of the missing field
+#: includes/Domain/SuggestionPrompt.php:92
+msgid "The AI answer is missing the \"%s\" field. Try again."
+msgstr "W odpowiedzi AI brakuje pola „%s”. Spróbuj ponownie."
+
+#: includes/Plugin.php:59
+msgid "SEO Doctor"
+msgstr "SEO Doctor"
+
+#: includes/Plugin.php:76
+msgid "SEO audit"
+msgstr "Audyt SEO"
+
+#: includes/Plugin.php:89
+msgid "Open"
+msgstr "Otwórz"
+
+#: includes/Plugin.php:133
+#: includes/Plugin.php:166
+msgid "You do not have permission to do this."
+msgstr "Nie masz uprawnień do wykonania tej operacji."
+
+#: includes/Plugin.php:146
+msgid "The API key was removed."
+msgstr "Klucz API został usunięty."
+
+#: includes/Plugin.php:150
+msgid "Settings saved."
+msgstr "Zapisano ustawienia."
+
+#: includes/Plugin.php:154
+msgid "That does not look like an API key. Paste only the key, without quotes or a whole command."
+msgstr "To nie wygląda na klucz API. Wklej sam klucz, bez cudzysłowów i bez całego polecenia."
+
+#: includes/Plugin.php:161
+msgid "The API key was saved."
+msgstr "Zapisano klucz API."
+
+#: includes/Plugin.php:175
+msgid "You cannot edit this item."
+msgstr "Nie możesz edytować tego elementu."
+
+#: includes/Plugin.php:186
+msgid "The AI provider plugin failed. Check its settings under Settings > Connectors."
+msgstr "Wtyczka dostawcy AI zgłosiła błąd. Sprawdź jej ustawienia w Ustawienia → Łączniki."
+
+#: includes/Plugin.php:195
+msgid "Set up an AI provider first (see \"AI suggestions\" below)."
+msgstr "Najpierw skonfiguruj dostawcę AI (zobacz „Podpowiedzi AI” poniżej)."
+
+#: includes/Plugin.php:205
+msgid "Suggestions are ready below."
+msgstr "Podpowiedzi są gotowe poniżej."
+
+#: includes/Plugin.php:225
+msgid "You do not have permission to access this page."
+msgstr "Nie masz uprawnień do tej strony."
+
+#: includes/Plugin.php:243
+msgid "The audit is read-only: the plugin never overwrites titles, canonicals, sitemaps or schema, so it works alongside Yoast SEO, Rank Math, All in One SEO and SEOPress."
+msgstr "Audyt jest wyłącznie do odczytu: wtyczka nigdy nie nadpisuje tytułów, canonicali, sitemapy ani schema, dzięki czemu współpracuje z Yoast SEO, Rank Math, All in One SEO i SEOPress."
+
+#: includes/Plugin.php:246
+msgid "Audit an item"
+msgstr "Zbadaj element"
+
+#: includes/Plugin.php:247
+msgid "Tip: use the \"SEO audit\" link under any post, page or product in its list."
+msgstr "Wskazówka: użyj linku „Audyt SEO” pod dowolnym wpisem, stroną lub produktem na liście."
+
+#: includes/Plugin.php:250
+msgid "Post, page or product ID:"
+msgstr "ID wpisu, strony lub produktu:"
+
+#: includes/Plugin.php:252
+msgid "Audit"
+msgstr "Zbadaj"
+
+#: includes/Plugin.php:260
+msgid "The item was not found, or you cannot edit it."
+msgstr "Nie znaleziono elementu albo nie możesz go edytować."
+
+#: includes/Plugin.php:299
+msgid "(no title)"
+msgstr "(bez tytułu)"
+
+#: includes/Plugin.php:300
+msgid "Edit"
+msgstr "Edytuj"
+
+#. translators: %s: where the meta description was read from, e.g. "Yoast SEO"
+#: includes/Plugin.php:306
+msgid "Meta description read from: %s"
+msgstr "Meta opis odczytany z: %s"
+
+#: includes/Plugin.php:315
+msgid "Status"
+msgstr "Status"
+
+#: includes/Plugin.php:316
+msgid "Result"
+msgstr "Wynik"
+
+#: includes/Plugin.php:317
+msgid "Recommendation"
+msgstr "Zalecenie"
+
+#: includes/Plugin.php:325
+msgid "OK"
+msgstr "OK"
+
+#: includes/Plugin.php:327
+msgid "Critical"
+msgstr "Krytyczne"
+
+#: includes/Plugin.php:329
+msgid "Warning"
+msgstr "Uwaga"
+
+#: includes/Plugin.php:344
+msgid "Suggest a title and description with AI"
+msgstr "Zaproponuj tytuł i opis z pomocą AI"
+
+#: includes/Plugin.php:345
+msgid "Sends the title and up to 4,000 characters of the content to the AI provider."
+msgstr "Wysyła do dostawcy AI tytuł i do 4000 znaków treści."
+
+#: includes/Plugin.php:350
+#: includes/Plugin.php:414
+msgid "AI suggestions"
+msgstr "Podpowiedzi AI"
+
+#: includes/Plugin.php:351
+msgid "Copy whatever you find useful into your SEO plugin. Nothing is changed automatically."
+msgstr "Skopiuj do swojej wtyczki SEO to, co uznasz za trafne. Nic nie zmienia się automatycznie."
+
+#: includes/Plugin.php:354
+msgid "Title"
+msgstr "Tytuł"
+
+#: includes/Plugin.php:358
+msgid "Description"
+msgstr "Opis"
+
+#: includes/Plugin.php:362
+msgid "Focus keyphrase"
+msgstr "Fraza kluczowa"
+
+#: includes/Plugin.php:404
+msgid "the excerpt"
+msgstr "zajawki"
+
+#: includes/Plugin.php:407
+msgid "nothing found"
+msgstr "nie znaleziono"
+
+#: includes/Plugin.php:418
+msgid "AI suggestions use the AI provider configured in WordPress."
+msgstr "Podpowiedzi AI korzystają z dostawcy AI skonfigurowanego w WordPressie."
+
+#: includes/Plugin.php:420
+msgid "Manage connectors"
+msgstr "Zarządzaj łącznikami"
+
+#: includes/Plugin.php:425
+msgid "Optional. AI suggestions use the AI provider configured in WordPress (Settings > Connectors, WordPress 7.0 or later) or, if there is none, your own OpenAI API key below. Requests go straight from this site to the provider, never through DoSieci, and you pay the provider directly."
+msgstr "Opcjonalnie. Podpowiedzi AI korzystają z dostawcy AI skonfigurowanego w WordPressie (Ustawienia → Łączniki, WordPress 7.0 lub nowszy), a jeśli go nie ma — z Twojego własnego klucza API OpenAI poniżej. Zapytania idą bezpośrednio z tej witryny do dostawcy, nigdy przez DoSieci, a za użycie płacisz bezpośrednio dostawcy."
+
+#: includes/Plugin.php:431
+msgid "Only an administrator can set up AI suggestions."
+msgstr "Podpowiedzi AI może skonfigurować wyłącznie administrator."
+
+#: includes/Plugin.php:446
+msgid "OpenAI API key"
+msgstr "Klucz API OpenAI"
+
+#: includes/Plugin.php:450
+msgid "Leave empty to keep the saved key. The key is never shown in full and never logged."
+msgstr "Zostaw puste, aby zachować zapisany klucz. Klucz nigdy nie jest wyświetlany w całości ani zapisywany w logach."
+
+#: includes/Plugin.php:452
+msgid "Remove the saved key"
+msgstr "Usuń zapisany klucz"
+
+#: includes/Plugin.php:457
+msgid "Model"
+msgstr "Model"
+
+#: includes/Plugin.php:465
+msgid "Save"
+msgstr "Zapisz"

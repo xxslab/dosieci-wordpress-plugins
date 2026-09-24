@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DoSieci SEO Doctor
  * Plugin URI: https://dosieci.pl/wtyczki/seo-doctor/
- * Description: Audyt SEO wpisów i produktów WooCommerce plus opcjonalne podpowiedzi AI na Twoim własnym kluczu API (BYOK). Tylko do odczytu — współpracuje z Yoast, Rank Math, AIOSEO i SEOPress, nie zastępuje ich.
+ * Description: A read-only SEO audit of posts, pages and WooCommerce products, with optional AI suggestions for titles and descriptions. Works alongside Yoast SEO, Rank Math, All in One SEO and SEOPress instead of replacing them.
  * Version: 1.0.0
  * Requires at least: 6.4
  * Requires PHP: 8.1
@@ -25,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 define( 'DOSIECI_SEO_DOCTOR_VERSION', '1.0.0' );
 define( 'DOSIECI_SEO_DOCTOR_FILE', __FILE__ );
 define( 'DOSIECI_SEO_DOCTOR_PATH', plugin_dir_path( __FILE__ ) );
-define( 'DOSIECI_SEO_DOCTOR_URL', plugin_dir_url( __FILE__ ) );
 
 spl_autoload_register(
 	static function ( string $class ): void {
@@ -43,15 +42,19 @@ spl_autoload_register(
 	}
 );
 
-register_activation_hook( __FILE__, static function (): void {} );
-
-/**
- * Deactivation never touches the stored API key. Deleting a user's own
- * provider credential because they toggled the plugin off would be both
- * surprising and annoying to recover from; removal is an explicit action
- * (save an empty key) or an uninstall.
+/*
+ * Deactivation deliberately keeps the stored API key: deleting a user's own
+ * provider credential because the plugin was toggled off would be surprising.
+ * Uninstalling removes it.
  */
-register_deactivation_hook( __FILE__, static function (): void {} );
+
+add_action(
+	'init',
+	static function (): void {
+		// Bundled Polish translation; language packs from WordPress.org still take precedence.
+		load_plugin_textdomain( 'dosieci-seo-doctor', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); // phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound
+	}
+);
 
 add_action(
 	'plugins_loaded',

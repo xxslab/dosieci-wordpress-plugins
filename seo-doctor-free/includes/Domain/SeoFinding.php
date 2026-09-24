@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\SEO\Doctor\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 final class SeoFinding {
 
 	public const SEVERITY_OK       = 'ok';

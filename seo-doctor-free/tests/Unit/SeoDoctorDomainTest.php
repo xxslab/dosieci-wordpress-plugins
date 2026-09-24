@@ -95,8 +95,31 @@ final class SeoDoctorDomainTest extends TestCase {
 	public function test_the_prompt_forbids_inventing_product_attributes(): void {
 		$prompt = SuggestionPrompt::build( 'Tytuł', 'Treść produktu' );
 
-		$this->assertStringContainsString( 'Nie wymyślaj cech produktu', $prompt );
-		$this->assertStringContainsString( 'WYŁĄCZNIE poprawnym JSON', $prompt );
+		$this->assertStringContainsString( 'Do not invent product features', $prompt );
+		$this->assertStringContainsString( 'ONLY with valid JSON', $prompt );
+	}
+
+	public function test_the_prompt_answers_in_the_language_of_the_content_not_a_fixed_one(): void {
+		$prompt = SuggestionPrompt::build( 'Tytuł', 'Treść produktu' );
+
+		$this->assertStringContainsString( 'same language as the content', $prompt );
+		$this->assertStringNotContainsString( 'Polish', $prompt );
+	}
+
+	public function test_the_json_schema_lists_every_field(): void {
+		$this->assertSame( array( 'title', 'description', 'keyphrase' ), SuggestionPrompt::schema()['required'] );
+	}
+
+	public function test_an_encoded_slug_is_shown_readable(): void {
+		$finding = $this->find( $this->audit( array( 'slug' => 'buty-m%c4%99skie' ) ), 'slug' );
+
+		$this->assertStringContainsString( 'buty-męskie', $finding->summary );
+	}
+
+	public function test_a_single_short_count_uses_the_singular(): void {
+		$finding = $this->find( $this->audit( array( 'content' => 'jedno' ) ), 'content_length' );
+
+		$this->assertStringContainsString( 'about 1 word.', $finding->summary );
 	}
 
 	public function test_the_prompt_bounds_how_much_content_is_sent(): void {

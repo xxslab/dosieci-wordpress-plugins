@@ -1,0 +1,410 @@
+# Copyright (C) 2026 DoSieci
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci SEO Doctor 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-seo-doctor\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: dosieci-seo-doctor\n"
+
+#. Plugin Name of the plugin
+#: dosieci-seo-doctor.php
+#: includes/Plugin.php:58
+#: includes/Plugin.php:234
+msgid "DoSieci SEO Doctor"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: dosieci-seo-doctor.php
+msgid "https://dosieci.pl/wtyczki/seo-doctor/"
+msgstr ""
+
+#. Description of the plugin
+#: dosieci-seo-doctor.php
+msgid "A read-only SEO audit of posts, pages and WooCommerce products, with optional AI suggestions for titles and descriptions. Works alongside Yoast SEO, Rank Math, All in One SEO and SEOPress instead of replacing them."
+msgstr ""
+
+#. Author of the plugin
+#: dosieci-seo-doctor.php
+msgid "DoSieci"
+msgstr ""
+
+#. Author URI of the plugin
+#: dosieci-seo-doctor.php
+msgid "https://dosieci.pl/"
+msgstr ""
+
+#: includes/Adapter/OpenAiClient.php:70
+msgid "OpenAI rejected the API key. Check the key in the settings below."
+msgstr ""
+
+#: includes/Adapter/OpenAiClient.php:74
+msgid "OpenAI does not recognise this model name, or your key has no access to it. Check the model in the settings below."
+msgstr ""
+
+#: includes/Adapter/OpenAiClient.php:78
+msgid "OpenAI rate limit or quota reached. Try again in a moment, or check the billing of your OpenAI account."
+msgstr ""
+
+#. translators: %d: HTTP status code
+#: includes/Adapter/OpenAiClient.php:84
+#, php-format
+msgid "OpenAI returned HTTP error %d."
+msgstr ""
+
+#: includes/Adapter/OpenAiClient.php:92
+msgid "OpenAI returned an empty answer."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:53
+msgid "There is no title."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:54
+msgid "Add a title. Without one, search engines make up their own."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:63
+#, php-format
+msgid "The title is %d character long, which is short."
+msgid_plural "The title is %d characters long, which is short."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: minimum number of characters, 2: maximum number of characters
+#: includes/Domain/SeoAuditor.php:65
+#, php-format
+msgid "Expand it to %1$d-%2$d characters to use the space in search results."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:74
+#, php-format
+msgid "The title is %d characters long and will be cut off in search results."
+msgstr ""
+
+#. translators: %d: maximum number of characters
+#: includes/Domain/SeoAuditor.php:76
+#: includes/Domain/SeoAuditor.php:120
+#, php-format
+msgid "Shorten it to %d characters at most."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:84
+#, php-format
+msgid "The title is %d characters long."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:96
+msgid "There is no meta description."
+msgstr ""
+
+#. translators: 1: minimum number of characters, 2: maximum number of characters
+#: includes/Domain/SeoAuditor.php:98
+#, php-format
+msgid "Add a description of %1$d-%2$d characters. Without one, the search engine picks a snippet of the content you have no control over."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:107
+#, php-format
+msgid "The meta description is %d character long, which is short."
+msgid_plural "The meta description is %d characters long, which is short."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: minimum number of characters, 2: maximum number of characters
+#: includes/Domain/SeoAuditor.php:109
+#, php-format
+msgid "Expand it to %1$d-%2$d characters."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:118
+#, php-format
+msgid "The meta description is %d characters long and will be cut off."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:128
+#, php-format
+msgid "The meta description is %d characters long."
+msgstr ""
+
+#. translators: %d: number of words
+#: includes/Domain/SeoAuditor.php:136
+#, php-format
+msgid "The content has about %d word."
+msgid_plural "The content has about %d words."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of words
+#: includes/Domain/SeoAuditor.php:144
+#, php-format
+msgid "Below about %d words, content is often seen as thin. Add real information, not filler."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:154
+msgid "There are no images in the content."
+msgstr ""
+
+#. translators: 1: number of images without alt text, 2: total number of images
+#: includes/Domain/SeoAuditor.php:167
+#, php-format
+msgid "%1$d of %2$d image has no alternative text."
+msgid_plural "%1$d of %2$d images have no alternative text."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Domain/SeoAuditor.php:171
+msgid "Fill in the alt attribute: it helps both accessibility and image search."
+msgstr ""
+
+#. translators: %d: number of images
+#: includes/Domain/SeoAuditor.php:178
+#, php-format
+msgid "%d image has alternative text."
+msgid_plural "All %d images have alternative text."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Domain/SeoAuditor.php:190
+msgid "There is no slug yet."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:191
+msgid "Set a readable URL before publishing."
+msgstr ""
+
+#. translators: %s: the slug
+#: includes/Domain/SeoAuditor.php:200
+#, php-format
+msgid "The slug \"%s\" is just a number."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:201
+msgid "Use a slug that describes the content: a numeric address tells neither people nor search engines anything."
+msgstr ""
+
+#. translators: %d: number of characters
+#: includes/Domain/SeoAuditor.php:210
+#, php-format
+msgid "The slug is %d characters long."
+msgstr ""
+
+#: includes/Domain/SeoAuditor.php:211
+msgid "Shorten the address: long slugs are harder to share and more often cut off."
+msgstr ""
+
+#. translators: %s: the slug
+#: includes/Domain/SeoAuditor.php:219
+#, php-format
+msgid "The slug \"%s\" looks fine."
+msgstr ""
+
+#: includes/Domain/SuggestionPrompt.php:85
+msgid "The AI model did not return valid JSON. Try again."
+msgstr ""
+
+#. translators: %s: name of the missing field
+#: includes/Domain/SuggestionPrompt.php:92
+#, php-format
+msgid "The AI answer is missing the \"%s\" field. Try again."
+msgstr ""
+
+#: includes/Plugin.php:59
+msgid "SEO Doctor"
+msgstr ""
+
+#: includes/Plugin.php:76
+msgid "SEO audit"
+msgstr ""
+
+#: includes/Plugin.php:89
+msgid "Open"
+msgstr ""
+
+#: includes/Plugin.php:133
+#: includes/Plugin.php:166
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: includes/Plugin.php:146
+msgid "The API key was removed."
+msgstr ""
+
+#: includes/Plugin.php:150
+msgid "Settings saved."
+msgstr ""
+
+#: includes/Plugin.php:154
+msgid "That does not look like an API key. Paste only the key, without quotes or a whole command."
+msgstr ""
+
+#: includes/Plugin.php:161
+msgid "The API key was saved."
+msgstr ""
+
+#: includes/Plugin.php:175
+msgid "You cannot edit this item."
+msgstr ""
+
+#: includes/Plugin.php:186
+msgid "The AI provider plugin failed. Check its settings under Settings > Connectors."
+msgstr ""
+
+#: includes/Plugin.php:195
+msgid "Set up an AI provider first (see \"AI suggestions\" below)."
+msgstr ""
+
+#: includes/Plugin.php:205
+msgid "Suggestions are ready below."
+msgstr ""
+
+#: includes/Plugin.php:225
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/Plugin.php:243
+msgid "The audit is read-only: the plugin never overwrites titles, canonicals, sitemaps or schema, so it works alongside Yoast SEO, Rank Math, All in One SEO and SEOPress."
+msgstr ""
+
+#: includes/Plugin.php:246
+msgid "Audit an item"
+msgstr ""
+
+#: includes/Plugin.php:247
+msgid "Tip: use the \"SEO audit\" link under any post, page or product in its list."
+msgstr ""
+
+#: includes/Plugin.php:250
+msgid "Post, page or product ID:"
+msgstr ""
+
+#: includes/Plugin.php:252
+msgid "Audit"
+msgstr ""
+
+#: includes/Plugin.php:260
+msgid "The item was not found, or you cannot edit it."
+msgstr ""
+
+#: includes/Plugin.php:299
+msgid "(no title)"
+msgstr ""
+
+#: includes/Plugin.php:300
+msgid "Edit"
+msgstr ""
+
+#. translators: %s: where the meta description was read from, e.g. "Yoast SEO"
+#: includes/Plugin.php:306
+#, php-format
+msgid "Meta description read from: %s"
+msgstr ""
+
+#: includes/Plugin.php:315
+msgid "Status"
+msgstr ""
+
+#: includes/Plugin.php:316
+msgid "Result"
+msgstr ""
+
+#: includes/Plugin.php:317
+msgid "Recommendation"
+msgstr ""
+
+#: includes/Plugin.php:325
+msgid "OK"
+msgstr ""
+
+#: includes/Plugin.php:327
+msgid "Critical"
+msgstr ""
+
+#: includes/Plugin.php:329
+msgid "Warning"
+msgstr ""
+
+#: includes/Plugin.php:344
+msgid "Suggest a title and description with AI"
+msgstr ""
+
+#: includes/Plugin.php:345
+msgid "Sends the title and up to 4,000 characters of the content to the AI provider."
+msgstr ""
+
+#: includes/Plugin.php:350
+#: includes/Plugin.php:414
+msgid "AI suggestions"
+msgstr ""
+
+#: includes/Plugin.php:351
+msgid "Copy whatever you find useful into your SEO plugin. Nothing is changed automatically."
+msgstr ""
+
+#: includes/Plugin.php:354
+msgid "Title"
+msgstr ""
+
+#: includes/Plugin.php:358
+msgid "Description"
+msgstr ""
+
+#: includes/Plugin.php:362
+msgid "Focus keyphrase"
+msgstr ""
+
+#: includes/Plugin.php:404
+msgid "the excerpt"
+msgstr ""
+
+#: includes/Plugin.php:407
+msgid "nothing found"
+msgstr ""
+
+#: includes/Plugin.php:418
+msgid "AI suggestions use the AI provider configured in WordPress."
+msgstr ""
+
+#: includes/Plugin.php:420
+msgid "Manage connectors"
+msgstr ""
+
+#: includes/Plugin.php:425
+msgid "Optional. AI suggestions use the AI provider configured in WordPress (Settings > Connectors, WordPress 7.0 or later) or, if there is none, your own OpenAI API key below. Requests go straight from this site to the provider, never through DoSieci, and you pay the provider directly."
+msgstr ""
+
+#: includes/Plugin.php:431
+msgid "Only an administrator can set up AI suggestions."
+msgstr ""
+
+#: includes/Plugin.php:446
+msgid "OpenAI API key"
+msgstr ""
+
+#: includes/Plugin.php:450
+msgid "Leave empty to keep the saved key. The key is never shown in full and never logged."
+msgstr ""
+
+#: includes/Plugin.php:452
+msgid "Remove the saved key"
+msgstr ""
+
+#: includes/Plugin.php:457
+msgid "Model"
+msgstr ""
+
+#: includes/Plugin.php:465
+msgid "Save"
+msgstr ""

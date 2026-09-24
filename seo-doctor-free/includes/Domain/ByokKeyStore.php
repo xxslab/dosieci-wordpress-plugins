@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace DoSieci\SEO\Doctor\Domain;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * BYOK key handling rules, as pure functions so they can be tested.
  *
