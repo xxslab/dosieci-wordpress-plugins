@@ -1,5 +1,5 @@
 === DoSieci Instant Search ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: woocommerce, search, live search, autocomplete, ajax search
 Requires at least: 6.4
 Tested up to: 7.1

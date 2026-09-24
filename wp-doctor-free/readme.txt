@@ -1,5 +1,5 @@
 === DoSieci WP Doctor ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: site health, diagnostics, performance, security, woocommerce
 Requires at least: 6.4
 Tested up to: 7.1

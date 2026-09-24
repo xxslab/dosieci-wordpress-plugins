@@ -1,5 +1,5 @@
 === DoSieci eBay Connector ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: ebay, woocommerce, marketplace, listings, api
 Requires at least: 6.4
 Tested up to: 7.1

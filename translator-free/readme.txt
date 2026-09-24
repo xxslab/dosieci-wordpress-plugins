@@ -1,5 +1,5 @@
 === DoSieci Translator ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: translation, deepl, woocommerce, translate, products
 Requires at least: 6.4
 Tested up to: 7.1

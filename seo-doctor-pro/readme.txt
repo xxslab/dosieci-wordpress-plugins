@@ -1,5 +1,5 @@
 === DoSieci SEO Doctor Pro ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: woocommerce, dosieci
 Requires at least: 6.4
 Tested up to: 6.6

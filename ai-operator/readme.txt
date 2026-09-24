@@ -1,5 +1,5 @@
 === DoSieci AI Operator ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: ai, woocommerce, diagnostics, assistant, site health
 Requires at least: 6.4
 Tested up to: 6.9

@@ -67,9 +67,10 @@ SEO Doctor wymuszał odpowiedzi po polsku. Szczegóły w historii commitów.
 
 ## Zgłoszenie na WordPress.org — lista kroków
 
-1. Załóż konto na wordpress.org o nazwie **`dosieci`** (profil jeszcze nie
-   istnieje, a wszystkie readme mają `Contributors: dosieci`). Inna nazwa =
-   zmiana tego pola w sześciu `readme.txt`.
+1. Konto na wordpress.org: **`vvalik`** (wszystkie readme mają
+   `Contributors: vvalik`). E-mail konta powinien być w domenie
+   `@dosieci.pl` — WordPress.org potwierdza tak własność marki z nazwy
+   wtyczki.
 2. Zgłaszaj **po jednej** wtyczce (limit WordPress.org: jedna w kolejce
    naraz) przez https://wordpress.org/plugins/developers/add/ — wgrywasz ZIP
    z `dist/`. Slug powstaje z nazwy wtyczki i **po akceptacji nie da się go

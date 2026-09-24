@@ -1,5 +1,5 @@
 === DoSieci Clean URLs ===
-Contributors: dosieci
+Contributors: vvalik
 Tags: permalinks, slugs, redirects, 301, seo
 Requires at least: 6.4
 Tested up to: 7.1
