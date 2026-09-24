@@ -180,7 +180,9 @@ final class Plugin {
 							<td>
 								<input type="password" id="ebay-client-secret" name="client_secret" class="regular-text" autocomplete="off"
 									placeholder="<?php echo esc_attr( $hasSecret ? '••••••••' : '' ); ?>">
-								<p class="description"><?php esc_html_e( 'Leave empty to keep the saved secret.', 'dosieci-ebay-connector' ); ?></p>
+								<?php if ( $hasSecret ) : ?>
+									<p class="description"><?php esc_html_e( 'Leave empty to keep the saved secret.', 'dosieci-ebay-connector' ); ?></p>
+								<?php endif; ?>
 							</td>
 						</tr>
 						<tr>

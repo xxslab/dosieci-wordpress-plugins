@@ -73,7 +73,6 @@ No data about your site's visitors or customers is sent. Nothing is sent to DoSi
 == Screenshots ==
 
 1. Application keys, environment and marketplace settings.
-2. Browsing eBay listings from wp-admin.
 
 == Changelog ==
 

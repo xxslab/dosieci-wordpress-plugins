@@ -1,113 +1,105 @@
 # DoSieci WordPress Plugins
 
 Monorepo z wtyczkami WordPress/WooCommerce rozwijanymi przez DoSieci. Kod
-źródłowy pochodzi z prywatnego monorepo [Laravel License Plugin
+pochodzi z prywatnego monorepo [Laravel License Plugin
 Hub](https://github.com/xxslab/Laravel-License-Plugin-Hub-WP-AI-Operator)
-(katalog `plugins/`), gdzie żyje razem z Hubem licencyjnym (Laravel) i
-pakietami współdzielonymi. To repozytorium zawiera wyłącznie same wtyczki,
-gotowe do instalacji w `wp-content/plugins/<nazwa>` albo do spakowania do
-ZIP-a.
+(katalog `plugins/`); od importu (2026-09-24) to repozytorium jest dla wtyczek
+źródłem prawdy — kopia w monorepo Huba jest już nieaktualna.
 
 ## Wtyczki
 
-| Wtyczka | Katalog | Wersja | Status | Testy jednostkowe |
-|---|---|---|---|---|
-| DoSieci AI Operator | `ai-operator` | **1.2.0-dev** | 🧪 rozwojowa, niescalona — patrz [niżej](#dosieci-ai-operator-120-dev) | 330/330 ✅ |
-| DoSieci Clean URLs | `clean-urls-free` | 1.0.0 | ✅ produkcyjna | 14/14 ✅ |
-| DoSieci Clean URLs Pro | `clean-urls-pro` | 0.0.1-dev | 🚧 szkielet Fazy 0, brak logiki domenowej | — (nic do testowania) |
-| DoSieci eBay Connector | `ebay-connector-free` | 1.0.0 | ✅ produkcyjna | 12/12 ✅ |
-| DoSieci eBay Connector Pro | `ebay-connector-pro` | 0.0.1-dev | 🚧 szkielet Fazy 0, brak logiki domenowej | — |
-| DoSieci Instant Search | `instant-search-free` | 1.0.0 | ✅ produkcyjna | 10/10 ✅ |
-| DoSieci Instant Search Pro | `instant-search-pro` | 0.0.1-dev | 🚧 szkielet Fazy 0, brak logiki domenowej | — |
-| DoSieci SEO Doctor | `seo-doctor-free` | 1.0.0 | ✅ produkcyjna | 18/18 ✅ |
-| DoSieci SEO Doctor Pro | `seo-doctor-pro` | 0.0.1-dev | 🚧 szkielet Fazy 0, brak logiki domenowej | — |
-| DoSieci Translator for WooCommerce | `translator-free` | 1.0.0 | ✅ produkcyjna | 10/10 ✅ |
-| DoSieci Translator Pro | `translator-pro` | 0.0.1-dev | 🚧 szkielet Fazy 0, brak logiki domenowej | — |
-| DoSieci WP Doctor | `wp-doctor-free` | 1.0.0 | ✅ produkcyjna | 15/15 ✅ |
-| DoSieci WP Doctor Pro | `wp-doctor-pro` | 0.0.1-dev | 🚧 szkielet Fazy 0, brak logiki domenowej | — |
+| Wtyczka | Katalog | Slug WordPress.org | Wersja | Status | Testy |
+|---|---|---|---|---|---|
+| DoSieci WP Doctor | `wp-doctor-free` | `dosieci-wp-doctor` | 1.0.0 | ✅ gotowa na WordPress.org | 18 ✅ |
+| DoSieci Clean URLs | `clean-urls-free` | `dosieci-clean-urls` | 1.0.0 | ✅ gotowa na WordPress.org | 21 ✅ |
+| DoSieci Instant Search | `instant-search-free` | `dosieci-instant-search` | 1.0.0 | ✅ gotowa na WordPress.org | 17 ✅ |
+| DoSieci SEO Doctor | `seo-doctor-free` | `dosieci-seo-doctor` | 1.0.0 | ✅ gotowa na WordPress.org | 22 ✅ |
+| DoSieci Translator | `translator-free` | `dosieci-translator` | 1.0.0 | ✅ gotowa na WordPress.org | 13 ✅ |
+| DoSieci eBay Connector | `ebay-connector-free` | `dosieci-ebay-connector` | 1.0.0 | ✅ gotowa na WordPress.org | 14 ✅ |
+| DoSieci AI Operator | `ai-operator` | — | 1.2.0-dev | 🧪 rozwojowa — patrz [niżej](#dosieci-ai-operator-120-dev) | 330 ✅ |
+| `*-pro` (6 wtyczek) | `*-pro` | — | 0.0.1-dev | 🚧 puste szkielety, bez logiki | — |
 
-**"Pro" = puste szkielety.** Wszystkie sześć wtyczek `*-pro` to celowo puste
-szkielety Fazy 0 (55 linii: nagłówek, stałe, puste hooki aktywacji) —
-mówi to wprost komentarz w każdym pliku głównym. Nie mają logiki domenowej,
-nie da się ich dziś sprzedawać jako produkt. Zostawione w repo zgodnie z
-zasadą projektu „nic nie usuwaj z powodu zmiany pozycjonowania" — do
-dokończenia później.
+Wtyczki darmowe mają angielskie teksty źródłowe (wymóg WordPress.org) i
+dołączone polskie tłumaczenie (`languages/*-pl_PL.po/.mo/.l10n.php`), które
+WordPress ładuje automatycznie na witrynach po polsku.
+
+## Budowanie paczek
+
+```bash
+bin/build.sh                    # wszystkie 6 darmowych wtyczek
+bin/build.sh translator-free    # jedna
+```
+
+Wynik: `dist/<slug>/` i `dist/<slug>-<wersja>.zip` — gotowe do wgrania na
+WordPress.org albo do instalacji ręcznej. Pliki deweloperskie (`tests/`,
+`composer.json`, `phpunit.xml.dist`…) są pomijane według `.distignore`.
+Testy jednostkowe: `cd <katalog> && composer install && vendor/bin/phpunit`.
+
+## Weryfikacja przed wydaniem (2026-09-24)
+
+Na lokalnej instalacji WordPress 7.1.2 (SQLite) + WooCommerce 11.1.2:
+
+- **Plugin Check 2.1.0** (oficjalne narzędzie recenzentów WordPress.org), także
+  z testami eksperymentalnymi: **0 błędów we wszystkich sześciu** (start: 44
+  błędy i 22 ostrzeżenia). Zostało 6 ostrzeżeń, wszystkie świadome:
+  - WP Doctor ×3 — „wp” w nazwie; kod Plugin Check sam opisuje to jako
+    „dozwolone, ale z ostrzeżeniem”. Jeśli recenzent poprosi o zmianę, plan B
+    to „DoSieci Site Doctor”.
+  - Instant Search ×2 — skrypt i styl ładowane na każdej stronie; celowo, bo
+    pole wyszukiwania jest zwykle w nagłówku każdej strony (razem ~6 KB).
+  - SEO Doctor ×1 — bezpośrednie wywołanie OpenAI; wtyczka najpierw używa
+    klienta AI WordPressa 7.0+ (Ustawienia → Łączniki), a własny klucz OpenAI
+    to tylko zapas dla starszych WordPressów.
+- **PHPCompatibility 8.1+**: jedyna uwaga to zapowiedź zmiany `trim()` w PHP
+  8.6 (dodatkowo usunie znak form feed) — bez wpływu na te wtyczki.
+- **Testy funkcjonalne w przeglądarce i HTTP**: wszystkie ekrany w EN i PL,
+  frontend, deinstalacja (usuwa dane, poza celowo zachowaną mapą przekierowań
+  Clean URLs), realne wywołania DeepL / OpenAI / eBay na fałszywych kluczach
+  (ścieżki błędów), Instant Search w Twenty Twenty-Five i Storefront, pusty
+  `debug.log` przy `WP_DEBUG`.
+
+Najważniejsze błędy znalezione i naprawione przy tej okazji: Translator
+kasował ukośniki wsteczne z treści i nie dawał się cofnąć na produktach (brak
+rewizji); Clean URLs potrafił wyczyścić treść wpisu (KSES), gubił adresy
+podstron i skanował wyłącznie wpisy; Instant Search ujawniał ukryte produkty i
+wyświetlał ceny jako `&#122;&#322;`; eBay Connector zawsze szukał na ebay.com;
+SEO Doctor wymuszał odpowiedzi po polsku. Szczegóły w historii commitów.
+
+## Zgłoszenie na WordPress.org — lista kroków
+
+1. Załóż konto na wordpress.org o nazwie **`dosieci`** (profil jeszcze nie
+   istnieje, a wszystkie readme mają `Contributors: dosieci`). Inna nazwa =
+   zmiana tego pola w sześciu `readme.txt`.
+2. Zgłaszaj **po jednej** wtyczce (limit WordPress.org: jedna w kolejce
+   naraz) przez https://wordpress.org/plugins/developers/add/ — wgrywasz ZIP
+   z `dist/`. Slug powstaje z nazwy wtyczki i **po akceptacji nie da się go
+   zmienić**; wszystkie sześć slugów z tabeli było wolnych 2026-09-24.
+   Proponowana kolejność: Clean URLs, Translator, eBay Connector (czyste
+   w Plugin Check) → Instant Search → SEO Doctor → WP Doctor.
+3. Po akceptacji: wgraj kod do SVN (`trunk/` + `tags/1.0.0/`), a zrzuty
+   ekranu z `wporg-assets/<slug>/` do katalogu `assets/` w SVN. Banera
+   (772×250, 1544×500) i ikony (128×128, 256×256) jeszcze nie ma — do
+   zaprojektowania.
+4. Polskie tłumaczenie: zaimportuj `languages/<slug>-pl_PL.po` na
+   translate.wordpress.org i poproś zespół Polyglots o rolę PTE dla swojej
+   wtyczki, żeby paczki językowe szły z WordPress.org.
 
 ## DoSieci AI Operator 1.2.0-dev
 
-W monorepo źródłowym wtyczka `ai-operator` na branchu `master` (ten, na
-który wskazywał link z zadania) stoi na **1.1.0**. Development poszedł
-jednak dalej na osobnym, **niescalonym** branchu
-`claude/ai-operator-site-builder-1.2` (ostatni commit 2026‑08‑17, 84 pliki,
-+15675/-11 linii względem mastera — praktycznie czysty dodatek, nic z
-1.1.0 nie ubyło). To właśnie ten branch trafił do tego repo jako aktualna
-wersja `ai-operator`, bo jest wyraźnie bardziej rozwinięty i przechodzi
-własne testy.
+Na `master` monorepo Huba ta wtyczka ma 1.1.0; tu jest wersja z niescalonego
+brancha `claude/ai-operator-site-builder-1.2` (commit `f74efe9`), bo to ścisłe
+rozszerzenie 1.1.0 (tryb planu zbiorczego z rollbackiem, kreator sklepu
+WooCommerce), 330/330 testów zielonych. Nieukończone: import mediów, adapter
+Elementora, import demo motywu. Wymaga jeszcze domknięcia trybu „klucz
+DoSieci przez Hub” i BYOK (w tym Łączników WordPressa 7.0+) oraz testu na
+stagingu, zanim trafi do klientów.
 
-Co nowego wg `docs/architecture/AI_OPERATOR_SITE_BUILDER_1_2.md` z tamtego
-brancha (uznany tam za jedyne źródło prawdy o stanie faktycznym, ponad
-dokumentem roadmapy, który jest już nieaktualny w części o WooCommerce):
-
-- **Gotowe i zweryfikowane na realnej instalacji WordPress** (wg tej
-  dokumentacji, nie mojej weryfikacji — nie miałem tu środowiska WP):
-  tryb planu zbiorczego (batch plan: model proponuje cały plan, człowiek
-  zatwierdza go jako całość, wykonanie krok po kroku przez te same bramki
-  co w 1.1.0), rollback odwracalnych kroków, generowanie treści świadome
-  bloków Gutenberga, oraz **kreator sklepu WooCommerce** (opis w języku
-  naturalnym → blueprint → plan → wykonanie z audytem i uzgadnianiem już
-  istniejących zasobów).
-- **Niezaimplementowane, celowo**: import/upload mediów, adapter
-  Elementora, import treści demo motywu, kompozycja z gotowych wzorców
-  bloków (template parts).
-
-Co sam zweryfikowałem w tej sesji: `php -l` czyste na wszystkich plikach,
-`composer install` + pełny `vendor/bin/phpunit` → **330/330 testów, 912
-asercji, zielono**. Nie mam tu instalacji WordPress, więc claim o
-weryfikacji "na realnej instalacji" pochodzi z dokumentacji brancha, nie
-ode mnie — jeśli to ma iść na produkcję, warto powtórzyć chociaż smoke
-test na stagingu przed udostępnieniem klientom.
-
-Poprawiłem tylko `readme.txt` (Stable tag + wpis w Changelogu), który w
-źródle wciąż mówił „1.1.0" mimo że plik główny wtyczki i tak deklaruje już
-`1.2.0-dev` — reszta kodu jest nietknięta.
-
-## Pochodzenie / traceability
+## Pochodzenie
 
 | Co | Skąd |
 |---|---|
-| 12 wtyczek (wszystkie poza `ai-operator`) | `xxslab/Laravel-License-Plugin-Hub-WP-AI-Operator`, branch `master`, commit `3b1e919afdc63944cbf6eb6de0cfc0dd62ccd0a3` |
-| `ai-operator` | ten sam repozytorium, branch `claude/ai-operator-site-builder-1.2` (niescalony do mastera), commit `f74efe96226b69bb702a5cf25236208a79dff13d` |
-
-Sprawdzone przed importem: wszystkie pozostałe branche repozytorium
-źródłowego (`claude/ai-operator-1.1-production-integration`,
-`claude/elinker-entitlement-integration`, `release-a094`) są już w pełni
-scalone do `master` — nie mają niczego nowszego. Jedyny inny rozjechany
-branch, `claude/project-structure-analysis-x8xlk1`, to starsza i znacznie
-mniejsza próba tego samego pomysłu (wspólny przodek z `site-builder-1.2`
-w tagu `production-2026-08-10`) — pominięty jako nieaktualny.
-
-Żadna z tych 13 wtyczek nie znalazła się jako wdrożona kopia na serwerze
-produkcyjnym `srv.dosieci.pl` ani w innym katalogu lokalnym z nowszą
-zawartością niż w monorepo źródłowym — sprawdzone przed importem.
-
-## Weryfikacja wykonana przed importem
-
-- `php -l` na każdym pliku `.php` wszystkich 13 wtyczek — czysto.
-- `composer install` + `vendor/bin/phpunit` osobno dla każdej wtyczki,
-  która ma testy (wszystkie `*-free` + `ai-operator`) — wszystkie zielone
-  (patrz tabela wyżej). Wtyczki `*-pro` nie mają czego testować (puste
-  szkielety).
-- Skan pod kątem sekretów (klucze API, hasła, klucze prywatne) w całym
-  `plugins/` źródłowym — jedyne trafienia to nazwy klas/opcji
-  (`SecretScrubber`, `RequestSigner`, pola ustawień licencji/API) i
-  oczywiście fałszywe wartości testowe (`sk-ant-SECRETSECRETSECRET-…`,
-  `sk-proj-ABCDEFG…`) w testach jednostkowych. Nic realnego do
-  publikacji.
-
-Nie wykonano (bo środowisko na to nie pozwala): instalacji na żywym
-WordPressie/WooCommerce, testu na WordPress.org Plugin Check, ręcznego
-code review linia po linii pod kątem bezpieczeństwa poza automatycznym
-skanem sekretów.
+| 12 wtyczek (poza `ai-operator`) | `xxslab/Laravel-License-Plugin-Hub-WP-AI-Operator`, `master`, `3b1e919` |
+| `ai-operator` | ten sam repozytorium, branch `claude/ai-operator-site-builder-1.2`, `f74efe9` |
 
 ## Licencja
 

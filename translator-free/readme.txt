@@ -73,8 +73,8 @@ Nothing is sent to DoSieci.
 
 == Screenshots ==
 
-1. The preview of a product description translation, before and after.
-2. Restoring the previous text.
+1. Choosing the field and the target language.
+2. Restoring the text from before a translation.
 
 == Changelog ==
 

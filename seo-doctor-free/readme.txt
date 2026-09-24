@@ -70,7 +70,7 @@ This plugin only contacts an external service when a user clicks "Suggest a titl
 
 == Screenshots ==
 
-1. The audit of a product, with AI suggestions.
+1. The audit of a product.
 2. The "SEO audit" link in the product list.
 
 == Changelog ==
