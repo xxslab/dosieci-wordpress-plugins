@@ -41,8 +41,8 @@ interface ChatGatewayInterface {
 	public function chat( string $requestId, array $conversation ): array;
 
 	/**
-	 * Human-readable label for the admin UI ("DoSieci Hub", "Anthropic
-	 * (własny klucz)"), so the chat screen can state plainly where the
+	 * Human-readable label for the admin UI ("DoSieci Hub", "Anthropic,
+	 * your own API key"), so the chat screen can state plainly where the
 	 * answer came from and whose credits paid for it.
 	 */
 	public function label(): string;

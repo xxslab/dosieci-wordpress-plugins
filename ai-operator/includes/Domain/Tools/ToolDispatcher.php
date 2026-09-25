@@ -113,7 +113,7 @@ final class ToolDispatcher {
 			// configurations, which is why handlers are also written to be
 			// individually cheap rather than relying on this alone.
 			$previousTimeLimit = (int) ini_get( 'max_execution_time' );
-			@set_time_limit( $tool->timeoutSeconds );
+			@set_time_limit( $tool->timeoutSeconds ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- deliberately bounding one tool call, restored in the finally block below; see the comment above.
 		}
 
 		try {
@@ -125,7 +125,7 @@ final class ToolDispatcher {
 			return $this->fail( $userId, $tool->name, $e->getMessage(), array( 'arguments' => $validated ), $requestId );
 		} finally {
 			if ( null !== $previousTimeLimit && function_exists( 'set_time_limit' ) ) {
-				@set_time_limit( $previousTimeLimit );
+				@set_time_limit( $previousTimeLimit ); // phpcs:ignore Squiz.PHP.DiscouragedFunctions.Discouraged -- restoring the limit this same method lowered above.
 			}
 		}
 

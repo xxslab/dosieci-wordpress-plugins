@@ -86,8 +86,9 @@ final class WpdbAuditLog implements AuditLogInterface {
 		$limit = max( 1, min( 500, $limit ) );
 		$table = self::tableName();
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table comes from $wpdb->prefix, not user input; $limit is prepared.
-		$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", $limit ), ARRAY_A );
+		// %i (an identifier placeholder, WordPress 6.2+) prepares the table
+		// name itself, rather than relying on it being safe to interpolate.
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY id DESC LIMIT %d', $table, $limit ), ARRAY_A );
 
 		if ( ! is_array( $rows ) ) {
 			return array();
