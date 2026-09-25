@@ -22,6 +22,14 @@
  * into pure functions (mapDescribeResponseToFormState / mapFormStateToBlueprint
  * / validateFormState) with no DOM access, so that round trip is testable
  * without a browser -- see tests/site-builder.form.test.js.
+ *
+ * ## Translation
+ *
+ * Every user-facing string is looked up through t()/tn() below, which read
+ * window.dosieciAiSiteBuilder.strings (localised by
+ * SiteBuilderPage::scriptStrings()) and fall back to the English source
+ * text otherwise -- including under Node, where the unit tests load this
+ * file with no `window` at all.
  */
 ( function ( root, factory ) {
 	if ( typeof module !== 'undefined' && module.exports ) {
@@ -31,6 +39,44 @@
 	}
 }( typeof window !== 'undefined' ? window : this, function ( isBrowser ) {
 	'use strict';
+
+	var STRINGS = ( isBrowser && window.dosieciAiSiteBuilder && window.dosieciAiSiteBuilder.strings ) || {};
+
+	/** A single localised string, or the English fallback when none was passed down. */
+	function t( key, fallback ) {
+		return 'string' === typeof STRINGS[ key ] ? STRINGS[ key ] : fallback;
+	}
+
+	/**
+	 * Picks the right one of three pre-translated "%d ..." templates for a
+	 * COUNT, the way Polish needs to: 1 / 2-4 / 5+ (with 12-14 always taking
+	 * the third form), then fills in the number.
+	 *
+	 * Safe for languages with fewer plural forms too -- English's own two
+	 * templates are simply repeated into more than one slot on the PHP side,
+	 * so the choice here between "few" and "many" has no visible effect for
+	 * them.
+	 *
+	 * @param {string} key
+	 * @param {number} count
+	 * @param {[string, string, string]} fallback English source templates: [one, few, many]
+	 * @return {string}
+	 */
+	function tn( key, count, fallback ) {
+		var patterns = Array.isArray( STRINGS[ key ] ) && 3 === STRINGS[ key ].length ? STRINGS[ key ] : fallback;
+		var n = Math.abs( count );
+		var index;
+
+		if ( 1 === n ) {
+			index = 0;
+		} else {
+			var mod10 = n % 10;
+			var mod100 = n % 100;
+			index = ( mod10 >= 2 && mod10 <= 4 && ( mod100 < 12 || mod100 > 14 ) ) ? 1 : 2;
+		}
+
+		return patterns[ index ].replace( '%d', String( count ) );
+	}
 
 	// -----------------------------------------------------------------
 	// Pure form <-> blueprint mapping. No DOM access anywhere in this
@@ -180,38 +226,44 @@
 		var store = formState.store;
 
 		if ( ! store ) {
-			return { valid: false, message: 'Wybrano rodzaj „Sklep” — uzupełnij dane sklepu poniżej.' };
+			return { valid: false, message: t( 'storeTypeNeedsData', 'Site type “Store” is selected — fill in the store data below.' ) };
 		}
 
 		if ( ! /^[A-Za-z]{2}(:[A-Za-z0-9]{1,6})?$/.test( store.country || '' ) ) {
-			return { valid: false, message: 'Podaj prawidłowy kod kraju sklepu (np. PL).' };
+			return { valid: false, message: t( 'storeInvalidCountry', 'Enter a valid store country code (e.g. PL).' ) };
 		}
 
 		if ( ! /^[A-Za-z]{3}$/.test( store.currency || '' ) ) {
-			return { valid: false, message: 'Podaj prawidłowy kod waluty (np. PLN).' };
+			return { valid: false, message: t( 'storeInvalidCurrency', 'Enter a valid currency code (e.g. PLN).' ) };
 		}
 
 		if ( ! store.categories || 0 === store.categories.length ) {
-			return { valid: false, message: 'Dodaj przynajmniej jedną kategorię produktów.' };
+			return { valid: false, message: t( 'storeNeedsCategory', 'Add at least one product category.' ) };
 		}
 
 		if ( ! store.products || 0 === store.products.length ) {
-			return { valid: false, message: 'Dodaj przynajmniej jeden produkt.' };
+			return { valid: false, message: t( 'storeNeedsProduct', 'Add at least one product.' ) };
 		}
 
 		for ( var i = 0; i < store.products.length; i++ ) {
 			var product = store.products[ i ];
 
 			if ( ! product.name ) {
-				return { valid: false, message: 'Każdy produkt musi mieć nazwę.' };
+				return { valid: false, message: t( 'productNeedsName', 'Every product must have a name.' ) };
 			}
 
 			if ( ! /^\d{1,7}([.,]\d{1,2})?$/.test( String( product.regularPrice || '' ).trim() ) ) {
-				return { valid: false, message: 'Produkt „' + product.name + '” ma nieprawidłową cenę.' };
+				return {
+					valid: false,
+					message: t( 'productInvalidPrice', 'Product “%s” has an invalid price.' ).replace( '%s', product.name )
+				};
 			}
 
 			if ( ! product.categoryRoles || 0 === product.categoryRoles.length ) {
-				return { valid: false, message: 'Produkt „' + product.name + '” nie ma przypisanej kategorii.' };
+				return {
+					valid: false,
+					message: t( 'productNeedsCategory', 'Product “%s” has no assigned category.' ).replace( '%s', product.name )
+				};
 			}
 		}
 
@@ -240,10 +292,10 @@
 		var planHash = null;
 		var polling = false;
 
-		// The full blueprint from the last "Przygotuj opis" response, kept
-		// only so fields the review form has no widget for (brand colours,
-		// brand style, page builder) survive being carried through to
-		// propose unedited. Never the sole home of anything commercial --
+		// The full blueprint from the last "Prepare description" response,
+		// kept only so fields the review form has no widget for (brand
+		// colours, brand style, page builder) survive being carried through
+		// to propose unedited. Never the sole home of anything commercial --
 		// store data always lives in the visible, editable form fields.
 		var lastDescribedBlueprint = {};
 
@@ -268,7 +320,7 @@
 					if ( ! payload || ! payload.success ) {
 						var message = payload && payload.data && payload.data.message
 							? payload.data.message
-							: 'Wystąpił błąd.';
+							: t( 'genericError', 'Something went wrong.' );
 						throw new Error( message );
 					}
 
@@ -317,16 +369,16 @@
 			panel.textContent = '';
 			panel.hidden = false;
 
-			panel.appendChild( node( 'h2', null, 'Co zrozumiałem' ) );
+			panel.appendChild( node( 'h2', null, t( 'whatIUnderstood', 'What I understood' ) ) );
 
 			var list = document.createElement( 'ul' );
 			var bp = data.blueprint || {};
 
 			[
-				[ 'Firma', bp.business_name ],
-				[ 'Rodzaj', bp.site_type ],
-				[ 'Strony', ( bp.pages || [] ).join( ', ' ) ],
-				[ 'Funkcje', ( bp.features || [] ).join( ', ' ) || 'brak' ]
+				[ t( 'businessLabel', 'Business' ), bp.business_name ],
+				[ t( 'typeLabel', 'Type' ), bp.site_type ],
+				[ t( 'pagesLabel', 'Pages' ), ( bp.pages || [] ).join( ', ' ) ],
+				[ t( 'featuresLabel', 'Features' ), ( bp.features || [] ).join( ', ' ) || t( 'none', 'none' ) ]
 			].forEach( function ( row ) {
 				var li = document.createElement( 'li' );
 				li.appendChild( node( 'strong', null, row[ 0 ] + ': ' ) );
@@ -337,11 +389,11 @@
 			if ( bp.store && Object.keys( bp.store ).length ) {
 				var products = bp.store.initial_products || [];
 				var li = document.createElement( 'li' );
-				li.appendChild( node( 'strong', null, 'Sklep: ' ) );
+				li.appendChild( node( 'strong', null, t( 'storeLabel', 'Store' ) + ': ' ) );
 				li.appendChild( text(
 					( bp.store.store_country || '' ) + ' / ' + ( bp.store.currency || '' ) + ', '
-					+ ( bp.store.categories || [] ).length + ' kategorii, '
-					+ products.length + ' produktów'
+					+ tn( 'categoryCount', ( bp.store.categories || [] ).length, [ '%d category', '%d categories', '%d categories' ] ) + ', '
+					+ tn( 'productCount', products.length, [ '%d product', '%d products', '%d products' ] )
 				) );
 				list.appendChild( li );
 			}
@@ -354,8 +406,12 @@
 			panel.textContent = '';
 			panel.hidden = false;
 
-			panel.appendChild( node( 'h2', null, 'Plan budowy — ' + data.steps.length + ' kroków' ) );
-			panel.appendChild( node( 'p', 'description', 'Przejrzyj wszystkie kroki. Zatwierdzasz je razem — nic nie wykona się wcześniej.' ) );
+			panel.appendChild( node( 'h2', null, tn( 'planHeading', data.steps.length, [
+				'Build plan — %d step',
+				'Build plan — %d steps',
+				'Build plan — %d steps'
+			] ) ) );
+			panel.appendChild( node( 'p', 'description', t( 'reviewStepsNotice', 'Review every step. You approve them together — nothing runs before that.' ) ) );
 
 			var list = document.createElement( 'ol' );
 			data.steps.forEach( function ( step ) {
@@ -363,7 +419,7 @@
 				li.appendChild( text( step.description ) );
 
 				if ( ! step.reversible ) {
-					li.appendChild( node( 'em', null, ' (nieodwracalne)' ) );
+					li.appendChild( node( 'em', null, t( 'irreversibleSuffix', ' (irreversible)' ) ) );
 				}
 
 				list.appendChild( li );
@@ -371,7 +427,7 @@
 			panel.appendChild( list );
 
 			if ( data.status === 'awaiting_approval' ) {
-				var approve = node( 'button', 'button button-primary', 'Zatwierdź cały plan' );
+				var approve = node( 'button', 'button button-primary', t( 'approveAllLabel', 'Approve the whole plan' ) );
 				approve.addEventListener( 'click', function () {
 					approve.disabled = true;
 					post( 'dosieci_ai_sb_approve', { plan_id: planId, plan_hash: planHash } )
@@ -385,7 +441,7 @@
 						} );
 				} );
 
-				var cancel = node( 'button', 'button', 'Anuluj' );
+				var cancel = node( 'button', 'button', t( 'cancelLabel', 'Cancel' ) );
 				cancel.addEventListener( 'click', function () {
 					post( 'dosieci_ai_sb_cancel', { plan_id: planId } ).then( update ).catch( function ( e ) {
 						showError( e.message );
@@ -412,7 +468,7 @@
 				return;
 			}
 
-			panel.appendChild( node( 'h3', null, 'Audyt końcowy' ) );
+			panel.appendChild( node( 'h3', null, t( 'finalAuditLabel', 'Final audit' ) ) );
 			panel.appendChild(
 				node( 'p', audit.passed ? 'notice notice-success' : 'notice notice-error', audit.summary )
 			);
@@ -449,7 +505,9 @@
 			panel.hidden = false;
 
 			var done = data.progress.succeeded;
-			panel.appendChild( node( 'h2', null, 'Postęp — ' + done + ' / ' + data.progress.total ) );
+			panel.appendChild( node( 'h2', null, t( 'progressHeading', 'Progress — %1$d / %2$d' )
+				.replace( '%1$d', String( done ) )
+				.replace( '%2$d', String( data.progress.total ) ) ) );
 
 			var list = document.createElement( 'ul' );
 			list.className = 'dosieci-sb-steps';
@@ -474,14 +532,14 @@
 			}
 
 			if ( data.status === 'running' ) {
-				var pause = node( 'button', 'button', 'Wstrzymaj' );
+				var pause = node( 'button', 'button', t( 'pauseLabel', 'Pause' ) );
 				pause.addEventListener( 'click', function () {
 					post( 'dosieci_ai_sb_pause', { plan_id: planId } ).then( update ).catch( function ( e ) {
 						showError( e.message );
 					} );
 				} );
 
-				var cancelRun = node( 'button', 'button', 'Przerwij' );
+				var cancelRun = node( 'button', 'button', t( 'stopLabel', 'Stop' ) );
 				cancelRun.addEventListener( 'click', function () {
 					post( 'dosieci_ai_sb_cancel', { plan_id: planId } ).then( update ).catch( function ( e ) {
 						showError( e.message );
@@ -494,7 +552,7 @@
 			}
 
 			if ( data.status === 'paused' ) {
-				var resume = node( 'button', 'button button-primary', 'Wznów' );
+				var resume = node( 'button', 'button button-primary', t( 'resumeLabel', 'Resume' ) );
 				resume.addEventListener( 'click', function () {
 					post( 'dosieci_ai_sb_resume', { plan_id: planId } ).then( function ( updated ) {
 						update( updated );
@@ -507,7 +565,7 @@
 			}
 
 			if ( data.can_rollback ) {
-				var rollback = node( 'button', 'button', 'Cofnij wprowadzone zmiany' );
+				var rollback = node( 'button', 'button', t( 'rollbackLabel', 'Undo the changes made' ) );
 				rollback.addEventListener( 'click', function () {
 					rollback.disabled = true;
 					post( 'dosieci_ai_sb_rollback', { plan_id: planId } ).then( update ).catch( function ( e ) {
@@ -840,18 +898,18 @@
 
 				var button = describe.querySelector( 'button' );
 				button.disabled = true;
-				button.textContent = 'Przygotowuję…';
+				button.textContent = t( 'preparingLabel', 'Preparing…' );
 
 				post( 'dosieci_ai_sb_describe', { request: request } )
 					.then( function ( data ) {
 						populateBlueprintForm( data.blueprint || {} );
 
 						button.disabled = false;
-						button.textContent = 'Przygotuj opis';
+						button.textContent = t( 'prepareDescriptionLabel', 'Prepare description' );
 					} )
 					.catch( function ( error ) {
 						button.disabled = false;
-						button.textContent = 'Przygotuj opis';
+						button.textContent = t( 'prepareDescriptionLabel', 'Prepare description' );
 						showError( error.message );
 					} );
 			} );
@@ -874,7 +932,7 @@
 
 				// Syncs the store section to whatever the select already
 				// shows on load -- a browser restoring form state (e.g. bfcache)
-				// can leave it on "Sklep" before any change event fires.
+				// can leave it on "Store" before any change event fires.
 				setStoreSectionVisible( isStoreTypeSelected() );
 			}
 

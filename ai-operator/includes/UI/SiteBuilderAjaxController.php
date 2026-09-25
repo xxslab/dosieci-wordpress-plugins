@@ -37,6 +37,16 @@ use DoSieci\AiOperator\Plugin;
  * compared against the server's own hash so that approving a plan the
  * screen has since re-generated is refused rather than silently applied to
  * the newer one.
+ *
+ * ## Exception messages crossing this boundary
+ *
+ * Every exception type surfaced below is escaped where it is BUILT (see
+ * their throw sites), because Plugin Check requires exception messages to
+ * be escaped and this is the one shared place they all funnel through
+ * before reaching the browser. site-builder.js inserts every message with
+ * textContent, never innerHTML, so an HTML-escaped string would show
+ * literal "&#039;"-style entities instead of the character itself --
+ * wp_specialchars_decode() undoes exactly that escaping, and only that.
  */
 final class SiteBuilderAjaxController {
 
@@ -85,10 +95,11 @@ final class SiteBuilderAjaxController {
 	public function handleDescribe(): void {
 		$this->assertAllowed();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in assertAllowed() above.
 		$request = isset( $_POST['request'] ) ? sanitize_textarea_field( wp_unslash( (string) $_POST['request'] ) ) : '';
 
 		if ( '' === $request ) {
-			wp_send_json_error( array( 'message' => __( 'Opisz witrynę, którą chcesz zbudować.', 'dosieci-ai-operator' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Describe the site you want to build.', 'dosieci-ai-operator' ) ), 400 );
 		}
 
 		try {
@@ -98,16 +109,21 @@ final class SiteBuilderAjaxController {
 			// distinguished from terminal so the UI can offer the right
 			// next step. A previously reviewed blueprint is NOT discarded --
 			// this endpoint never mutates stored state.
+			//
+			// A known gateway error code (insufficient credits, not
+			// connected, a rejected BYOK key...) gets the same actionable
+			// wording the main chat screen already gives, instead of a raw
+			// "Hub returned HTTP 402 (insufficient_credits)."-style message.
 			wp_send_json_error(
 				array(
-					'message'   => $e->getMessage(),
+					'message'   => ErrorMessages::forCode( $e->errorCode ) ?? wp_specialchars_decode( $e->getMessage(), ENT_QUOTES ),
 					'code'      => $e->errorCode,
 					'retryable' => $e->retryable,
 				),
 				200
 			);
 		} catch ( \Throwable $e ) {
-			wp_send_json_error( array( 'message' => __( 'Nie udało się przygotować opisu witryny.', 'dosieci-ai-operator' ), 'code' => 'unexpected' ), 200 );
+			wp_send_json_error( array( 'message' => __( 'Could not prepare the site description.', 'dosieci-ai-operator' ), 'code' => 'unexpected' ), 200 );
 		}
 
 		wp_send_json_success( array( 'blueprint' => $blueprint->toArray() ) );
@@ -121,17 +137,21 @@ final class SiteBuilderAjaxController {
 	public function handlePropose(): void {
 		$this->assertAllowed();
 
-		$raw = isset( $_POST['blueprint'] ) ? wp_unslash( (string) $_POST['blueprint'] ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce verified in assertAllowed() above; this is JSON, not text, so sanitize_text_field() would corrupt it -- it is strictly validated below by SiteBlueprint::fromArray() instead, never used unvalidated.
+		$raw     = isset( $_POST['blueprint'] ) ? wp_unslash( (string) $_POST['blueprint'] ) : '';
 		$decoded = json_decode( $raw, true );
 
 		if ( ! is_array( $decoded ) ) {
-			wp_send_json_error( array( 'message' => __( 'Nieprawidłowy opis witryny.', 'dosieci-ai-operator' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'Invalid site description.', 'dosieci-ai-operator' ) ), 400 );
 		}
 
 		try {
 			$blueprint = SiteBlueprint::fromArray( $decoded );
 		} catch ( BlueprintValidationException $e ) {
-			wp_send_json_error( array( 'message' => $e->getMessage(), 'code' => 'invalid_blueprint' ), 400 );
+			wp_send_json_error(
+				array( 'message' => wp_specialchars_decode( $e->getMessage(), ENT_QUOTES ), 'code' => 'invalid_blueprint' ),
+				400
+			);
 		}
 
 		if ( ! $this->plugin->writesEnabled() ) {
@@ -139,7 +159,7 @@ final class SiteBuilderAjaxController {
 			// time and misrepresent what the plugin will do.
 			wp_send_json_error(
 				array(
-					'message' => __( 'Tryb budowania witryny wymaga włączenia narzędzi zapisu w Ustawieniach.', 'dosieci-ai-operator' ),
+					'message' => __( 'Site Builder mode requires write tools to be enabled in Settings.', 'dosieci-ai-operator' ),
 					'code'    => 'writes_disabled',
 				),
 				409
@@ -148,11 +168,14 @@ final class SiteBuilderAjaxController {
 
 		$userId = get_current_user_id();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in assertAllowed() above.
+		$conversationId = isset( $_POST['conversation_id'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['conversation_id'] ) ) : '';
+
 		try {
 			$plan = $this->plugin->blueprintPlanner()->plan(
 				$blueprint,
 				$this->newPlanId(),
-				(string) ( $_POST['conversation_id'] ?? '' ),
+				$conversationId,
 				$userId,
 				time(),
 				// Real site facts the planner needs to choose a strategy: a
@@ -164,7 +187,10 @@ final class SiteBuilderAjaxController {
 				$this->plugin->projectId()
 			);
 		} catch ( PlanValidationException $e ) {
-			wp_send_json_error( array( 'message' => $e->getMessage(), 'code' => 'invalid_plan' ), 400 );
+			wp_send_json_error(
+				array( 'message' => wp_specialchars_decode( $e->getMessage(), ENT_QUOTES ), 'code' => 'invalid_plan' ),
+				400
+			);
 		}
 
 		$record         = new PlanRecord( $plan );
@@ -179,6 +205,7 @@ final class SiteBuilderAjaxController {
 		$this->assertAllowed();
 
 		$record = $this->loadPlanOr404();
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in assertAllowed() above.
 		$shown  = isset( $_POST['plan_hash'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['plan_hash'] ) ) : '';
 
 		// The user approves the plan they were SHOWN. If the stored plan has
@@ -187,7 +214,7 @@ final class SiteBuilderAjaxController {
 		if ( '' === $shown || ! hash_equals( $record->plan->planHash, $shown ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Ten plan jest nieaktualny. Odśwież stronę i przejrzyj go ponownie.', 'dosieci-ai-operator' ),
+					'message' => __( 'This plan is out of date. Refresh the page and review it again.', 'dosieci-ai-operator' ),
 					'code'    => 'stale_plan',
 				),
 				409
@@ -258,17 +285,21 @@ final class SiteBuilderAjaxController {
 			// A refused state transition is an expected, explainable outcome
 			// (cancelled, expired, not yours, already finished) -- reported
 			// as data the UI can render, not as a fatal.
-			wp_send_json_error( array( 'message' => $e->getMessage(), 'code' => 'plan_state' ), 409 );
+			wp_send_json_error(
+				array( 'message' => wp_specialchars_decode( $e->getMessage(), ENT_QUOTES ), 'code' => 'plan_state' ),
+				409
+			);
 		}
 
 		wp_send_json_success( $this->present( $record ) );
 	}
 
 	private function planIdFromRequest(): string {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- every caller of this private helper calls assertAllowed() first.
 		$planId = isset( $_POST['plan_id'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['plan_id'] ) ) : '';
 
 		if ( '' === $planId ) {
-			wp_send_json_error( array( 'message' => __( 'Brak identyfikatora planu.', 'dosieci-ai-operator' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'No plan ID given.', 'dosieci-ai-operator' ) ), 400 );
 		}
 
 		return $planId;
@@ -280,7 +311,7 @@ final class SiteBuilderAjaxController {
 		if ( null === $record ) {
 			// Same response for "no such plan" and "not yours" -- a probe
 			// must not be able to enumerate other users' plan ids.
-			wp_send_json_error( array( 'message' => __( 'Nie znaleziono planu.', 'dosieci-ai-operator' ) ), 404 );
+			wp_send_json_error( array( 'message' => __( 'Plan not found.', 'dosieci-ai-operator' ) ), 404 );
 		}
 
 		return $record;
@@ -377,7 +408,7 @@ final class SiteBuilderAjaxController {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 
 		if ( ! current_user_can( AdminMenu::CAPABILITY ) ) {
-			wp_send_json_error( array( 'message' => __( 'Brak uprawnień.', 'dosieci-ai-operator' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not allowed to do this.', 'dosieci-ai-operator' ) ), 403 );
 		}
 	}
 
