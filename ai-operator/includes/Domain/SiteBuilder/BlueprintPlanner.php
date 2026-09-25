@@ -88,9 +88,13 @@ final class BlueprintPlanner {
 			'install_theme',
 			array( 'slug' => $themeSlug, 'activate' => true ),
 			ToolDefinition::RISK_REVERSIBLE_WRITE,
-			sprintf( 'Zainstaluj i włącz motyw „%s”.', $themeSlug ),
+			sprintf(
+				/* translators: %s: theme slug */
+				__( 'Install and activate the theme “%s”.', 'dosieci-ai-operator' ),
+				$themeSlug
+			),
 			array(),
-			'Motyw jest zainstalowany i aktywny.',
+			__( 'The theme is installed and active.', 'dosieci-ai-operator' ),
 			array( 'tool' => 'inspect_theme', 'arguments' => array() ),
 			PlanAction::ROLLBACK_RESTORE_THEME
 		);
@@ -104,9 +108,9 @@ final class BlueprintPlanner {
 				'install_plugin',
 				array( 'slug' => 'contact-form-7', 'activate' => true ),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
-				'Zainstaluj i włącz wtyczkę formularza kontaktowego (Contact Form 7).',
+				__( 'Install and activate the contact form plugin (Contact Form 7).', 'dosieci-ai-operator' ),
 				array(),
-				'Wtyczka formularza jest aktywna.',
+				__( 'The form plugin is active.', 'dosieci-ai-operator' ),
 				array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 				PlanAction::ROLLBACK_RESTORE_PLUGIN_STATE
 			);
@@ -163,7 +167,11 @@ final class BlueprintPlanner {
 					ToolDefinition::RISK_REVERSIBLE_WRITE,
 					$resolution->describe( $pageTitle ),
 					array(),
-					sprintf( 'Strona „%s” zawiera zaktualizowaną treść.', $pageTitle ),
+					sprintf(
+						/* translators: %s: page title */
+						__( 'Page “%s” contains the updated content.', 'dosieci-ai-operator' ),
+						$pageTitle
+					),
 					array( 'tool' => 'get_post', 'arguments' => array( 'post_id' => (int) $resolution->existingId ) ),
 					// Restores the previous content, not a trash: we did not
 					// create this page in this run.
@@ -190,14 +198,22 @@ final class BlueprintPlanner {
 					// homepage that 404s for logged-out visitors is not a
 					// finished site. 1.1's create_post defaults to draft for
 					// one-off calls, which is right there and wrong here --
-					// so the plan is explicit, and the human sees "opublikuj"
+					// so the plan is explicit, and the human sees "publish"
 					// in the step description before approving.
 					'status'    => 'publish',
 				),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
-				sprintf( 'Utwórz i opublikuj stronę „%s”.', $pageTitle ),
+				sprintf(
+					/* translators: %s: page title */
+					__( 'Create and publish the page “%s”.', 'dosieci-ai-operator' ),
+					$pageTitle
+				),
 				array(),
-				sprintf( 'Strona „%s” istnieje i jest opublikowana.', $pageTitle ),
+				sprintf(
+					/* translators: %s: page title */
+					__( 'Page “%s” exists and is published.', 'dosieci-ai-operator' ),
+					$pageTitle
+				),
 				array( 'tool' => 'search_posts', 'arguments' => array( 'query' => $pageTitle ) ),
 				PlanAction::ROLLBACK_TRASH_POST,
 				array(),
@@ -260,12 +276,17 @@ final class BlueprintPlanner {
 					// Names the actual file, so a questionable match costs
 					// the human one glance at the approval list.
 					sprintf(
-						'Ustaw obrazek wyróżniający strony „%s”: %s.',
+						/* translators: 1: page title, 2: image file label */
+						__( 'Set the featured image of page “%1$s”: %2$s.', 'dosieci-ai-operator' ),
 						$pageTitle,
 						$image->label()
 					),
 					$isPlanned ? array( $pageActionIds[ $pageTitle ] ) : array(),
-					sprintf( 'Strona „%s” ma ustawiony obrazek wyróżniający.', $pageTitle ),
+					sprintf(
+						/* translators: %s: page title */
+						__( 'Page “%s” has a featured image set.', 'dosieci-ai-operator' ),
+						$pageTitle
+					),
 					array( 'tool' => 'get_post', 'arguments' => array() ),
 					PlanAction::ROLLBACK_RESTORE_FEATURED_IMAGE,
 					$isPlanned
@@ -316,17 +337,18 @@ final class BlueprintPlanner {
 			$sequence++,
 			'create_menu',
 			array(
-				'name'     => 'Menu główne',
+				'name'     => __( 'Main Menu', 'dosieci-ai-operator' ),
 				'location' => 'primary',
 				'items'    => array(),
 			),
 			ToolDefinition::RISK_REVERSIBLE_WRITE,
 			sprintf(
-				'Utwórz menu główne z %d pozycjami i przypisz je do motywu.',
+				/* translators: %d: number of menu items */
+				__( 'Create the main menu with %d item(s) and assign it to the theme.', 'dosieci-ai-operator' ),
 				count( $menuItemResolvers )
 			),
 			array_values( $pageActionIds ),
-			'Menu istnieje i jest przypisane do lokalizacji w motywie.',
+			__( 'The menu exists and is assigned to the theme location.', 'dosieci-ai-operator' ),
 			array( 'tool' => 'inspect_theme', 'arguments' => array() ),
 			PlanAction::ROLLBACK_DELETE_MENU,
 			array(
@@ -354,9 +376,9 @@ final class BlueprintPlanner {
 					'project_id' => $projectId,
 				),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
-				'Ustaw nawigację motywu blokowego, żeby menu było widoczne na stronie.',
+				__( 'Set the block theme navigation so the menu is visible on the site.', 'dosieci-ai-operator' ),
 				array_values( $pageActionIds ),
-				'Motyw blokowy renderuje nawigację z odnośnikami do stron.',
+				__( 'The block theme renders navigation with links to the pages.', 'dosieci-ai-operator' ),
 				array( 'tool' => 'inspect_theme', 'arguments' => array() ),
 				PlanAction::ROLLBACK_RESTORE_NAVIGATION,
 				array(
@@ -384,9 +406,13 @@ final class BlueprintPlanner {
 				'set_homepage',
 				array( 'page_id' => $homeIsPlanned ? 0 : $homeExistingId ),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
-				sprintf( 'Ustaw stronę „%s” jako stronę główną witryny.', $homeTitle ),
+				sprintf(
+					/* translators: %s: page title */
+					__( 'Set page “%s” as the site’s homepage.', 'dosieci-ai-operator' ),
+					$homeTitle
+				),
 				$homeIsPlanned ? array( $pageActionIds[ $homeTitle ] ) : array(),
-				'Witryna wyświetla wskazaną stronę jako stronę główną.',
+				__( 'The site displays the chosen page as its homepage.', 'dosieci-ai-operator' ),
 				array( 'tool' => 'get_site_info', 'arguments' => array() ),
 				PlanAction::ROLLBACK_RESTORE_HOMEPAGE,
 				$homeIsPlanned
@@ -401,9 +427,13 @@ final class BlueprintPlanner {
 			'set_site_option',
 			array( 'option' => 'blogname', 'value' => $blueprint->businessName ),
 			ToolDefinition::RISK_REVERSIBLE_WRITE,
-			sprintf( 'Ustaw nazwę witryny na „%s”.', $blueprint->businessName ),
+			sprintf(
+				/* translators: %s: business name */
+				__( 'Set the site name to “%s”.', 'dosieci-ai-operator' ),
+				$blueprint->businessName
+			),
 			array(),
-			'Nazwa witryny jest ustawiona.',
+			__( 'The site name is set.', 'dosieci-ai-operator' ),
 			array( 'tool' => 'get_site_info', 'arguments' => array() ),
 			PlanAction::ROLLBACK_RESTORE_OPTION
 		);
@@ -411,7 +441,7 @@ final class BlueprintPlanner {
 		// --- contact form: create it, then put it on the contact page ------
 		// Installing CF7 is not the same as having a contact form. Without
 		// these two steps the site has the plugin active, no form, and a
-		// Kontakt page with nothing on it.
+		// contact page with nothing on it.
 		if ( null !== $formActionId ) {
 			$contactPageTitle = $this->contactPageTitle( $blueprint );
 
@@ -428,9 +458,9 @@ final class BlueprintPlanner {
 						'plan_id'       => $planId,
 					),
 					ToolDefinition::RISK_REVERSIBLE_WRITE,
-					'Utwórz formularz kontaktowy.',
+					__( 'Create the contact form.', 'dosieci-ai-operator' ),
 					array( $formActionId ),
-					'Formularz kontaktowy istnieje.',
+					__( 'The contact form exists.', 'dosieci-ai-operator' ),
 					array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 					PlanAction::ROLLBACK_TRASH_CONTACT_FORM
 				);
@@ -444,9 +474,13 @@ final class BlueprintPlanner {
 						'shortcode' => '',
 					),
 					ToolDefinition::RISK_REVERSIBLE_WRITE,
-					sprintf( 'Osadź formularz kontaktowy na stronie „%s”.', $contactPageTitle ),
+					sprintf(
+						/* translators: %s: page title */
+						__( 'Embed the contact form on page “%s”.', 'dosieci-ai-operator' ),
+						$contactPageTitle
+					),
 					array_values( array_filter( array( $configure->actionId, $pageActionIds[ $contactPageTitle ] ?? null ) ) ),
-					'Strona kontaktowa zawiera formularz.',
+					__( 'The contact page contains the form.', 'dosieci-ai-operator' ),
 					array( 'tool' => 'get_post', 'arguments' => array() ),
 					PlanAction::ROLLBACK_RESTORE_POST,
 					isset( $pageActionIds[ $contactPageTitle ] )
@@ -476,9 +510,9 @@ final class BlueprintPlanner {
 				'install_plugin',
 				array( 'slug' => 'woocommerce', 'activate' => true ),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
-				'Zainstaluj i włącz WooCommerce.',
+				__( 'Install and activate WooCommerce.', 'dosieci-ai-operator' ),
 				array(),
-				'WooCommerce jest aktywny.',
+				__( 'WooCommerce is active.', 'dosieci-ai-operator' ),
 				array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 				PlanAction::ROLLBACK_RESTORE_PLUGIN_STATE
 			);
@@ -491,9 +525,9 @@ final class BlueprintPlanner {
 				'ensure_store_pages',
 				array(),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
-				'Sprawdź strony sklepu (Sklep, Koszyk, Zamówienie, Moje konto) i odtwórz brakujące.',
+				__( 'Check the store pages (Shop, Cart, Checkout, My account) and recreate any that are missing.', 'dosieci-ai-operator' ),
 				array( $installWoo->actionId ),
-				'Wszystkie strony sklepu istnieją i są przypisane.',
+				__( 'All store pages exist and are assigned.', 'dosieci-ai-operator' ),
 				array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 				PlanAction::ROLLBACK_RESTORE_STORE_PAGES
 			);
@@ -509,14 +543,15 @@ final class BlueprintPlanner {
 				),
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
 				sprintf(
-					'Ustaw podstawy sklepu — kraj: %s, waluta: %s, jednostki: %s / %s.',
+					/* translators: 1: country code, 2: currency code, 3: weight unit, 4: dimension unit */
+					__( 'Set the store basics — country: %1$s, currency: %2$s, units: %3$s / %4$s.', 'dosieci-ai-operator' ),
 					$store->country,
 					$store->currency,
 					$store->weightUnit,
 					$store->dimensionUnit
 				),
 				array( $installWoo->actionId ),
-				'Kraj, waluta i jednostki sklepu są ustawione.',
+				__( 'The store’s country, currency and units are set.', 'dosieci-ai-operator' ),
 				array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 				PlanAction::ROLLBACK_RESTORE_STORE_SETTINGS
 			);
@@ -528,7 +563,7 @@ final class BlueprintPlanner {
 			// categories -- a category reused on a recovery run gets no
 			// step of its own, and a product resolver that only looked at
 			// steps in THIS plan found nothing for it. Verified: a recovery
-			// plan whose Koszulki category was reused put the surviving
+			// plan whose T-shirts category was reused put the surviving
 			// product in WooCommerce's "Uncategorized" instead.
 			$categoryEntryByRole = array();
 
@@ -573,10 +608,22 @@ final class BlueprintPlanner {
 					),
 					ToolDefinition::RISK_REVERSIBLE_WRITE,
 					$isUpdate
-						? sprintf( 'Zaktualizuj kategorię produktów „%s”.', $category->name )
-						: sprintf( 'Utwórz kategorię produktów „%s”.', $category->name ),
+						? sprintf(
+							/* translators: %s: category name */
+							__( 'Update the product category “%s”.', 'dosieci-ai-operator' ),
+							$category->name
+						)
+						: sprintf(
+							/* translators: %s: category name */
+							__( 'Create the product category “%s”.', 'dosieci-ai-operator' ),
+							$category->name
+						),
 					array( $installWoo->actionId ),
-					sprintf( 'Kategoria „%s” istnieje.', $category->name ),
+					sprintf(
+						/* translators: %s: category name */
+						__( 'Category “%s” exists.', 'dosieci-ai-operator' ),
+						$category->name
+					),
 					array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 					$isUpdate
 						? PlanAction::ROLLBACK_RESTORE_PRODUCT_CATEGORY
@@ -645,17 +692,29 @@ final class BlueprintPlanner {
 						'product_id'        => $isUpdate ? (int) $resolution->existingId : 0,
 					),
 					ToolDefinition::RISK_REVERSIBLE_WRITE,
-					sprintf(
-						'%s szkic produktu „%s” — %s %s.',
-						$isUpdate ? 'Zaktualizuj' : 'Utwórz',
-						$product->name,
-						$product->regularPrice,
-						$store->currency
-					),
+					$isUpdate
+						? sprintf(
+							/* translators: 1: product name, 2: price, 3: currency code */
+							__( 'Update the product draft “%1$s” — %2$s %3$s.', 'dosieci-ai-operator' ),
+							$product->name,
+							$product->regularPrice,
+							$store->currency
+						)
+						: sprintf(
+							/* translators: 1: product name, 2: price, 3: currency code */
+							__( 'Create the product draft “%1$s” — %2$s %3$s.', 'dosieci-ai-operator' ),
+							$product->name,
+							$product->regularPrice,
+							$store->currency
+						),
 					// Categories must exist before a product can be filed in
 					// them, so every category step is a dependency.
 					array_merge( array( $installWoo->actionId ), $categoryStepIds ),
-					sprintf( 'Produkt „%s” istnieje jako szkic.', $product->name ),
+					sprintf(
+						/* translators: %s: product name */
+						__( 'Product “%s” exists as a draft.', 'dosieci-ai-operator' ),
+						$product->name
+					),
 					array( 'tool' => 'inspect_plugins', 'arguments' => array() ),
 					$isUpdate ? PlanAction::ROLLBACK_RESTORE_PRODUCT : PlanAction::ROLLBACK_TRASH_PRODUCT,
 					array(
@@ -788,13 +847,21 @@ final class BlueprintPlanner {
 	): PlanAction {
 		if ( ! in_array( $tool, self::VERIFIABLE_TOOLS, true ) ) {
 			throw new PlanValidationException(
-				sprintf( 'Narzędzie "%s" nie ma weryfikatora i nie może wejść do planu.', $tool )
+				sprintf(
+					/* translators: %s: internal tool name */
+					esc_html__( 'Tool “%s” has no verifier and cannot enter the plan.', 'dosieci-ai-operator' ),
+					esc_html( $tool )
+				)
 			);
 		}
 
 		if ( null === $verification ) {
 			throw new PlanValidationException(
-				sprintf( 'Krok "%s" musi deklarować weryfikację.', $tool )
+				sprintf(
+					/* translators: %s: internal tool name */
+					esc_html__( 'Step “%s” must declare a verification.', 'dosieci-ai-operator' ),
+					esc_html( $tool )
+				)
 			);
 		}
 

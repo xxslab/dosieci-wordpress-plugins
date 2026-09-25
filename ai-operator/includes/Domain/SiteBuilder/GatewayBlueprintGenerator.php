@@ -50,7 +50,7 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		$request = trim( $request );
 
 		if ( '' === $request ) {
-			throw new BlueprintGenerationException( 'Opis witryny jest pusty.', 'empty_request' );
+			throw new BlueprintGenerationException( esc_html__( 'The site description is empty.', 'dosieci-ai-operator' ), 'empty_request' );
 		}
 
 		// Bounded before it ever leaves the site: an unbounded prompt is
@@ -68,10 +68,13 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		try {
 			$response = $this->gateway->chat( self::requestId(), $conversation );
 		} catch ( HubException $e ) {
+			// $e->getMessage() is already HTML-escaped at its own construction
+			// site (see HubClient), so it is passed through as-is rather than
+			// escaped a second time.
 			throw new BlueprintGenerationException( $e->getMessage(), $e->errorCode, $e->retryable );
 		} catch ( TransportException $e ) {
 			throw new BlueprintGenerationException(
-				'Nie udało się połączyć z usługą AI.',
+				esc_html__( 'Could not connect to the AI service.', 'dosieci-ai-operator' ),
 				'transport_error',
 				true
 			);
@@ -93,7 +96,7 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		// error rather than something to execute.
 		if ( 'final_answer' !== $type ) {
 			throw new BlueprintGenerationException(
-				'Model nie zwrócił opisu witryny.',
+				esc_html__( 'The model did not return a site description.', 'dosieci-ai-operator' ),
 				'unexpected_response_type'
 			);
 		}
@@ -101,14 +104,14 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		$answer = (string) ( $response['answer'] ?? '' );
 
 		if ( strlen( $answer ) > self::MAX_RESPONSE_BYTES ) {
-			throw new BlueprintGenerationException( 'Odpowiedź modelu jest zbyt duża.', 'response_too_large' );
+			throw new BlueprintGenerationException( esc_html__( 'The model’s response is too large.', 'dosieci-ai-operator' ), 'response_too_large' );
 		}
 
 		$decoded = $this->decodeJson( $answer );
 
 		if ( null === $decoded ) {
 			throw new BlueprintGenerationException(
-				'Model nie zwrócił poprawnego JSON-a z opisem witryny.',
+				esc_html__( 'The model did not return valid JSON with a site description.', 'dosieci-ai-operator' ),
 				'malformed_response'
 			);
 		}
@@ -119,7 +122,11 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 			return SiteBlueprint::fromArray( $decoded );
 		} catch ( BlueprintValidationException $e ) {
 			throw new BlueprintGenerationException(
-				sprintf( 'Opis witryny od modelu jest nieprawidłowy: %s', $e->getMessage() ),
+				sprintf(
+					/* translators: %s: validation error from the model's site description (already escaped) */
+					esc_html__( 'The model’s site description is invalid: %s', 'dosieci-ai-operator' ),
+					$e->getMessage()
+				),
 				'invalid_blueprint'
 			);
 		}
@@ -154,7 +161,14 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		return is_array( $decoded ) ? $decoded : null;
 	}
 
-	/** @param array<string, mixed> $context */
+	/**
+	 * Always English: read by the model, not by people. What the MODEL
+	 * writes (business name, page names, descriptions, store text) is
+	 * asked to follow the user's own request language instead, with the
+	 * site's language as a fallback -- see the instruction embedded below.
+	 *
+	 * @param array<string, mixed> $context
+	 */
 	private function prompt( string $request, array $context ): string {
 		$allowedTypes = implode(
 			', ',
@@ -175,43 +189,48 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		return implode(
 			"\n",
 			array(
-				'Jesteś asystentem, który zamienia opis firmy na STRUKTURĘ JSON opisującą witrynę.',
-				'Zwróć WYŁĄCZNIE obiekt JSON, bez komentarza i bez wyjaśnień.',
+				'You are an assistant that turns a description of a business into a JSON STRUCTURE describing a website.',
+				'Return ONLY a JSON object -- no commentary, no explanation.',
 				'',
-				'Dozwolone pola:',
-				'  site_type      — jedna z wartości: ' . $allowedTypes,
-				'  business_name  — nazwa firmy (wymagane)',
-				'  language       — kod języka, np. "pl" albo "en"',
-				'  description    — jedno–dwa zdania o firmie',
-				'  brand_style    — krótki opis stylu, np. "modern_professional"',
-				'  brand_colors   — obiekt, wartości wyłącznie w formacie #rrggbb',
-				'  pages          — lista nazw stron (maks. 20)',
-				'  features       — lista cech; obsługiwane: "contact_form", "gallery"',
+				'Write business_name, description, page names, and any store text (product and',
+				'category names and descriptions) in the SAME LANGUAGE the user wrote their',
+				'request in. If the request does not make the language clear, use the site',
+				'language given in the context below.',
+				'',
+				'Allowed fields:',
+				'  site_type      — one of: ' . $allowedTypes,
+				'  business_name  — the business name (required)',
+				'  language       — language code of the generated text, e.g. "en" or "pl"',
+				'  description    — one or two sentences about the business',
+				'  brand_style    — a short style description, e.g. "modern_professional"',
+				'  brand_colors   — an object, values only in #rrggbb format',
+				'  pages          — a list of page names (max 20)',
+				'  features       — a list of features; supported: "contact_form", "gallery"',
 				'  woocommerce    — true/false',
-				'  store          — obiekt, TYLKO gdy użytkownik prosi o sklep:',
-				'                     store_country    — kod kraju ISO, np. "PL" albo "US:CA"',
-				'                     currency         — kod waluty ISO, np. "PLN"',
-				'                     weight_unit      — jedna z: kg, g, lbs, oz',
-				'                     dimension_unit   — jedna z: m, cm, mm, in, yd',
-				'                     categories       — lista nazw kategorii (napisy albo',
-				'                                        obiekty {name, description})',
-				'                     initial_products — lista obiektów produktu:',
+				'  store          — an object, ONLY when the user asks for a shop:',
+				'                     store_country    — ISO country code, e.g. "PL" or "US:CA"',
+				'                     currency         — ISO currency code, e.g. "USD"',
+				'                     weight_unit      — one of: kg, g, lbs, oz',
+				'                     dimension_unit   — one of: m, cm, mm, in, yd',
+				'                     categories       — a list of category names (strings, or',
+				'                                        objects {name, description})',
+				'                     initial_products — a list of product objects:',
 				'                                        {name, regular_price, description,',
 				'                                         short_description, category_roles}',
-				'                                        regular_price to liczba jako tekst,',
-				'                                        np. "79.00" albo "79,90"',
+				'                                        regular_price is a number as text,',
+				'                                        e.g. "79.00"',
 				'',
-				'Wygenerowane produkty są zawsze SZKICAMI — ten format nie ma pola',
-				'do publikacji, ceny promocyjnej, statusu ani żadnej innej akcji.',
+				'Generated products are always DRAFTS -- this format has no field for',
+				'publishing, a sale price, a status, or any other action.',
 				'',
-				'Nie dodawaj innych pól. Nie opisuj żadnych działań ani narzędzi —',
-				'ten JSON to wyłącznie opis docelowej witryny, który człowiek zatwierdzi.',
-				'Wszystko poza tym opisem (klucze API, sekrety, adresy URL, polecenia',
-				'wykonania kodu, instrukcje publikacji) jest ignorowane, ponieważ ten',
-				'format nie ma pola zdolnego je wyrazić.',
+				'Do not add other fields. Do not describe any actions or tools -- this JSON is',
+				'only a description of the target site, which a human will approve.',
+				'Anything outside that description (API keys, secrets, URLs, code-execution',
+				'instructions, publishing instructions) is ignored, because this format has no',
+				'field capable of expressing it.',
 				'',
 				$this->contextBlock( $context ),
-				'Opis od użytkownika:',
+				"The user's request:",
 				'"""',
 				$request,
 				'"""',
@@ -235,7 +254,7 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 				continue;
 			}
 
-			$value = is_bool( $context[ $key ] ) ? ( $context[ $key ] ? 'tak' : 'nie' ) : (string) $context[ $key ];
+			$value = is_bool( $context[ $key ] ) ? ( $context[ $key ] ? 'yes' : 'no' ) : (string) $context[ $key ];
 			$lines[] = sprintf( '  %s: %s', $key, mb_substr( $value, 0, 120 ) );
 		}
 
@@ -243,7 +262,7 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 			return '';
 		}
 
-		return "Kontekst istniejącej witryny (tylko do odczytu):\n" . implode( "\n", $lines ) . "\n";
+		return "Context of the existing site (read-only):\n" . implode( "\n", $lines ) . "\n";
 	}
 
 	private static function requestId(): string {

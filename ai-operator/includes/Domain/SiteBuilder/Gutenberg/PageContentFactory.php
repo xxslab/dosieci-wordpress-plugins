@@ -23,6 +23,11 @@ use DoSieci\AiOperator\Domain\SiteBuilder\SiteBlueprint;
  * that overclaims ("award-winning", "trusted by thousands") in a generated
  * draft is worse than text that is merely neutral -- it makes false claims
  * on the site owner's behalf.
+ *
+ * All strings are translatable (English source, Polish bundled as the
+ * plugin's own translation): the copy this class writes becomes real
+ * content on the user's site, so a Polish install should still get the
+ * same Polish copy it always has, and an English install gets English.
  */
 final class PageContentFactory {
 
@@ -47,8 +52,12 @@ final class PageContentFactory {
 				'title'     => $name,
 				'subtitle'  => '' !== $blueprint->description
 					? $blueprint->description
-					: sprintf( '%s — profesjonalne usługi dla klientów indywidualnych i firm.', $name ),
-				'cta_label' => 'Skontaktuj się',
+					: sprintf(
+						/* translators: %s: business name */
+						__( '%s — professional services for individual and business clients.', 'dosieci-ai-operator' ),
+						$name
+					),
+				'cta_label' => __( 'Get in touch', 'dosieci-ai-operator' ),
 				'cta_url'   => '#kontakt',
 			),
 		);
@@ -58,7 +67,7 @@ final class PageContentFactory {
 		if ( array() !== $services ) {
 			$sections[] = array(
 				'type'  => 'services',
-				'title' => 'Co robimy',
+				'title' => __( 'What we do', 'dosieci-ai-operator' ),
 				'items' => $services,
 			);
 		}
@@ -67,9 +76,9 @@ final class PageContentFactory {
 
 		$sections[] = array(
 			'type'      => 'cta',
-			'title'     => 'Potrzebujesz wyceny?',
-			'text'      => 'Opisz swój problem, a odpowiemy z propozycją terminu i kosztu.',
-			'cta_label' => 'Napisz do nas',
+			'title'     => __( 'Need a quote?', 'dosieci-ai-operator' ),
+			'text'      => __( 'Describe what you need, and we will get back to you with a timeline and a price.', 'dosieci-ai-operator' ),
+			'cta_label' => __( 'Write to us', 'dosieci-ai-operator' ),
 			'cta_url'   => '#kontakt',
 		);
 
@@ -80,40 +89,46 @@ final class PageContentFactory {
 	private function innerSections( SiteBlueprint $blueprint, string $pageTitle ): array {
 		$normalised = mb_strtolower( $pageTitle );
 
-		if ( str_contains( $normalised, 'kontakt' ) ) {
+		if ( str_contains( $normalised, 'kontakt' ) || str_contains( $normalised, 'contact' ) ) {
 			return array(
-				array( 'type' => 'heading', 'text' => 'Kontakt', 'level' => 1 ),
+				array( 'type' => 'heading', 'text' => __( 'Contact', 'dosieci-ai-operator' ), 'level' => 1 ),
 				array(
 					'type'  => 'contact',
-					'title' => 'Napisz lub zadzwoń',
+					'title' => __( 'Write or call us', 'dosieci-ai-operator' ),
 					'text'  => sprintf(
-						'Chętnie odpowiemy na pytania dotyczące usług firmy %s.',
+						/* translators: %s: business name */
+						__( 'We are happy to answer any questions about %s’s services.', 'dosieci-ai-operator' ),
 						$blueprint->businessName
 					),
 				),
 			);
 		}
 
-		if ( str_contains( $normalised, 'oferta' ) || str_contains( $normalised, 'usług' ) ) {
+		if ( str_contains( $normalised, 'oferta' ) || str_contains( $normalised, 'usług' )
+			|| str_contains( $normalised, 'offer' ) || str_contains( $normalised, 'services' ) || str_contains( $normalised, 'pricing' )
+		) {
 			$items = $this->serviceItems( $blueprint );
 
 			return array(
 				array( 'type' => 'heading', 'text' => $pageTitle, 'level' => 1 ),
 				array(
 					'type' => 'paragraph',
-					'text' => 'Poniżej znajdziesz zakres naszych usług. Każdą wycenę przygotowujemy indywidualnie.',
+					'text' => __( 'Below is an overview of our services. Every quote is prepared individually.', 'dosieci-ai-operator' ),
 				),
 				array( 'type' => 'services', 'items' => $items ),
 			);
 		}
 
-		if ( str_contains( $normalised, 'o nas' ) || str_contains( $normalised, 'o firmie' ) ) {
+		if ( str_contains( $normalised, 'o nas' ) || str_contains( $normalised, 'o firmie' )
+			|| str_contains( $normalised, 'about' ) || str_contains( $normalised, 'team' )
+		) {
 			return array(
 				array( 'type' => 'heading', 'text' => $pageTitle, 'level' => 1 ),
 				array(
 					'type' => 'paragraph',
 					'text' => sprintf(
-						'%s to zespół, który stawia na rzetelność i terminowość. Ta sekcja czeka na Twój opis — dodaj historię firmy, doświadczenie i to, co Was wyróżnia.',
+						/* translators: %s: business name */
+						__( '%s is a team that values reliability and punctuality. This section is waiting for your own description — add the company’s history, experience and what sets you apart.', 'dosieci-ai-operator' ),
 						$blueprint->businessName
 					),
 				),
@@ -126,7 +141,11 @@ final class PageContentFactory {
 			array( 'type' => 'heading', 'text' => $pageTitle, 'level' => 1 ),
 			array(
 				'type' => 'paragraph',
-				'text' => sprintf( 'Ta strona („%s”) czeka na treść. Możesz ją teraz uzupełnić w edytorze.', $pageTitle ),
+				'text' => sprintf(
+					/* translators: %s: page title */
+					__( 'This page (“%s”) is waiting for content. You can fill it in now in the editor.', 'dosieci-ai-operator' ),
+					$pageTitle
+				),
 			),
 		);
 	}
@@ -135,17 +154,38 @@ final class PageContentFactory {
 	private function serviceItems( SiteBlueprint $blueprint ): array {
 		return match ( $blueprint->siteType ) {
 			SiteBlueprint::TYPE_SERVICE_BUSINESS => array(
-				array( 'title' => 'Szybka realizacja', 'text' => 'Podejmujemy się zleceń pilnych i umawiamy konkretny termin.' ),
-				array( 'title' => 'Doświadczony zespół', 'text' => 'Pracujemy zgodnie ze sztuką i obowiązującymi normami.' ),
-				array( 'title' => 'Przejrzysta wycena', 'text' => 'Koszt znasz przed rozpoczęciem prac — bez niespodzianek.' ),
+				array(
+					'title' => __( 'Fast turnaround', 'dosieci-ai-operator' ),
+					'text'  => __( 'We take on urgent jobs and agree a firm date.', 'dosieci-ai-operator' ),
+				),
+				array(
+					'title' => __( 'Experienced team', 'dosieci-ai-operator' ),
+					'text'  => __( 'We work to established standards and best practice.', 'dosieci-ai-operator' ),
+				),
+				array(
+					'title' => __( 'Transparent pricing', 'dosieci-ai-operator' ),
+					'text'  => __( 'You know the cost before work starts — no surprises.', 'dosieci-ai-operator' ),
+				),
 			),
 			SiteBlueprint::TYPE_RESTAURANT => array(
-				array( 'title' => 'Świeże składniki', 'text' => 'Menu układamy wokół tego, co sezonowe i lokalne.' ),
-				array( 'title' => 'Miejsce na spotkania', 'text' => 'Sala i rezerwacje dla większych grup.' ),
+				array(
+					'title' => __( 'Fresh ingredients', 'dosieci-ai-operator' ),
+					'text'  => __( 'Our menu is built around what is seasonal and local.', 'dosieci-ai-operator' ),
+				),
+				array(
+					'title' => __( 'A place to meet', 'dosieci-ai-operator' ),
+					'text'  => __( 'A dining room and reservations for larger groups.', 'dosieci-ai-operator' ),
+				),
 			),
 			SiteBlueprint::TYPE_PORTFOLIO => array(
-				array( 'title' => 'Wybrane realizacje', 'text' => 'Przegląd projektów, nad którymi pracowaliśmy.' ),
-				array( 'title' => 'Proces', 'text' => 'Jak wygląda współpraca krok po kroku.' ),
+				array(
+					'title' => __( 'Selected work', 'dosieci-ai-operator' ),
+					'text'  => __( 'An overview of projects we have worked on.', 'dosieci-ai-operator' ),
+				),
+				array(
+					'title' => __( 'Process', 'dosieci-ai-operator' ),
+					'text'  => __( 'How working together looks, step by step.', 'dosieci-ai-operator' ),
+				),
 			),
 			default => array(),
 		};
