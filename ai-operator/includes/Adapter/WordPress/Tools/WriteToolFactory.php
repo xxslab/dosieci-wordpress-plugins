@@ -485,7 +485,7 @@ final class WriteToolFactory {
 			);
 
 			if ( is_wp_error( $api ) ) {
-				return $this->failure( sprintf( /* translators: 1: plugin slug, 2: error message from WordPress.org */ __( 'Plugin "%1\$s" was not found in the WordPress.org directory: %2\$s', 'dosieci-ai-operator' ), $slug, $api->get_error_message() ) );
+				return $this->failure( sprintf( /* translators: 1: plugin slug, 2: error message from WordPress.org */ __( 'Plugin "%1$s" was not found in the WordPress.org directory: %2$s', 'dosieci-ai-operator' ), $slug, $api->get_error_message() ) );
 			}
 
 			// The package URL comes from the official API response, never
@@ -622,7 +622,7 @@ final class WriteToolFactory {
 			);
 
 			if ( is_wp_error( $api ) ) {
-				return $this->failure( sprintf( /* translators: 1: theme slug, 2: error message from WordPress.org */ __( 'Theme "%1\$s" was not found in the WordPress.org directory: %2\$s', 'dosieci-ai-operator' ), $slug, $api->get_error_message() ) );
+				return $this->failure( sprintf( /* translators: 1: theme slug, 2: error message from WordPress.org */ __( 'Theme "%1$s" was not found in the WordPress.org directory: %2$s', 'dosieci-ai-operator' ), $slug, $api->get_error_message() ) );
 			}
 
 			$upgrader = new \Theme_Upgrader( new \Automatic_Upgrader_Skin() );
