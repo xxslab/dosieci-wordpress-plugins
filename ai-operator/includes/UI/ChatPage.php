@@ -103,10 +103,8 @@ final class ChatPage {
 	 * provider, and the two key-based BYOK modes need a saved key: each has
 	 * its own remedy, so each gets its own message rather than a shared
 	 * "not configured".
-	 *
-	 * @param \DoSieci\AiOperator\Domain\Connection|null $connection
 	 */
-	private function blocker( ProviderSettings $settings, $connection ): ?string {
+	private function blocker( ProviderSettings $settings, ?\DoSieci\AiOperator\Domain\Connection $connection ): ?string {
 		$statusUrl   = esc_url( admin_url( 'admin.php?page=' . AdminMenu::SLUG . '-status' ) );
 		$settingsUrl = esc_url( admin_url( 'admin.php?page=' . AdminMenu::SLUG . '-settings' ) );
 
