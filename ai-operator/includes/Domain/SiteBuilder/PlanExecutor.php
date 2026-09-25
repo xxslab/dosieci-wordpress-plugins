@@ -161,7 +161,7 @@ final class PlanExecutor {
 		// treating it as a succeeded step would let the plan march on
 		// reporting green while the site was never touched.
 		$softError = ( false === ( $outcome->data['success'] ?? true ) )
-			? (string) ( $outcome->data['error'] ?? 'Narzędzie odmówiło wykonania.' )
+			? (string) ( $outcome->data['error'] ?? __( 'The tool refused to run.', 'dosieci-ai-operator' ) )
 			: null;
 
 		if ( $outcome->isError || null !== $softError ) {
@@ -172,7 +172,8 @@ final class PlanExecutor {
 
 			$record->status        = PlanStatus::FAILED;
 			$record->failureReason = sprintf(
-				'Krok %d (%s) nie powiódł się: %s',
+				/* translators: 1: step sequence number, 2: internal tool name, 3: failure message */
+				__( 'Step %1$d (%2$s) failed: %3$s', 'dosieci-ai-operator' ),
 				$action->sequence,
 				$action->toolName,
 				$message
@@ -194,13 +195,15 @@ final class PlanExecutor {
 		if ( ! $verification ) {
 			$state->status = ActionState::FAILED;
 			$state->error  = sprintf(
-				'Zapis wykonany, ale weryfikacja stanu WordPressa nie powiodła się: %s',
+				/* translators: %s: verification failure detail */
+				__( 'The write succeeded, but verifying WordPress’s state failed: %s', 'dosieci-ai-operator' ),
 				(string) $state->verificationDetail
 			);
 
 			$record->status        = PlanStatus::FAILED;
 			$record->failureReason = sprintf(
-				'Krok %d (%s): %s',
+				/* translators: 1: step sequence number, 2: internal tool name, 3: failure message */
+				__( 'Step %1$d (%2$s): %3$s', 'dosieci-ai-operator' ),
 				$action->sequence,
 				$action->toolName,
 				$state->error
@@ -448,7 +451,8 @@ final class PlanExecutor {
 		if ( null === $action->verification ) {
 			$state->verificationStatus = 'unverifiable';
 			$state->verificationDetail = sprintf(
-				'Krok "%s" nie deklaruje weryfikacji, więc nie można potwierdzić jego skutku.',
+				/* translators: %s: internal tool name */
+				__( 'Step “%s” does not declare a verification, so its effect cannot be confirmed.', 'dosieci-ai-operator' ),
 				$action->toolName
 			);
 

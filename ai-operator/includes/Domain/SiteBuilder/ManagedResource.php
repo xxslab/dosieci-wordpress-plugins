@@ -86,7 +86,7 @@ final class ManagedResource {
 	 */
 	public static function forRole( string $type, string $role ): self {
 		if ( ! in_array( $type, self::VALID_TYPES, true ) ) {
-			throw new \InvalidArgumentException( sprintf( 'Unknown managed resource type "%s".', $type ) );
+			throw new \InvalidArgumentException( sprintf( 'Unknown managed resource type “%s”.', esc_html( $type ) ) );
 		}
 
 		return new self( $type, self::slugify( $role ) );
@@ -97,7 +97,7 @@ final class ManagedResource {
 		$parts = explode( ':', $key, 2 );
 
 		if ( 2 !== count( $parts ) || '' === $parts[1] ) {
-			throw new \InvalidArgumentException( sprintf( 'Malformed managed resource key "%s".', $key ) );
+			throw new \InvalidArgumentException( sprintf( 'Malformed managed resource key “%s”.', esc_html( $key ) ) );
 		}
 
 		return self::forRole( $parts[0], $parts[1] );

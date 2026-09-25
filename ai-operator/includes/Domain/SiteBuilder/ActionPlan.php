@@ -198,9 +198,13 @@ final class ActionPlan {
 		);
 
 		// JSON_UNESCAPED_* so the same string does not hash differently
-		// depending on whether PHP chose to escape a Polish character.
+		// depending on whether PHP chose to escape a Polish character. Domain
+		// code must stay usable with no WordPress loaded (see
+		// tests/bootstrap.php), and this is a hash input, never output to a
+		// browser.
 		return hash(
 			'sha256',
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.json_encode_json_encode -- see note above.
 			(string) json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE )
 		);
 	}
@@ -217,7 +221,7 @@ final class ActionPlan {
 
 		if ( count( $actions ) > self::MAX_ACTIONS ) {
 			throw new PlanValidationException(
-				sprintf( 'A plan is limited to %d actions.', self::MAX_ACTIONS )
+				sprintf( 'A plan is limited to %d actions.', (int) self::MAX_ACTIONS )
 			);
 		}
 
@@ -229,7 +233,7 @@ final class ActionPlan {
 
 			if ( isset( $seen[ $action->actionId ] ) ) {
 				throw new PlanValidationException(
-					sprintf( 'Duplicate action id "%s".', $action->actionId )
+					sprintf( 'Duplicate action id “%s”.', esc_html( $action->actionId ) )
 				);
 			}
 
@@ -243,7 +247,11 @@ final class ActionPlan {
 			foreach ( $action->dependsOn as $dependency ) {
 				if ( ! isset( $seen[ $dependency ] ) ) {
 					throw new PlanValidationException(
-						sprintf( 'Action "%s" depends on unknown action "%s".', $action->actionId, $dependency )
+						sprintf(
+							'Action “%s” depends on unknown action “%s”.',
+							esc_html( $action->actionId ),
+							esc_html( $dependency )
+						)
 					);
 				}
 
@@ -258,9 +266,9 @@ final class ActionPlan {
 				if ( null !== $dependencyIndex && $dependencyIndex >= $index ) {
 					throw new PlanValidationException(
 						sprintf(
-							'Action "%s" depends on "%s", which does not run before it.',
-							$action->actionId,
-							$dependency
+							'Action “%s” depends on “%s”, which does not run before it.',
+							esc_html( $action->actionId ),
+							esc_html( $dependency )
 						)
 					);
 				}

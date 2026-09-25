@@ -57,7 +57,11 @@ final class StoreBlueprint {
 
 		if ( 1 !== preg_match( '/^[A-Z]{2}(:[A-Z0-9]{1,6})?$/', $country ) ) {
 			throw new BlueprintValidationException(
-				sprintf( 'Kod kraju sklepu "%s" jest nieprawidłowy.', $country )
+				sprintf(
+					/* translators: %s: the invalid store country code */
+					esc_html__( 'The store country code “%s” is invalid.', 'dosieci-ai-operator' ),
+					esc_html( $country )
+				)
 			);
 		}
 
@@ -65,7 +69,11 @@ final class StoreBlueprint {
 
 		if ( 1 !== preg_match( '/^[A-Z]{3}$/', $currency ) ) {
 			throw new BlueprintValidationException(
-				sprintf( 'Kod waluty "%s" jest nieprawidłowy.', $currency )
+				sprintf(
+					/* translators: %s: the invalid currency code */
+					esc_html__( 'The currency code “%s” is invalid.', 'dosieci-ai-operator' ),
+					esc_html( $currency )
+				)
 			);
 		}
 
@@ -73,11 +81,23 @@ final class StoreBlueprint {
 		$dimensionUnit = strtolower( trim( (string) ( $raw['dimension_unit'] ?? 'cm' ) ) );
 
 		if ( ! in_array( $weightUnit, self::WEIGHT_UNITS, true ) ) {
-			throw new BlueprintValidationException( sprintf( 'Nieznana jednostka wagi "%s".', $weightUnit ) );
+			throw new BlueprintValidationException(
+				sprintf(
+					/* translators: %s: the unrecognised weight unit */
+					esc_html__( 'Unknown weight unit “%s”.', 'dosieci-ai-operator' ),
+					esc_html( $weightUnit )
+				)
+			);
 		}
 
 		if ( ! in_array( $dimensionUnit, self::DIMENSION_UNITS, true ) ) {
-			throw new BlueprintValidationException( sprintf( 'Nieznana jednostka wymiaru "%s".', $dimensionUnit ) );
+			throw new BlueprintValidationException(
+				sprintf(
+					/* translators: %s: the unrecognised dimension unit */
+					esc_html__( 'Unknown dimension unit “%s”.', 'dosieci-ai-operator' ),
+					esc_html( $dimensionUnit )
+				)
+			);
 		}
 
 		$categories = array();
@@ -86,20 +106,20 @@ final class StoreBlueprint {
 		}
 
 		if ( count( $categories ) > self::MAX_CATEGORIES ) {
-			throw new BlueprintValidationException( 'Zbyt wiele kategorii w opisie sklepu.' );
+			throw new BlueprintValidationException( esc_html__( 'Too many categories in the store description.', 'dosieci-ai-operator' ) );
 		}
 
 		$products = array();
 		foreach ( (array) ( $raw['initial_products'] ?? array() ) as $entry ) {
 			if ( ! is_array( $entry ) ) {
-				throw new BlueprintValidationException( 'Opis produktu musi być obiektem.' );
+				throw new BlueprintValidationException( esc_html__( 'A product description must be an object.', 'dosieci-ai-operator' ) );
 			}
 
 			$products[] = StoreProduct::fromArray( $entry );
 		}
 
 		if ( count( $products ) > self::MAX_PRODUCTS ) {
-			throw new BlueprintValidationException( 'Zbyt wiele produktów w opisie sklepu.' );
+			throw new BlueprintValidationException( esc_html__( 'Too many products in the store description.', 'dosieci-ai-operator' ) );
 		}
 
 		self::assertRolesAreUnique( $categories, $products );
@@ -126,7 +146,12 @@ final class StoreBlueprint {
 
 				if ( isset( $seen[ $key ] ) ) {
 					throw new BlueprintValidationException(
-						sprintf( 'Powtórzona nazwa w sekcji %s: "%s".', $label, $item->role )
+						sprintf(
+							/* translators: 1: section name ("categories" or "products"), 2: duplicated name */
+							esc_html__( 'Duplicate name in the %1$s section: “%2$s”.', 'dosieci-ai-operator' ),
+							esc_html( $label ),
+							esc_html( $item->role )
+						)
 					);
 				}
 
@@ -154,7 +179,12 @@ final class StoreBlueprint {
 					// in no category is a shop the merchant has to repair by
 					// hand, and they would have no idea why.
 					throw new BlueprintValidationException(
-						sprintf( 'Produkt „%s” wskazuje nieistniejącą kategorię „%s”.', $product->name, $role )
+						sprintf(
+							/* translators: 1: product name, 2: category role that does not exist */
+							esc_html__( 'Product “%1$s” references a category that does not exist: “%2$s”.', 'dosieci-ai-operator' ),
+							esc_html( $product->name ),
+							esc_html( $role )
+						)
 					);
 				}
 			}

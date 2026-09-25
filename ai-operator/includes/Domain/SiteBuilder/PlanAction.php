@@ -112,12 +112,12 @@ final class PlanAction {
 		}
 
 		if ( '' === $toolName ) {
-			throw new PlanValidationException( sprintf( 'Action "%s" has no tool name.', $actionId ) );
+			throw new PlanValidationException( sprintf( 'Action “%s” has no tool name.', esc_html( $actionId ) ) );
 		}
 
 		if ( ! in_array( $rollbackStrategy, self::ROLLBACK_STRATEGIES, true ) ) {
 			throw new PlanValidationException(
-				sprintf( 'Action "%s" declares unknown rollback strategy "%s".', $actionId, $rollbackStrategy )
+				sprintf( 'Action “%s” declares unknown rollback strategy “%s”.', esc_html( $actionId ), esc_html( $rollbackStrategy ) )
 			);
 		}
 	}
