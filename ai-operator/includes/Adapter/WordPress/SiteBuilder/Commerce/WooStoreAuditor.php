@@ -35,11 +35,19 @@ final class WooStoreAuditor {
 	 */
 	public function audit( StoreBlueprint $store, string $projectId ): array {
 		if ( ! $this->woo->isAvailable() ) {
-			return array( $this->row( 'woocommerce_active', false, 'WooCommerce nie jest aktywny.' ) );
+			return array( $this->row( 'woocommerce_active', false, __( 'WooCommerce is not active.', 'dosieci-ai-operator' ) ) );
 		}
 
 		$checks = array(
-			$this->row( 'woocommerce_active', true, sprintf( 'WooCommerce %s jest aktywny.', $this->woo->version() ) ),
+			$this->row(
+				'woocommerce_active',
+				true,
+				sprintf(
+					/* translators: %s: WooCommerce version number */
+					__( 'WooCommerce %s is active.', 'dosieci-ai-operator' ),
+					$this->woo->version()
+				)
+			),
 		);
 
 		$checks = array_merge( $checks, $this->corePages(), $this->settings( $store ) );
@@ -50,10 +58,11 @@ final class WooStoreAuditor {
 
 	/** @return array<int, array{check:string, passed:bool, detail:string}> */
 	private function corePages(): array {
-		$rows = array();
+		$rows   = array();
+		$labels = WooCommerceAdapter::coreLabels();
 
 		foreach ( $this->woo->corePageState() as $slug => $page ) {
-			$label = WooCommerceAdapter::CORE_PAGES[ $slug ] ?? $slug;
+			$label = $labels[ $slug ] ?? $slug;
 
 			// Checks the live post, not the option. WooCommerce keeps a page
 			// id after the page is deleted, so a non-zero option proves
@@ -62,8 +71,17 @@ final class WooStoreAuditor {
 				'store_page_' . $slug,
 				true === $page['exists'],
 				true === $page['exists']
-					? sprintf( 'Strona „%s” działa (id %d).', $label, $page['page_id'] )
-					: sprintf( 'Strona „%s” nie istnieje lub nie jest przypisana.', $label )
+					? sprintf(
+						/* translators: 1: store page label, 2: post ID */
+						__( 'Page “%1$s” works (id %2$d).', 'dosieci-ai-operator' ),
+						$label,
+						$page['page_id']
+					)
+					: sprintf(
+						/* translators: %s: store page label */
+						__( 'Page “%s” does not exist or is not assigned.', 'dosieci-ai-operator' ),
+						$label
+					)
 			);
 		}
 
@@ -91,8 +109,19 @@ final class WooStoreAuditor {
 				$check,
 				$passed,
 				$passed
-					? sprintf( '%s: %s.', $field, $have )
-					: sprintf( '%s to „%s”, oczekiwano „%s”.', $field, $have, (string) $want )
+					? sprintf(
+						/* translators: 1: setting field name, 2: setting value */
+						__( '%1$s: %2$s.', 'dosieci-ai-operator' ),
+						$field,
+						$have
+					)
+					: sprintf(
+						/* translators: 1: setting field name, 2: actual value, 3: expected value */
+						__( '%1$s is “%2$s”, expected “%3$s”.', 'dosieci-ai-operator' ),
+						$field,
+						$have,
+						(string) $want
+					)
 			);
 		}
 
@@ -112,8 +141,17 @@ final class WooStoreAuditor {
 				'store_category_' . $resource->slug,
 				null !== $term,
 				null !== $term
-					? sprintf( 'Kategoria „%s” istnieje (id %d).', $term['name'], $term['term_id'] )
-					: sprintf( 'Brak kategorii „%s”.', $category->name )
+					? sprintf(
+						/* translators: 1: category name, 2: term ID */
+						__( 'Category “%1$s” exists (id %2$d).', 'dosieci-ai-operator' ),
+						$term['name'],
+						$term['term_id']
+					)
+					: sprintf(
+						/* translators: %s: category name */
+						__( 'Category “%s” is missing.', 'dosieci-ai-operator' ),
+						$category->name
+					)
 			);
 		}
 
@@ -133,7 +171,11 @@ final class WooStoreAuditor {
 				$rows[] = $this->row(
 					'store_product_' . $resource->slug,
 					false,
-					sprintf( 'Brak produktu „%s”.', $product->name )
+					sprintf(
+						/* translators: %s: product name */
+						__( 'Product “%s” is missing.', 'dosieci-ai-operator' ),
+						$product->name
+					)
 				);
 
 				continue;
@@ -145,7 +187,12 @@ final class WooStoreAuditor {
 				$rows[] = $this->row(
 					'store_product_' . $resource->slug,
 					false,
-					sprintf( 'Produkt „%s” ma status „%s”, a musi pozostać szkicem.', $live['name'], $live['status'] )
+					sprintf(
+						/* translators: 1: product name, 2: actual product status */
+						__( 'Product “%1$s” has status “%2$s”, but must remain a draft.', 'dosieci-ai-operator' ),
+						$live['name'],
+						$live['status']
+					)
 				);
 
 				continue;
@@ -156,7 +203,8 @@ final class WooStoreAuditor {
 					'store_product_' . $resource->slug,
 					false,
 					sprintf(
-						'Produkt „%s”: oczekiwano %s, jest %s.',
+						/* translators: 1: product name, 2: expected price, 3: actual price */
+						__( 'Product “%1$s”: expected %2$s, is %3$s.', 'dosieci-ai-operator' ),
 						$live['name'],
 						$product->regularPrice,
 						$live['price']
@@ -175,7 +223,11 @@ final class WooStoreAuditor {
 				$rows[] = $this->row(
 					'store_product_' . $resource->slug,
 					false,
-					sprintf( 'Produkt „%s” jest w innych kategoriach niż zaplanowano.', $live['name'] )
+					sprintf(
+						/* translators: %s: product name */
+						__( 'Product “%s” is filed under different categories than planned.', 'dosieci-ai-operator' ),
+						$live['name']
+					)
 				);
 
 				continue;
@@ -184,7 +236,12 @@ final class WooStoreAuditor {
 			$rows[] = $this->row(
 				'store_product_' . $resource->slug,
 				true,
-				sprintf( 'Szkic „%s” — %s.', $live['name'], $live['price'] )
+				sprintf(
+					/* translators: 1: product name, 2: product price */
+					__( 'Draft “%1$s” — %2$s.', 'dosieci-ai-operator' ),
+					$live['name'],
+					$live['price']
+				)
 			);
 		}
 

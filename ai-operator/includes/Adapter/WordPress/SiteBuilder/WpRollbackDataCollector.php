@@ -94,7 +94,7 @@ final class WpRollbackDataCollector implements RollbackDataCollectorInterface {
 				// pointers back. The pages themselves are never destroyed:
 				// they may hold shortcodes or content a merchant added.
 				$pages = array();
-				foreach ( array_keys( \DoSieci\AiOperator\Adapter\WordPress\SiteBuilder\Commerce\WooCommerceAdapter::CORE_PAGES ) as $slug ) {
+				foreach ( \DoSieci\AiOperator\Adapter\WordPress\SiteBuilder\Commerce\WooCommerceAdapter::CORE_PAGE_SLUGS as $slug ) {
 					$pages[ $slug ] = (int) get_option( 'woocommerce_' . $slug . '_page_id', 0 );
 				}
 

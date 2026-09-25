@@ -41,7 +41,15 @@ use DoSieci\AiOperator\Domain\SiteBuilder\Navigation\NavigationAdapterInterface;
  */
 final class BlockThemeNavigationAdapter implements NavigationAdapterInterface {
 
-	public const NAV_TITLE = 'Nawigacja';
+	/**
+	 * The title of the wp_navigation post this adapter writes. A method
+	 * rather than a class constant: constant expressions cannot call __(),
+	 * and this becomes real content on the user's site (rule: bundle the
+	 * Polish original as this string's translation).
+	 */
+	public static function navTitle(): string {
+		return __( 'Navigation', 'dosieci-ai-operator' );
+	}
 
 	public function supports(): bool {
 		return function_exists( 'wp_is_block_theme' ) && wp_is_block_theme();
@@ -91,7 +99,7 @@ final class BlockThemeNavigationAdapter implements NavigationAdapterInterface {
 		if ( array() === $blocks ) {
 			return array(
 				'success' => false,
-				'error'   => 'Brak stron do umieszczenia w nawigacji.',
+				'error'   => __( 'No pages to place in the navigation.', 'dosieci-ai-operator' ),
 			);
 		}
 
@@ -100,7 +108,7 @@ final class BlockThemeNavigationAdapter implements NavigationAdapterInterface {
 		$postData = array(
 			'post_type'    => 'wp_navigation',
 			'post_status'  => 'publish',
-			'post_title'   => self::NAV_TITLE,
+			'post_title'   => self::navTitle(),
 			'post_content' => $content,
 		);
 
@@ -131,6 +139,7 @@ final class BlockThemeNavigationAdapter implements NavigationAdapterInterface {
 				'posts_per_page'   => 1,
 				'fields'           => 'ids',
 				'suppress_filters' => false,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- bounded to 1 result; a site has at most one wp_navigation post per project.
 				'meta_query'       => array(
 					array( 'key' => '_dosieci_ai_resource_key', 'value' => 'navigation:primary' ),
 					array( 'key' => '_dosieci_ai_project_id', 'value' => $projectId ),

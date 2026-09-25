@@ -38,13 +38,23 @@ use DoSieci\AiOperator\Domain\SiteBuilder\ResourceResolution;
  */
 final class WooCommerceAdapter implements CommerceAdapterInterface {
 
-	/** @var string[] Woo core pages the builder cares about, option suffix => label. */
-	public const CORE_PAGES = array(
-		'shop'      => 'Sklep',
-		'cart'      => 'Koszyk',
-		'checkout'  => 'Zamówienie',
-		'myaccount' => 'Moje konto',
-	);
+	/** @var string[] Woo core pages the builder cares about, by their option-name suffix. */
+	public const CORE_PAGE_SLUGS = array( 'shop', 'cart', 'checkout', 'myaccount' );
+
+	/**
+	 * Human-readable labels for the core pages, for check messages. Not a
+	 * class constant: constant expressions cannot call __().
+	 *
+	 * @return array<string, string>
+	 */
+	public static function coreLabels(): array {
+		return array(
+			'shop'      => __( 'Shop', 'dosieci-ai-operator' ),
+			'cart'      => __( 'Cart', 'dosieci-ai-operator' ),
+			'checkout'  => __( 'Checkout', 'dosieci-ai-operator' ),
+			'myaccount' => __( 'My account', 'dosieci-ai-operator' ),
+		);
+	}
 
 	public function __construct( private WpManagedResourceResolver $resources = new WpManagedResourceResolver() ) {
 	}
@@ -62,7 +72,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 	 * built. Writing a product in that state produced a product WordPress
 	 * could not then read back -- found on the first real store build,
 	 * where `create_product_draft` reported success and verification said
-	 * "Produkt 320 nie istnieje".
+	 * "Product 320 does not exist".
 	 *
 	 * Commerce tools therefore refuse rather than write. The plan stops,
 	 * the user resumes, and the next request has a fully booted shop --
@@ -144,7 +154,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 	public function corePageState(): array {
 		$state = array();
 
-		foreach ( array_keys( self::CORE_PAGES ) as $slug ) {
+		foreach ( self::CORE_PAGE_SLUGS as $slug ) {
 			$id   = (int) get_option( 'woocommerce_' . $slug . '_page_id', 0 );
 			$post = $id > 0 ? get_post( $id ) : null;
 
@@ -195,7 +205,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 
 		if ( array() !== $before ) {
 			if ( ! class_exists( 'WC_Install' ) ) {
-				return array( 'success' => false, 'error' => 'WooCommerce nie jest w pełni załadowany.' );
+				return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded.', 'dosieci-ai-operator' ) );
 			}
 
 			// Clear the stale ids first. create_pages() skips a page whose
@@ -344,7 +354,8 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 				return array(
 					'success' => false,
 					'error'   => sprintf(
-						'Istnieje już kategoria „%s”, której kreator nie tworzył. Wygeneruj plan ponownie, aby zobaczyć konflikt.',
+						/* translators: %s: category name */
+						__( 'A category called “%s” already exists and the builder did not create it. Regenerate the plan to see the conflict.', 'dosieci-ai-operator' ),
 						$name
 					),
 				);
@@ -425,7 +436,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 		int $imageId = 0
 	): array {
 		if ( ! class_exists( 'WC_Product_Simple' ) ) {
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest w pełni załadowany.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded.', 'dosieci-ai-operator' ) );
 		}
 
 		$product = new \WC_Product_Simple();
@@ -450,7 +461,14 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $productId ) : null;
 
 		if ( ! $product instanceof \WC_Product ) {
-			return array( 'success' => false, 'error' => sprintf( 'Produkt %d nie istnieje.', $productId ) );
+			return array(
+				'success' => false,
+				'error'   => sprintf(
+					/* translators: %d: product ID */
+					__( 'Product %d does not exist.', 'dosieci-ai-operator' ),
+					$productId
+				),
+			);
 		}
 
 		return $this->writeProduct( $product, $name, $description, $shortDescription, $regularPrice, $categoryIds, $imageId, false );
@@ -488,7 +506,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 		$id = $product->save();
 
 		if ( ! is_int( $id ) || $id <= 0 ) {
-			return array( 'success' => false, 'error' => 'WooCommerce nie zapisał produktu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce did not save the product.', 'dosieci-ai-operator' ) );
 		}
 
 		return array(
@@ -568,7 +586,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 		$key      = $resource->key();
 
 		if ( ! $this->isAvailable() ) {
-			return ResourceResolution::create( $key, 'WooCommerce nie jest jeszcze aktywny.' );
+			return ResourceResolution::create( $key, __( 'WooCommerce is not active yet.', 'dosieci-ai-operator' ) );
 		}
 
 		$existing = $this->resources->findManaged( $resource, $projectId );
@@ -579,13 +597,13 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 			// not the same resource, and refusing to build because a name
 			// collides would block the common case of a real catalogue.
 			// Managed identity is what decides ownership.
-			return ResourceResolution::create( $key, 'Brak istniejącego produktu.' );
+			return ResourceResolution::create( $key, __( 'No existing product.', 'dosieci-ai-operator' ) );
 		}
 
 		$current = $this->readProduct( $existing );
 
 		if ( null === $current || 'trash' === $current['status'] ) {
-			return ResourceResolution::create( $key, 'Poprzedni produkt został usunięty.' );
+			return ResourceResolution::create( $key, __( 'The previous product was deleted.', 'dosieci-ai-operator' ) );
 		}
 
 		$recorded    = (string) get_post_meta( $existing, WpManagedResourceResolver::META_FINGERPRINT, true );
@@ -604,7 +622,7 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 			return ResourceResolution::conflict(
 				$key,
 				$existing,
-				'Produkt został zmieniony ręcznie po ostatniej zmianie kreatora.'
+				__( 'The product was edited by hand after the builder’s last change.', 'dosieci-ai-operator' )
 			);
 		}
 
@@ -623,9 +641,9 @@ final class WooCommerceAdapter implements CommerceAdapterInterface {
 		$baseline = '' !== $authored ? $authored : $currentHash;
 
 		if ( hash_equals( $baseline, $desired ) ) {
-			return ResourceResolution::reuse( $key, $existing, 'Produkt jest już zgodny z planem.', true );
+			return ResourceResolution::reuse( $key, $existing, __( 'The product already matches the plan.', 'dosieci-ai-operator' ), true );
 		}
 
-		return ResourceResolution::updateManaged( $key, $existing, 'Produkt utworzony przez kreator, bez ręcznych zmian.' );
+		return ResourceResolution::updateManaged( $key, $existing, __( 'Product created by the builder, with no manual changes.', 'dosieci-ai-operator' ) );
 	}
 }
