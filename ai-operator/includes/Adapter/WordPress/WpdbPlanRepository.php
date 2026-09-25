@@ -30,8 +30,13 @@ use DoSieci\AiOperator\Domain\SiteBuilder\SiteBlueprint;
  * step-state persistence can never corrupt the approved plan the hash is
  * computed over.
  *
- * Every query uses $wpdb->prepare(); table names interpolate $wpdb->prefix,
- * which is configuration, not user input.
+ * Every query uses $wpdb->prepare(), including the table name itself via
+ * the %i identifier placeholder (WordPress 6.2+; this plugin requires
+ * 6.5+) rather than string concatenation, so no query is built by
+ * interpolating anything outside prepare()'s own substitution. There is no
+ * core WordPress API for querying a plugin's own custom tables, so the
+ * direct $wpdb calls throughout this file are the correct tool, not a
+ * shortcut around one that exists.
  */
 final class WpdbPlanRepository implements PlanRepositoryInterface {
 
@@ -145,8 +150,10 @@ final class WpdbPlanRepository implements PlanRepositoryInterface {
 		$existing = $this->planRow( $plan->planId );
 
 		if ( null === $existing ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- custom plugin table, no core API exists.
 			$wpdb->insert( self::plansTable(), $row );
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists; a plan is read fresh every poll by design (see PlanExecutor).
 			$wpdb->update( self::plansTable(), $row, array( 'plan_id' => $plan->planId ) );
 		}
 
@@ -172,18 +179,21 @@ final class WpdbPlanRepository implements PlanRepositoryInterface {
 				'resolved_arguments'    => null === $state->resolvedArguments ? null : (string) wp_json_encode( $state->resolvedArguments ),
 			);
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from $wpdb->prefix; values prepared.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists; a plan's steps are read fresh every poll by design.
 			$exists = $wpdb->get_var(
 				$wpdb->prepare(
-					'SELECT id FROM ' . self::actionsTable() . ' WHERE plan_id = %s AND action_id = %s',
+					'SELECT id FROM %i WHERE plan_id = %s AND action_id = %s',
+					self::actionsTable(),
 					$plan->planId,
 					$action->actionId
 				)
 			);
 
 			if ( null === $exists ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- custom plugin table, no core API exists.
 				$wpdb->insert( self::actionsTable(), $actionRow );
 			} else {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists; a plan's steps are read fresh every poll by design.
 				$wpdb->update(
 					self::actionsTable(),
 					$actionRow,
@@ -219,10 +229,11 @@ final class WpdbPlanRepository implements PlanRepositoryInterface {
 
 		$limit = max( 1, min( 100, $limit ) );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from $wpdb->prefix; values prepared.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists; a short, bounded list read on demand, not a hot path worth caching.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * FROM ' . self::plansTable() . ' WHERE owner_user_id = %d ORDER BY created_at DESC LIMIT %d',
+				'SELECT * FROM %i WHERE owner_user_id = %d ORDER BY created_at DESC LIMIT %d',
+				self::plansTable(),
 				$userId,
 				$limit
 			),
@@ -248,7 +259,9 @@ final class WpdbPlanRepository implements PlanRepositoryInterface {
 	public function delete( string $planId ): void {
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists.
 		$wpdb->delete( self::actionsTable(), array( 'plan_id' => $planId ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists.
 		$wpdb->delete( self::plansTable(), array( 'plan_id' => $planId ) );
 	}
 
@@ -256,9 +269,9 @@ final class WpdbPlanRepository implements PlanRepositoryInterface {
 	private function planRow( string $planId ): ?array {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from $wpdb->prefix; value prepared.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists; plan state changes on every step, so a cached copy would go stale mid-build.
 		$row = $wpdb->get_row(
-			$wpdb->prepare( 'SELECT * FROM ' . self::plansTable() . ' WHERE plan_id = %s', $planId ),
+			$wpdb->prepare( 'SELECT * FROM %i WHERE plan_id = %s', self::plansTable(), $planId ),
 			ARRAY_A
 		);
 
@@ -271,10 +284,11 @@ final class WpdbPlanRepository implements PlanRepositoryInterface {
 
 		$planId = (string) $row['plan_id'];
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from $wpdb->prefix; value prepared.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom plugin table, no core API exists; plan state changes on every step, so a cached copy would go stale mid-build.
 		$actionRows = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * FROM ' . self::actionsTable() . ' WHERE plan_id = %s ORDER BY sequence ASC, id ASC',
+				'SELECT * FROM %i WHERE plan_id = %s ORDER BY sequence ASC, id ASC',
+				self::actionsTable(),
 				$planId
 			),
 			ARRAY_A

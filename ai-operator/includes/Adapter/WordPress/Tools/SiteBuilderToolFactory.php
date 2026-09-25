@@ -40,7 +40,7 @@ final class SiteBuilderToolFactory {
 		return array(
 			new ToolDefinition(
 				'configure_contact_form',
-				'Tworzy (lub ponownie wykorzystuje) formularz kontaktowy w aktywnej wtyczce formularzy i zwraca jego shortcode.',
+				__( 'Creates (or reuses) a contact form in the active form plugin and returns its shortcode.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -59,7 +59,7 @@ final class SiteBuilderToolFactory {
 			),
 			new ToolDefinition(
 				'set_block_navigation',
-				'Tworzy lub aktualizuje nawigację motywu blokowego (wpis wp_navigation), którą renderuje blok nawigacji.',
+				__( 'Creates or updates the block theme navigation (a wp_navigation post) rendered by the navigation block.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -84,7 +84,7 @@ final class SiteBuilderToolFactory {
 			),
 			new ToolDefinition(
 				'set_featured_image',
-				'Ustawia obrazek wyróżniający strony na wskazany załącznik, który już istnieje w bibliotece mediów.',
+				__( 'Sets a page’s featured image to an attachment that already exists in the media library.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -100,7 +100,7 @@ final class SiteBuilderToolFactory {
 			),
 			new ToolDefinition(
 				'embed_contact_form',
-				'Osadza istniejący formularz kontaktowy na wskazanej stronie, jeśli jeszcze go tam nie ma.',
+				__( 'Embeds an existing contact form on the given page, if it is not already there.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -128,7 +128,7 @@ final class SiteBuilderToolFactory {
 		if ( ! $adapter->isAvailable() ) {
 			return array(
 				'success' => false,
-				'error'   => 'Żadna obsługiwana wtyczka formularzy nie jest aktywna.',
+				'error'   => __( 'No supported form plugin is active.', 'dosieci-ai-operator' ),
 			);
 		}
 
@@ -146,6 +146,9 @@ final class SiteBuilderToolFactory {
 
 			return $adapter->configure( $blueprint, isset( $args['plan_id'] ) ? (string) $args['plan_id'] : '' );
 		} catch ( PluginConfigurationException | \Throwable $e ) {
+			// $e->getMessage() is already HTML-escaped at its own construction
+			// site (PluginConfigurationException, BlueprintValidationException),
+			// so it is passed through as-is rather than escaped a second time.
 			return array( 'success' => false, 'error' => $e->getMessage() );
 		}
 	}
@@ -161,7 +164,7 @@ final class SiteBuilderToolFactory {
 		if ( ! $adapter->supports() ) {
 			return array(
 				'success' => false,
-				'error'   => 'Aktywny motyw nie jest motywem blokowym.',
+				'error'   => __( 'The active theme is not a block theme.', 'dosieci-ai-operator' ),
 			);
 		}
 
@@ -193,11 +196,18 @@ final class SiteBuilderToolFactory {
 		$page = get_post( $pageId );
 
 		if ( ! $page instanceof \WP_Post ) {
-			return array( 'success' => false, 'error' => sprintf( 'Strona %d nie istnieje.', $pageId ) );
+			return array(
+				'success' => false,
+				'error'   => sprintf(
+					/* translators: %d: page ID */
+					__( 'Page %d does not exist.', 'dosieci-ai-operator' ),
+					$pageId
+				),
+			);
 		}
 
 		if ( ! current_user_can( 'edit_post', $pageId ) ) {
-			return array( 'success' => false, 'error' => 'Brak uprawnień do edycji tej strony.' );
+			return array( 'success' => false, 'error' => __( 'You are not allowed to edit this page.', 'dosieci-ai-operator' ) );
 		}
 
 		$attachment = get_post( $attachmentId );
@@ -205,7 +215,11 @@ final class SiteBuilderToolFactory {
 		if ( ! $attachment instanceof \WP_Post || 'attachment' !== $attachment->post_type ) {
 			return array(
 				'success' => false,
-				'error'   => sprintf( 'Załącznik %d nie istnieje.', $attachmentId ),
+				'error'   => sprintf(
+					/* translators: %d: attachment ID */
+					__( 'Attachment %d does not exist.', 'dosieci-ai-operator' ),
+					$attachmentId
+				),
 			);
 		}
 
@@ -217,7 +231,12 @@ final class SiteBuilderToolFactory {
 		if ( ! in_array( $mime, array( 'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif' ), true ) ) {
 			return array(
 				'success' => false,
-				'error'   => sprintf( 'Załącznik %d nie jest obsługiwanym obrazem (%s).', $attachmentId, $mime ),
+				'error'   => sprintf(
+					/* translators: 1: attachment ID, 2: MIME type */
+					__( 'Attachment %1$d is not a supported image (%2$s).', 'dosieci-ai-operator' ),
+					$attachmentId,
+					$mime
+				),
 			);
 		}
 
@@ -233,7 +252,7 @@ final class SiteBuilderToolFactory {
 		}
 
 		if ( false === set_post_thumbnail( $pageId, $attachmentId ) ) {
-			return array( 'success' => false, 'error' => 'WordPress odrzucił ustawienie obrazka wyróżniającego.' );
+			return array( 'success' => false, 'error' => __( 'WordPress refused to set the featured image.', 'dosieci-ai-operator' ) );
 		}
 
 		return array(
@@ -256,18 +275,25 @@ final class SiteBuilderToolFactory {
 		$page = get_post( $pageId );
 
 		if ( ! $page instanceof \WP_Post ) {
-			return array( 'success' => false, 'error' => sprintf( 'Strona %d nie istnieje.', $pageId ) );
+			return array(
+				'success' => false,
+				'error'   => sprintf(
+					/* translators: %d: page ID */
+					__( 'Page %d does not exist.', 'dosieci-ai-operator' ),
+					$pageId
+				),
+			);
 		}
 
 		if ( ! current_user_can( 'edit_post', $pageId ) ) {
-			return array( 'success' => false, 'error' => 'Brak uprawnień do edycji tej strony.' );
+			return array( 'success' => false, 'error' => __( 'You are not allowed to edit this page.', 'dosieci-ai-operator' ) );
 		}
 
 		// Only a well-formed contact-form shortcode is accepted. This value
 		// is produced by the CF7 adapter, but it arrives here as a tool
 		// argument like any other, so it is validated rather than trusted.
 		if ( 1 !== preg_match( '/^\[contact-form-7\s[^<>\[\]]*\]$/', $shortcode ) ) {
-			return array( 'success' => false, 'error' => 'Nieprawidłowy shortcode formularza.' );
+			return array( 'success' => false, 'error' => __( 'Invalid form shortcode.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( str_contains( $page->post_content, '[contact-form-7' ) ) {
