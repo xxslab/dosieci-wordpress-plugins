@@ -2,7 +2,7 @@
 /**
  * Plugin Name: DoSieci AI Operator
  * Plugin URI: https://dosieci.pl/wtyczki/ai-operator/
- * Description: Asystent AI dla WordPressa i WooCommerce. Rozmawiasz w wp-adminie, a operator diagnozuje i — po Twoim zatwierdzeniu — buduje witrynę: tworzy treści, instaluje motywy i wtyczki, konfiguruje ustawienia. Działa przez DoSieci License Hub albo bezpośrednio z Twoim własnym kluczem OpenAI/Anthropic.
+ * Description: An AI assistant for WordPress and WooCommerce. You talk in wp-admin, and the operator diagnoses your site and — once you approve it — builds it: creates content, installs themes and plugins, configures settings. Works through the DoSieci License Hub, WordPress's own AI connectors, or directly with your own OpenAI/Anthropic key.
  * Version: 1.2.0-dev
  * Requires at least: 6.5
  * Requires PHP: 8.1

@@ -68,10 +68,11 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		try {
 			$response = $this->gateway->chat( self::requestId(), $conversation );
 		} catch ( HubException $e ) {
-			// $e->getMessage() is already HTML-escaped at its own construction
-			// site (see HubClient), so it is passed through as-is rather than
-			// escaped a second time.
-			throw new BlueprintGenerationException( $e->getMessage(), $e->errorCode, $e->retryable );
+			// $e->getMessage() and $e->errorCode are already HTML-escaped at
+			// their own construction site (see HubClient), so esc_html() here is
+			// a safe no-op rather than a second real escaping pass -- but Plugin
+			// Check flags every throw argument regardless of provenance.
+			throw new BlueprintGenerationException( esc_html( $e->getMessage() ), esc_html( $e->errorCode ), (bool) $e->retryable );
 		} catch ( TransportException $e ) {
 			throw new BlueprintGenerationException(
 				esc_html__( 'Could not connect to the AI service.', 'dosieci-ai-operator' ),
@@ -123,9 +124,9 @@ final class GatewayBlueprintGenerator implements BlueprintGeneratorInterface {
 		} catch ( BlueprintValidationException $e ) {
 			throw new BlueprintGenerationException(
 				sprintf(
-					/* translators: %s: validation error from the model's site description (already escaped) */
+					/* translators: %s: validation error from the model's site description */
 					esc_html__( 'The model’s site description is invalid: %s', 'dosieci-ai-operator' ),
-					$e->getMessage()
+					esc_html( $e->getMessage() )
 				),
 				'invalid_blueprint'
 			);
