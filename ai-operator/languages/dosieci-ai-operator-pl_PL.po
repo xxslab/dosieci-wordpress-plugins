@@ -1,0 +1,2460 @@
+# Polish translation of DoSieci AI Operator 1.2.0-dev
+msgid ""
+msgstr ""
+"Project-Id-Version: DoSieci AI Operator 1.2.0-dev\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dosieci-ai-operator\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"Language: pl_PL\n"
+
+#. Plugin Name of the plugin
+#: dosieci-ai-operator.php
+#: includes/UI/AdminMenu.php:40
+#: includes/UI/ChatPage.php:42
+msgid "DoSieci AI Operator"
+msgstr "DoSieci AI Operator"
+
+#. Plugin URI of the plugin
+#: dosieci-ai-operator.php
+msgid "https://dosieci.pl/wtyczki/ai-operator/"
+msgstr "https://dosieci.pl/wtyczki/ai-operator/"
+
+#. Description of the plugin
+#: dosieci-ai-operator.php
+msgid "An AI assistant for WordPress and WooCommerce. You talk in wp-admin, and the operator diagnoses your site and — once you approve it — builds it: creates content, installs themes and plugins, configures settings. Works through the DoSieci License Hub, WordPress's own AI connectors, or directly with your own OpenAI/Anthropic key."
+msgstr "Asystent AI dla WordPressa i WooCommerce. Rozmawiasz w wp-adminie, a operator diagnozuje Twoją witrynę i — po Twoim zatwierdzeniu — buduje ją: tworzy treści, instaluje motywy i wtyczki, konfiguruje ustawienia. Działa przez DoSieci License Hub, własne Łączniki AI WordPressa albo bezpośrednio z Twoim własnym kluczem OpenAI/Anthropic."
+
+#. Author of the plugin
+#: dosieci-ai-operator.php
+msgid "DoSieci"
+msgstr "DoSieci"
+
+#. Author URI of the plugin
+#: dosieci-ai-operator.php
+msgid "https://dosieci.pl/"
+msgstr "https://dosieci.pl/"
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:52
+msgid "Shop"
+msgstr "Sklep"
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:53
+msgid "Cart"
+msgstr "Koszyk"
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:54
+msgid "Checkout"
+msgstr "Zamówienie"
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:55
+msgid "My account"
+msgstr "Moje konto"
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:208
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:439
+msgid "WooCommerce is not fully loaded."
+msgstr "WooCommerce nie jest w pełni załadowany."
+
+#. translators: %s: category name
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:358
+#, php-format
+msgid "A category called “%s” already exists and the builder did not create it. Regenerate the plan to see the conflict."
+msgstr "Istnieje już kategoria „%s”, której kreator nie tworzył. Wygeneruj plan ponownie, aby zobaczyć konflikt."
+
+#. translators: %d: product ID
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:468
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:931
+#, php-format
+msgid "Product %d does not exist."
+msgstr "Produkt %d nie istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:509
+msgid "WooCommerce did not save the product."
+msgstr "WooCommerce nie zapisał produktu."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:589
+msgid "WooCommerce is not active yet."
+msgstr "WooCommerce nie jest jeszcze aktywny."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:600
+msgid "No existing product."
+msgstr "Brak istniejącego produktu."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:606
+msgid "The previous product was deleted."
+msgstr "Poprzedni produkt został usunięty."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:625
+msgid "The product was edited by hand after the builder’s last change."
+msgstr "Produkt został zmieniony ręcznie po ostatniej zmianie kreatora."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:644
+msgid "The product already matches the plan."
+msgstr "Produkt jest już zgodny z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooCommerceAdapter.php:647
+msgid "Product created by the builder, with no manual changes."
+msgstr "Produkt utworzony przez kreator, bez ręcznych zmian."
+
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:38
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:787
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:824
+msgid "WooCommerce is not active."
+msgstr "WooCommerce nie jest aktywny."
+
+#. translators: %s: WooCommerce version number
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:47
+#, php-format
+msgid "WooCommerce %s is active."
+msgstr "WooCommerce %s jest aktywny."
+
+#. translators: 1: store page label, 2: post ID
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:76
+#, php-format
+msgid "Page “%1$s” works (id %2$d)."
+msgstr "Strona „%1$s” działa (id %2$d)."
+
+#. translators: %s: store page label
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:82
+#, php-format
+msgid "Page “%s” does not exist or is not assigned."
+msgstr "Strona „%s” nie istnieje lub nie jest przypisana."
+
+#. translators: 1: setting field name, 2: setting value
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:114
+#, php-format
+msgid "%1$s: %2$s."
+msgstr "%1$s: %2$s."
+
+#. translators: 1: setting field name, 2: actual value, 3: expected value
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:120
+#, php-format
+msgid "%1$s is “%2$s”, expected “%3$s”."
+msgstr "%1$s to „%2$s”, oczekiwano „%3$s”."
+
+#. translators: 1: category name, 2: term ID
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:146
+#, php-format
+msgid "Category “%1$s” exists (id %2$d)."
+msgstr "Kategoria „%1$s” istnieje (id %2$d)."
+
+#. translators: %s: category name
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:152
+#, php-format
+msgid "Category “%s” is missing."
+msgstr "Brak kategorii „%s”."
+
+#. translators: %s: product name
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:176
+#, php-format
+msgid "Product “%s” is missing."
+msgstr "Brak produktu „%s”."
+
+#. translators: 1: product name, 2: actual product status
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:192
+#, php-format
+msgid "Product “%1$s” has status “%2$s”, but must remain a draft."
+msgstr "Produkt „%1$s” ma status „%2$s”, a musi pozostać szkicem."
+
+#. translators: 1: product name, 2: expected price, 3: actual price
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:207
+#, php-format
+msgid "Product “%1$s”: expected %2$s, is %3$s."
+msgstr "Produkt „%1$s”: oczekiwano %2$s, jest %3$s."
+
+#. translators: %s: product name
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:228
+#, php-format
+msgid "Product “%s” is filed under different categories than planned."
+msgstr "Produkt „%s” jest w innych kategoriach niż zaplanowano."
+
+#. translators: 1: product name, 2: product price
+#: includes/Adapter/WordPress/SiteBuilder/Commerce/WooStoreAuditor.php:241
+#, php-format
+msgid "Draft “%1$s” — %2$s."
+msgstr "Szkic „%1$s” — %2$s."
+
+#: includes/Adapter/WordPress/SiteBuilder/Navigation/BlockThemeNavigationAdapter.php:51
+msgid "Navigation"
+msgstr "Nawigacja"
+
+#: includes/Adapter/WordPress/SiteBuilder/Navigation/BlockThemeNavigationAdapter.php:102
+msgid "No pages to place in the navigation."
+msgstr "Brak stron do umieszczenia w nawigacji."
+
+#: includes/Adapter/WordPress/SiteBuilder/Plugins/ContactForm7Adapter.php:69
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:304
+msgid "Contact Form 7 is not active."
+msgstr "Contact Form 7 nie jest aktywny."
+
+#: includes/Adapter/WordPress/SiteBuilder/Plugins/ContactForm7Adapter.php:91
+msgid "Could not create the form template."
+msgstr "Nie udało się utworzyć szablonu formularza."
+
+#: includes/Adapter/WordPress/SiteBuilder/Plugins/ContactForm7Adapter.php:111
+msgid "Contact Form 7 did not save the form."
+msgstr "Contact Form 7 nie zapisał formularza."
+
+#. translators: %s: business name
+#: includes/Adapter/WordPress/SiteBuilder/Plugins/ContactForm7Adapter.php:196
+#, php-format
+msgid "%s — contact form"
+msgstr "%s — formularz kontaktowy"
+
+#. translators: %d: post ID of the unmanaged page
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:91
+#, php-format
+msgid "This site already has a page with this name (id %d) that the builder did not create."
+msgstr "Na witrynie istnieje już strona o tej nazwie (id %d), której kreator nie tworzył."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:98
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:144
+msgid "No existing resource."
+msgstr "Brak istniejącego zasobu."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:121
+msgid "The taxonomy is not available yet."
+msgstr "Taksonomia nie jest jeszcze dostępna."
+
+#. translators: %d: term ID of the unmanaged category
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:138
+#, php-format
+msgid "A category with this name (id %d) already exists and the builder did not create it."
+msgstr "Istnieje już kategoria o tej nazwie (id %d), której kreator nie tworzył."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:150
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:194
+msgid "The previous resource was deleted."
+msgstr "Poprzedni zasób został usunięty."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:160
+msgid "The category was edited by hand after the builder’s last change."
+msgstr "Kategoria została zmieniona ręcznie po ostatniej zmianie kreatora."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:168
+msgid "The category already matches the plan."
+msgstr "Kategoria jest już zgodna z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:171
+msgid "Category created by the builder, with no manual changes."
+msgstr "Kategoria utworzona przez kreator, bez ręcznych zmian."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:208
+msgid "The content was edited by hand after the builder’s last change."
+msgstr "Treść została zmieniona ręcznie po ostatniej zmianie kreatora."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:221
+msgid "The content already matches the plan."
+msgstr "Treść jest już zgodna z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpManagedResourceResolver.php:224
+msgid "Resource created by the builder, with no manual changes."
+msgstr "Zasób utworzony przez kreator, bez ręcznych zmian."
+
+#. translators: %s: internal tool name
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:86
+#, php-format
+msgid "No verifier for tool “%s”."
+msgstr "Brak weryfikatora dla narzędzia „%s”."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:145
+msgid "The tool did not return a post ID."
+msgstr "Narzędzie nie zwróciło identyfikatora wpisu."
+
+#. translators: %d: post ID
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:156
+#, php-format
+msgid "Post ID %d does not exist in WordPress."
+msgstr "Wpis o id %d nie istnieje w WordPressie."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:172
+msgid "A different content type was created than planned."
+msgstr "Utworzono inny typ treści niż zaplanowano."
+
+#. translators: 1: actual post status, 2: expected post status
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:179
+#, php-format
+msgid "The post status is “%1$s”, expected “%2$s”."
+msgstr "Status wpisu to „%1$s”, oczekiwano „%2$s”."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:192
+msgid "The page title does not match the plan."
+msgstr "Tytuł strony nie zgadza się z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:196
+msgid "The page exists, but is empty."
+msgstr "Strona istnieje, ale jest pusta."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:199
+msgid "The page exists with the expected title and status."
+msgstr "Strona istnieje z oczekiwanym tytułem i statusem."
+
+#. translators: %d: post ID
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:211
+#, php-format
+msgid "Post %d does not exist."
+msgstr "Wpis %d nie istnieje."
+
+#. translators: %s: internal field name
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:238
+#, php-format
+msgid "Field “%s” was not updated."
+msgstr "Pole „%s” nie zostało zaktualizowane."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:247
+msgid "The post contains the expected changes."
+msgstr "Wpis zawiera oczekiwane zmiany."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:259
+msgid "The post is in the trash."
+msgstr "Wpis jest w koszu."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:260
+msgid "The post was not moved to the trash."
+msgstr "Wpis nie trafił do kosza."
+
+#. translators: %s: plugin slug
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:278
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:319
+#, php-format
+msgid "Plugin “%s” is not installed."
+msgstr "Wtyczka „%s” nie jest zainstalowana."
+
+#. translators: %s: plugin slug
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:297
+#, php-format
+msgid "Plugin “%s” is installed, but not active."
+msgstr "Wtyczka „%s” jest zainstalowana, ale nieaktywna."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:305
+msgid "The plugin is installed as planned."
+msgstr "Wtyczka jest zainstalowana zgodnie z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:331
+msgid "The plugin’s state matches the plan."
+msgstr "Stan wtyczki zgodny z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:332
+msgid "The plugin’s activation state does not match the plan."
+msgstr "Stan aktywacji wtyczki nie zgadza się z planem."
+
+#. translators: %s: theme slug
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:346
+#, php-format
+msgid "Theme “%s” is not installed."
+msgstr "Motyw „%s” nie jest zainstalowany."
+
+#. translators: 1: planned theme slug, 2: actually active theme slug
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:363
+#, php-format
+msgid "Theme “%1$s” is installed, but “%2$s” is active."
+msgstr "Motyw „%1$s” jest zainstalowany, ale aktywny jest „%2$s”."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:372
+msgid "The theme is installed as planned."
+msgstr "Motyw jest zainstalowany zgodnie z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:384
+msgid "The theme is active."
+msgstr "Motyw jest aktywny."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:385
+msgid "A different theme than planned is active."
+msgstr "Aktywny jest inny motyw niż zaplanowany."
+
+#. translators: %s: menu name
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:416
+#, php-format
+msgid "Menu “%s” does not exist."
+msgstr "Menu „%s” nie istnieje."
+
+#. translators: %s: menu name
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:438
+#, php-format
+msgid "Menu “%s” exists, but contains no items."
+msgstr "Menu „%s” istnieje, ale nie zawiera żadnych pozycji."
+
+#. translators: 1: actual item count, 2: expected item count
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:450
+#, php-format
+msgid "The menu contains %1$d item(s), expected %2$d."
+msgstr "Menu zawiera %1$d pozycji, oczekiwano %2$d."
+
+#. translators: %d: page ID
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:473
+#, php-format
+msgid "The menu has no link to the page with ID %d."
+msgstr "Menu nie zawiera odnośnika do strony o id %d."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:482
+msgid "The menu exists and contains the expected links."
+msgstr "Menu istnieje i zawiera oczekiwane odnośniki."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:528
+msgid "The site still shows posts on the homepage."
+msgstr "Witryna nadal wyświetla wpisy na stronie głównej."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:532
+msgid "A different page is set as the homepage."
+msgstr "Jako strona główna ustawiona jest inna strona."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:536
+msgid "No homepage is set."
+msgstr "Nie ustawiono strony głównej."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:541
+msgid "The homepage is not published."
+msgstr "Strona główna nie jest opublikowana."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:544
+msgid "The homepage is set and published."
+msgstr "Strona główna jest ustawiona i opublikowana."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:552
+msgid "Option outside the allowed list."
+msgstr "Opcja spoza dozwolonej listy."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:569
+msgid "The option has the expected value."
+msgstr "Opcja ma oczekiwaną wartość."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:570
+msgid "The option does not have the expected value."
+msgstr "Opcja nie ma oczekiwanej wartości."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:581
+msgid "The tool did not return a term ID."
+msgstr "Narzędzie nie zwróciło identyfikatora terminu."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:587
+msgid "The term exists."
+msgstr "Termin istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:588
+msgid "The term does not exist."
+msgstr "Termin nie istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:604
+msgid "No form was created."
+msgstr "Nie utworzono formularza."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:615
+msgid "The form does not exist in WordPress."
+msgstr "Formularz nie istnieje w WordPressie."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:619
+msgid "The form exists, but no shortcode was returned."
+msgstr "Formularz istnieje, ale nie zwrócono shortcode."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:622
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:463
+msgid "The contact form exists."
+msgstr "Formularz kontaktowy istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:640
+msgid "The contact page does not exist."
+msgstr "Strona kontaktowa nie istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:647
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:327
+msgid "The contact page does not contain the form."
+msgstr "Strona kontaktowa nie zawiera formularza."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:656
+msgid "Embedding the form broke the block structure."
+msgstr "Osadzenie formularza uszkodziło strukturę bloków."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:659
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:483
+msgid "The contact page contains the form."
+msgstr "Strona kontaktowa zawiera formularz."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:675
+msgid "No navigation post was created."
+msgstr "Nie utworzono wpisu nawigacji."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:691
+msgid "The navigation contains fewer items than planned."
+msgstr "Nawigacja zawiera mniej pozycji niż zaplanowano."
+
+#. translators: %s: navigation link label
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:708
+#, php-format
+msgid "The navigation exists, but the theme does not render it (missing “%s”)."
+msgstr "Nawigacja istnieje, ale motyw jej nie renderuje (brak „%s”)."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:718
+msgid "The block theme navigation contains the expected links."
+msgstr "Nawigacja motywu blokowego zawiera oczekiwane odnośniki."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:732
+msgid "The step did not name a page or an attachment."
+msgstr "Krok nie wskazał strony lub załącznika."
+
+#. translators: 1: page ID, 2: actual attachment ID, 3: expected attachment ID
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:750
+#, php-format
+msgid "The featured image of page %1$d is %2$d, expected %3$d."
+msgstr "Obrazek wyróżniający strony %1$d to %2$d, oczekiwano %3$d."
+
+#. translators: %d: attachment ID
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:766
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:220
+#, php-format
+msgid "Attachment %d does not exist."
+msgstr "Załącznik %d nie istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:776
+msgid "The page has the expected featured image set."
+msgstr "Strona ma ustawiony oczekiwany obrazek wyróżniający."
+
+#. translators: %s: comma-separated list of missing store page slugs
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:808
+#, php-format
+msgid "Missing working store pages: %s."
+msgstr "Brakuje działających stron sklepu: %s."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:816
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:530
+msgid "All store pages exist and are assigned."
+msgstr "Wszystkie strony sklepu istnieją i są przypisane."
+
+#. translators: 1: setting name, 2: actual value, 3: expected value
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:847
+#, php-format
+msgid "Setting “%1$s” is “%2$s”, expected “%3$s”."
+msgstr "Ustawienie „%1$s” to „%2$s”, oczekiwano „%3$s”."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:858
+msgid "The basic store settings match the plan."
+msgstr "Podstawowe ustawienia sklepu są zgodne z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:870
+msgid "The tool did not return a category ID."
+msgstr "Narzędzie nie zwróciło identyfikatora kategorii."
+
+#. translators: %d: category term ID
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:879
+#, php-format
+msgid "Category %d does not exist in the product taxonomy."
+msgstr "Kategoria %d nie istnieje w taksonomii produktów."
+
+#. translators: 1: actual category name, 2: expected category name
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:891
+#, php-format
+msgid "The category is named “%1$s”, expected “%2$s”."
+msgstr "Kategoria nazywa się „%1$s”, oczekiwano „%2$s”."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:900
+msgid "The product category exists with the expected name."
+msgstr "Kategoria produktów istnieje z oczekiwaną nazwą."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:922
+msgid "The tool did not return a product ID."
+msgstr "Narzędzie nie zwróciło identyfikatora produktu."
+
+#. translators: %s: actual product status
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:957
+#, php-format
+msgid "The product has status “%s”, but must remain a draft."
+msgstr "Produkt ma status „%s”, a musi pozostać szkicem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:966
+msgid "The product name does not match the plan."
+msgstr "Nazwa produktu nie zgadza się z planem."
+
+#. translators: 1: actual price, 2: expected price
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:977
+#, php-format
+msgid "The price is %1$s, expected %2$s."
+msgstr "Cena to %1$s, oczekiwano %2$s."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:987
+msgid "The product’s categories do not match the plan."
+msgstr "Kategorie produktu nie zgadzają się z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:991
+msgid "The product image does not match the plan."
+msgstr "Obrazek produktu nie zgadza się z planem."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpPlanVerifier.php:994
+msgid "The product exists as a draft with the expected price."
+msgstr "Produkt istnieje jako szkic z oczekiwaną ceną."
+
+#. translators: 1: page title, 2: actual post status
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:102
+#, php-format
+msgid "%1$s (status: %2$s)"
+msgstr "%1$s (status: %2$s)"
+
+#. translators: %d: number of pages
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:115
+#, php-format
+msgid "All %d pages exist and are published."
+msgstr "Wszystkie %d stron istnieje i jest opublikowanych."
+
+#. translators: %s: comma-separated list of page titles
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:120
+#, php-format
+msgid "Missing published pages: %s"
+msgstr "Brakuje opublikowanych stron: %s"
+
+#. translators: %s: page title
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:151
+#, php-format
+msgid "%s (invalid block markup)"
+msgstr "%s (nieprawidłowy markup bloków)"
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:161
+msgid "The content of every page parses correctly into Gutenberg blocks."
+msgstr "Treść wszystkich stron poprawnie parsuje się do bloków Gutenberga."
+
+#. translators: %s: comma-separated list of page titles
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:164
+#, php-format
+msgid "Pages with invalid block content: %s"
+msgstr "Strony z nieprawidłową treścią blokową: %s"
+
+#. translators: %s: active theme name
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:180
+#, php-format
+msgid "Active theme: %s."
+msgstr "Aktywny motyw: %s."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:183
+msgid "The active theme does not exist."
+msgstr "Aktywny motyw nie istnieje."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:194
+msgid "The site has no homepage set."
+msgstr "Witryna nie ma ustawionej strony głównej."
+
+#. translators: 1: actual front page ID, 2: expected page title, 3: expected page ID
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:203
+#, php-format
+msgid "The homepage is id %1$d, expected “%2$s” (id %3$d)."
+msgstr "Stroną główną jest id %1$d, oczekiwano „%2$s” (id %3$d)."
+
+#. translators: %d: front page ID
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:216
+#, php-format
+msgid "The homepage points at id %d."
+msgstr "Strona główna wskazuje na id %d."
+
+#. translators: %s: site title
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:233
+#, php-format
+msgid "Site title: “%s”."
+msgstr "Nazwa witryny: „%s”."
+
+#. translators: 1: actual site title, 2: expected site title
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:238
+#, php-format
+msgid "The site title is “%1$s”, expected “%2$s”."
+msgstr "Nazwa witryny to „%1$s”, oczekiwano „%2$s”."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:250
+msgid "The site has no menu at all."
+msgstr "Witryna nie ma żadnego menu."
+
+#. translators: %d: number of menu items
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:276
+#, php-format
+msgid "The menu contains %d item(s)."
+msgstr "Menu zawiera %d pozycji."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:279
+msgid "The menu exists, but contains no items."
+msgstr "Menu istnieje, ale nie zawiera żadnych pozycji."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:285
+msgid "The menu links to every page in the plan."
+msgstr "Menu zawiera odnośniki do wszystkich stron z planu."
+
+#. translators: %s: comma-separated list of page titles
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:288
+#, php-format
+msgid "The menu has no link to: %s"
+msgstr "Brak w menu odnośników do: %s"
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:303
+msgid "Contact Form 7 is active."
+msgstr "Contact Form 7 jest aktywny."
+
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:320
+msgid "No contact page was found."
+msgstr "Nie znaleziono strony kontaktowej."
+
+#. translators: %d: contact form post ID
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:344
+#, php-format
+msgid "The contact page embeds an existing form (id %d)."
+msgstr "Strona kontaktowa osadza istniejący formularz (id %d)."
+
+#. translators: %s: form reference (hash or ID) found in the shortcode
+#: includes/Adapter/WordPress/SiteBuilder/WpSiteBuildAuditor.php:349
+#, php-format
+msgid "The contact page refers to a form that does not exist (“%s”)."
+msgstr "Strona kontaktowa odwołuje się do nieistniejącego formularza („%s”)."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:92
+msgid "Checks the store pages (Shop, Cart, Checkout, My account) and recreates only the ones that are actually missing."
+msgstr "Sprawdza strony sklepu (Sklep, Koszyk, Zamówienie, Moje konto) i odtwarza tylko te, których faktycznie brakuje."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:101
+msgid "Sets the store’s country, currency and units. Cannot change any other WooCommerce setting."
+msgstr "Ustawia kraj, walutę i jednostki sklepu. Nie może zmienić żadnego innego ustawienia WooCommerce."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:119
+msgid "Creates a product category."
+msgstr "Tworzy kategorię produktów."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:128
+msgid "Updates a product category previously created by the builder."
+msgstr "Aktualizuje kategorię produktów utworzoną wcześniej przez kreator."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:137
+msgid "Creates a product as a DRAFT. Does not publish it."
+msgstr "Tworzy produkt jako SZKIC. Nie publikuje go."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:146
+msgid "Updates a product draft previously created by the builder. Does not publish it."
+msgstr "Aktualizuje szkic produktu utworzony wcześniej przez kreator. Nie publikuje go."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:168
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:186
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:247
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:272
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:300
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:331
+msgid "WooCommerce is not fully loaded yet in this request."
+msgstr "WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu."
+
+#. translators: %s: country code
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:200
+#, php-format
+msgid "WooCommerce does not recognise the country “%s”."
+msgstr "WooCommerce nie zna kraju „%s”."
+
+#. translators: %s: currency code
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:211
+#, php-format
+msgid "WooCommerce does not recognise the currency “%s”."
+msgstr "WooCommerce nie zna waluty „%s”."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:222
+msgid "Unsupported unit."
+msgstr "Nieobsługiwana jednostka."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:278
+msgid "No category ID given."
+msgstr "Brak identyfikatora kategorii."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:306
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:342
+msgid "Invalid product price."
+msgstr "Nieprawidłowa cena produktu."
+
+#: includes/Adapter/WordPress/Tools/CommerceToolFactory.php:338
+msgid "No product ID given."
+msgstr "Brak identyfikatora produktu."
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:34
+msgid "Site title"
+msgstr "Nazwa witryny"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:39
+msgid "Site tagline / description"
+msgstr "Opis / tagline witryny"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:44
+msgid "Week starts on"
+msgstr "Pierwszy dzień tygodnia"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:50
+msgid "Timezone"
+msgstr "Strefa czasowa"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:54
+msgid "Date format"
+msgstr "Format daty"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:59
+msgid "Time format"
+msgstr "Format godziny"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:64
+msgid "Posts per page"
+msgstr "Wpisów na stronę"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:70
+msgid "Default comment status"
+msgstr "Domyślny status komentarzy"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:75
+msgid "Comments require a logged-in user"
+msgstr "Komentarze tylko dla zalogowanych"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:79
+msgid "Comment moderation"
+msgstr "Moderacja komentarzy"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:83
+msgid "Search engine visibility"
+msgstr "Widoczność dla wyszukiwarek"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:87
+msgid "Permalink structure"
+msgstr "Struktura bezpośrednich odnośników"
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:91
+msgid "What to show on the front page"
+msgstr "Co pokazywać na stronie głównej"
+
+#. translators: %s: option name
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:123
+#, php-format
+msgid "The option “%s” is not allowed to be written."
+msgstr "Opcja „%s” nie jest dozwolona do zapisu."
+
+#. translators: %d: maximum length in characters
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:132
+#, php-format
+msgid "The value is longer than %d characters."
+msgstr "Wartość jest dłuższa niż %d znaków."
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:139
+msgid "A number was expected."
+msgstr "Oczekiwano liczby."
+
+#. translators: 1: minimum value, 2: maximum value
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:144
+#, php-format
+msgid "The value must be between %1$d and %2$d."
+msgstr "Wartość musi mieścić się w zakresie %1$d–%2$d."
+
+#. translators: %s: comma-separated list of allowed values
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:158
+#, php-format
+msgid "Allowed values: %s."
+msgstr "Dozwolone wartości: %s."
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:166
+msgid "Unknown timezone."
+msgstr "Nieznana strefa czasowa."
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:184
+msgid "Invalid permalink structure."
+msgstr "Nieprawidłowa struktura odnośników."
+
+#: includes/Adapter/WordPress/Tools/OptionAllowlist.php:190
+msgid "Unsupported option type."
+msgstr "Nieobsługiwany typ opcji."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:43
+msgid "Creates (or reuses) a contact form in the active form plugin and returns its shortcode."
+msgstr "Tworzy (lub ponownie wykorzystuje) formularz kontaktowy w aktywnej wtyczce formularzy i zwraca jego shortcode."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:62
+msgid "Creates or updates the block theme navigation (a wp_navigation post) rendered by the navigation block."
+msgstr "Tworzy lub aktualizuje nawigację motywu blokowego (wpis wp_navigation), którą renderuje blok nawigacji."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:87
+msgid "Sets a page’s featured image to an attachment that already exists in the media library."
+msgstr "Ustawia obrazek wyróżniający strony na wskazany załącznik, który już istnieje w bibliotece mediów."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:103
+msgid "Embeds an existing contact form on the given page, if it is not already there."
+msgstr "Osadza istniejący formularz kontaktowy na wskazanej stronie, jeśli jeszcze go tam nie ma."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:131
+msgid "No supported form plugin is active."
+msgstr "Żadna obsługiwana wtyczka formularzy nie jest aktywna."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:167
+msgid "The active theme is not a block theme."
+msgstr "Aktywny motyw nie jest motywem blokowym."
+
+#. translators: %d: page ID
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:203
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:282
+#, php-format
+msgid "Page %d does not exist."
+msgstr "Strona %d nie istnieje."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:210
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:289
+msgid "You are not allowed to edit this page."
+msgstr "Brak uprawnień do edycji tej strony."
+
+#. translators: 1: attachment ID, 2: MIME type
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:236
+#, php-format
+msgid "Attachment %1$d is not a supported image (%2$s)."
+msgstr "Załącznik %1$d nie jest obsługiwanym obrazem (%2$s)."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:255
+msgid "WordPress refused to set the featured image."
+msgstr "WordPress odrzucił ustawienie obrazka wyróżniającego."
+
+#: includes/Adapter/WordPress/Tools/SiteBuilderToolFactory.php:296
+msgid "Invalid form shortcode."
+msgstr "Nieprawidłowy shortcode formularza."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:56
+msgid "Creates a new page or post. Returns its id and URL. Content accepts HTML or Gutenberg blocks."
+msgstr "Tworzy nową stronę lub wpis. Zwraca id i adres URL. Treść przyjmuje HTML lub bloki Gutenberga."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:76
+msgid "Updates an existing page or post (title, content, status, excerpt)."
+msgstr "Aktualizuje istniejącą stronę lub wpis (tytuł, treść, status, wyimek)."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:95
+msgid "Moves a page or post to the trash. Not a permanent delete — the content can be restored from the trash."
+msgstr "Przenosi stronę lub wpis do kosza. Nie kasuje trwale — treść można przywrócić z kosza."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:108
+msgid "Changes one site setting from the allowed list (title, description, timezone, permalinks, comments, visibility)."
+msgstr "Zmienia jedno ustawienie witryny z listy dozwolonych (nazwa, opis, strefa czasowa, odnośniki, komentarze, widoczność)."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:124
+msgid "Sets the given page as the site’s homepage, optionally also the posts page."
+msgstr "Ustawia wskazaną stronę jako stronę główną witryny, opcjonalnie także stronę wpisów."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:140
+msgid "Installs a plugin from the official WordPress.org directory by its slug (e.g. \"contact-form-7\") and optionally activates it."
+msgstr "Instaluje wtyczkę z oficjalnego katalogu WordPress.org po jej slugu (np. \"contact-form-7\") i opcjonalnie ją aktywuje."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:156
+msgid "Activates an already-installed plugin by its slug."
+msgstr "Aktywuje już zainstalowaną wtyczkę po jej slugu."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:169
+msgid "Deactivates a plugin by its slug. Does not remove its files or data."
+msgstr "Dezaktywuje wtyczkę po jej slugu. Nie usuwa jej plików ani danych."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:182
+msgid "Installs a theme from the official WordPress.org directory by its slug (e.g. \"twentytwentyfour\") and optionally activates it."
+msgstr "Instaluje motyw z oficjalnego katalogu WordPress.org po jego slugu (np. \"twentytwentyfour\") i opcjonalnie go włącza."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:198
+msgid "Activates an already-installed theme by its slug."
+msgstr "Włącza już zainstalowany motyw po jego slugu."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:211
+msgid "Creates a navigation menu from the given items (pages by id or custom links) and optionally assigns it to a location in the theme."
+msgstr "Tworzy menu nawigacyjne z podanych pozycji (strony po id lub własne linki) i opcjonalnie przypisuje je do lokalizacji w motywie."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:238
+msgid "Creates a category, tag or other taxonomy term."
+msgstr "Tworzy kategorię, tag lub inny termin taksonomii."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:269
+msgid "Allowed types are \"page\" and \"post\"."
+msgstr "Dozwolone typy to \"page\" i \"post\"."
+
+#. translators: %d: post id
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:310
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:364
+#, php-format
+msgid "There is no post with id %d."
+msgstr "Nie ma wpisu o id %d."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:317
+msgid "The current user cannot edit this post."
+msgstr "Bieżący użytkownik nie może edytować tego wpisu."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:336
+msgid "No field to change was given."
+msgstr "Nie podano żadnego pola do zmiany."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:368
+msgid "The current user cannot delete this post."
+msgstr "Bieżący użytkownik nie może usunąć tego wpisu."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:376
+msgid "WordPress refused to move the post to the trash."
+msgstr "WordPress odmówił przeniesienia wpisu do kosza."
+
+#. translators: %d: post id
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:432
+#, php-format
+msgid "Id %d does not point to a page."
+msgstr "Id %d nie wskazuje na stronę."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:438
+msgid "The homepage must be published. Publish it first."
+msgstr "Strona główna musi być opublikowana. Opublikuj ją najpierw."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:471
+msgid "Invalid plugin slug."
+msgstr "Nieprawidłowy slug wtyczki."
+
+#. translators: 1: plugin slug, 2: error message from WordPress.org
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:488
+#, php-format
+msgid "Plugin \"%1$s\" was not found in the WordPress.org directory: %2$s"
+msgstr "Nie znaleziono wtyczki \"%1$s\" w katalogu WordPress.org: %2$s"
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:502
+msgid "The plugin installation failed."
+msgstr "Instalacja wtyczki nie powiodła się."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:509
+msgid "The plugin was installed, but its main file could not be found."
+msgstr "Wtyczka zainstalowana, ale nie udało się odnaleźć jej pliku głównego."
+
+#. translators: %s: plugin slug
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:548
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:583
+#, php-format
+msgid "Plugin \"%s\" is not installed."
+msgstr "Wtyczka \"%s\" nie jest zainstalowana."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:590
+msgid "AI Operator cannot deactivate itself."
+msgstr "AI Operator nie może dezaktywować sam siebie."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:610
+msgid "Invalid theme slug."
+msgstr "Nieprawidłowy slug motywu."
+
+#. translators: 1: theme slug, 2: error message from WordPress.org
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:625
+#, php-format
+msgid "Theme \"%1$s\" was not found in the WordPress.org directory: %2$s"
+msgstr "Nie znaleziono motywu \"%1$s\" w katalogu WordPress.org: %2$s"
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:636
+msgid "The theme installation failed."
+msgstr "Instalacja motywu nie powiodła się."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:643
+msgid "The theme was installed, but could not be found."
+msgstr "Motyw zainstalowany, ale nie udało się go odnaleźć."
+
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:699
+msgid "Could not create the menu."
+msgstr "Nie udało się utworzyć menu."
+
+#. translators: %s: theme navigation menu location
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:783
+#, php-format
+msgid "The theme has no “%s” location."
+msgstr "Motyw nie ma lokalizacji „%s”."
+
+#. translators: %s: taxonomy name
+#: includes/Adapter/WordPress/Tools/WriteToolFactory.php:813
+#, php-format
+msgid "The taxonomy \"%s\" does not exist."
+msgstr "Taksonomia \"%s\" nie istnieje."
+
+#: includes/Adapter/WordPress/WpAiClientGateway.php:107
+msgid "WordPress AI connectors"
+msgstr "Łączniki AI WordPressa"
+
+#: includes/Domain/ChatSession.php:271
+msgid "Stopped: the model asked for too many tools in a row in one turn."
+msgstr "Przerwano: model poprosił o zbyt wiele kolejnych narzędzi w jednej turze."
+
+#. translators: %s: model identifier, e.g. claude-sonnet-5
+#: includes/Domain/Gateway/AnthropicGateway.php:47
+#, php-format
+msgid "Anthropic, your own API key (%s)"
+msgstr "Anthropic, własny klucz API (%s)"
+
+#. translators: %s: model identifier, e.g. gpt-5
+#: includes/Domain/Gateway/OpenAiGateway.php:36
+#, php-format
+msgid "OpenAI, your own API key (%s)"
+msgstr "OpenAI, własny klucz API (%s)"
+
+#: includes/Domain/Gateway/ProviderSettings.php:62
+msgid "DoSieci Hub: AI credits from your DoSieci plan"
+msgstr "DoSieci Hub: kredyty AI z Twojego planu DoSieci"
+
+#: includes/Domain/Gateway/ProviderSettings.php:63
+msgid "WordPress AI connectors: your own key, set in Settings > Connectors (WordPress 7.0+)"
+msgstr "Łączniki AI WordPressa: własny klucz ustawiony w Ustawienia > Łączniki (WordPress 7.0+)"
+
+#: includes/Domain/Gateway/ProviderSettings.php:64
+msgid "Anthropic: your own API key"
+msgstr "Anthropic: własny klucz API"
+
+#: includes/Domain/Gateway/ProviderSettings.php:65
+msgid "OpenAI: your own API key"
+msgstr "OpenAI: własny klucz API"
+
+#. translators: %s: theme slug
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:93
+#, php-format
+msgid "Install and activate the theme “%s”."
+msgstr "Zainstaluj i włącz motyw „%s”."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:97
+msgid "The theme is installed and active."
+msgstr "Motyw jest zainstalowany i aktywny."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:111
+msgid "Install and activate the contact form plugin (Contact Form 7)."
+msgstr "Zainstaluj i włącz wtyczkę formularza kontaktowego (Contact Form 7)."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:113
+msgid "The form plugin is active."
+msgstr "Wtyczka formularza jest aktywna."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:172
+#, php-format
+msgid "Page “%s” contains the updated content."
+msgstr "Strona „%s” zawiera zaktualizowaną treść."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:208
+#, php-format
+msgid "Create and publish the page “%s”."
+msgstr "Utwórz i opublikuj stronę „%s”."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:214
+#, php-format
+msgid "Page “%s” exists and is published."
+msgstr "Strona „%s” istnieje i jest opublikowana."
+
+#. translators: 1: page title, 2: image file label
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:280
+#, php-format
+msgid "Set the featured image of page “%1$s”: %2$s."
+msgstr "Ustaw obrazek wyróżniający strony „%1$s”: %2$s."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:287
+#, php-format
+msgid "Page “%s” has a featured image set."
+msgstr "Strona „%s” ma ustawiony obrazek wyróżniający."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:340
+msgid "Main Menu"
+msgstr "Menu główne"
+
+#. translators: %d: number of menu items
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:347
+#, php-format
+msgid "Create the main menu with %d item(s) and assign it to the theme."
+msgstr "Utwórz menu główne z %d pozycjami i przypisz je do motywu."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:351
+msgid "The menu exists and is assigned to the theme location."
+msgstr "Menu istnieje i jest przypisane do lokalizacji w motywie."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:379
+msgid "Set the block theme navigation so the menu is visible on the site."
+msgstr "Ustaw nawigację motywu blokowego, żeby menu było widoczne na stronie."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:381
+msgid "The block theme renders navigation with links to the pages."
+msgstr "Motyw blokowy renderuje nawigację z odnośnikami do stron."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:411
+#, php-format
+msgid "Set page “%s” as the site’s homepage."
+msgstr "Ustaw stronę „%s” jako stronę główną witryny."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:415
+msgid "The site displays the chosen page as its homepage."
+msgstr "Witryna wyświetla wskazaną stronę jako stronę główną."
+
+#. translators: %s: business name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:432
+#, php-format
+msgid "Set the site name to “%s”."
+msgstr "Ustaw nazwę witryny na „%s”."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:436
+msgid "The site name is set."
+msgstr "Nazwa witryny jest ustawiona."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:461
+msgid "Create the contact form."
+msgstr "Utwórz formularz kontaktowy."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:479
+#, php-format
+msgid "Embed the contact form on page “%s”."
+msgstr "Osadź formularz kontaktowy na stronie „%s”."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:513
+msgid "Install and activate WooCommerce."
+msgstr "Zainstaluj i włącz WooCommerce."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:515
+msgid "WooCommerce is active."
+msgstr "WooCommerce jest aktywny."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:528
+msgid "Check the store pages (Shop, Cart, Checkout, My account) and recreate any that are missing."
+msgstr "Sprawdź strony sklepu (Sklep, Koszyk, Zamówienie, Moje konto) i odtwórz brakujące."
+
+#. translators: 1: country code, 2: currency code, 3: weight unit, 4: dimension unit
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:547
+#, php-format
+msgid "Set the store basics — country: %1$s, currency: %2$s, units: %3$s / %4$s."
+msgstr "Ustaw podstawy sklepu — kraj: %1$s, waluta: %2$s, jednostki: %3$s / %4$s."
+
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:554
+msgid "The store’s country, currency and units are set."
+msgstr "Kraj, waluta i jednostki sklepu są ustawione."
+
+#. translators: %s: category name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:613
+#, php-format
+msgid "Update the product category “%s”."
+msgstr "Zaktualizuj kategorię produktów „%s”."
+
+#. translators: %s: category name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:618
+#, php-format
+msgid "Create the product category “%s”."
+msgstr "Utwórz kategorię produktów „%s”."
+
+#. translators: %s: category name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:624
+#, php-format
+msgid "Category “%s” exists."
+msgstr "Kategoria „%s” istnieje."
+
+#. translators: 1: product name, 2: price, 3: currency code
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:698
+#, php-format
+msgid "Update the product draft “%1$s” — %2$s %3$s."
+msgstr "Zaktualizuj szkic produktu „%1$s” — %2$s %3$s."
+
+#. translators: 1: product name, 2: price, 3: currency code
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:705
+#, php-format
+msgid "Create the product draft “%1$s” — %2$s %3$s."
+msgstr "Utwórz szkic produktu „%1$s” — %2$s %3$s."
+
+#. translators: %s: product name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:715
+#, php-format
+msgid "Product “%s” exists as a draft."
+msgstr "Produkt „%s” istnieje jako szkic."
+
+#. translators: %s: internal tool name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:852
+#, php-format
+msgid "Tool “%s” has no verifier and cannot enter the plan."
+msgstr "Narzędzie „%s” nie ma weryfikatora i nie może wejść do planu."
+
+#. translators: %s: internal tool name
+#: includes/Domain/SiteBuilder/BlueprintPlanner.php:862
+#, php-format
+msgid "Step “%s” must declare a verification."
+msgstr "Krok „%s” musi deklarować weryfikację."
+
+#. translators: %s: the invalid store country code
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:62
+#, php-format
+msgid "The store country code “%s” is invalid."
+msgstr "Kod kraju sklepu „%s” jest nieprawidłowy."
+
+#. translators: %s: the invalid currency code
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:74
+#, php-format
+msgid "The currency code “%s” is invalid."
+msgstr "Kod waluty „%s” jest nieprawidłowy."
+
+#. translators: %s: the unrecognised weight unit
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:87
+#, php-format
+msgid "Unknown weight unit “%s”."
+msgstr "Nieznana jednostka wagi „%s”."
+
+#. translators: %s: the unrecognised dimension unit
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:97
+#, php-format
+msgid "Unknown dimension unit “%s”."
+msgstr "Nieznana jednostka wymiaru „%s”."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:109
+msgid "Too many categories in the store description."
+msgstr "Zbyt wiele kategorii w opisie sklepu."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:115
+msgid "A product description must be an object."
+msgstr "Opis produktu musi być obiektem."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:122
+msgid "Too many products in the store description."
+msgstr "Zbyt wiele produktów w opisie sklepu."
+
+#. translators: 1: section name ("categories" or "products"), 2: duplicated name
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:151
+#, php-format
+msgid "Duplicate name in the %1$s section: “%2$s”."
+msgstr "Powtórzona nazwa w sekcji %1$s: „%2$s”."
+
+#. translators: 1: product name, 2: category role that does not exist
+#: includes/Domain/SiteBuilder/Commerce/StoreBlueprint.php:184
+#, php-format
+msgid "Product “%1$s” references a category that does not exist: “%2$s”."
+msgstr "Produkt „%1$s” wskazuje nieistniejącą kategorię „%2$s”."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreCategory.php:32
+msgid "A category must be a name or an object."
+msgstr "Kategoria musi być nazwą albo obiektem."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreCategory.php:38
+msgid "A category must have a name."
+msgstr "Kategoria musi mieć nazwę."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreCategory.php:42
+msgid "The category name is too long."
+msgstr "Nazwa kategorii jest zbyt długa."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:57
+msgid "A product must have a name."
+msgstr "Produkt musi mieć nazwę."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:61
+msgid "The product name is too long."
+msgstr "Nazwa produktu jest zbyt długa."
+
+#. translators: %s: the unrecognised image strategy
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:75
+#, php-format
+msgid "Unknown product image strategy: “%s”."
+msgstr "Nieznana strategia obrazu produktu: „%s”."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:114
+msgid "A product must have a price."
+msgstr "Produkt musi mieć cenę."
+
+#. translators: %s: the invalid price value
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:127
+#, php-format
+msgid "The price “%s” is not a valid number."
+msgstr "Cena „%s” nie jest poprawną liczbą."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:137
+msgid "The price cannot be negative."
+msgstr "Cena nie może być ujemna."
+
+#: includes/Domain/SiteBuilder/Commerce/StoreProduct.php:141
+msgid "The price exceeds the allowed limit."
+msgstr "Cena przekracza dopuszczalny limit."
+
+#: includes/Domain/SiteBuilder/GatewayBlueprintGenerator.php:53
+msgid "The site description is empty."
+msgstr "Opis witryny jest pusty."
+
+#: includes/Domain/SiteBuilder/GatewayBlueprintGenerator.php:78
+msgid "Could not connect to the AI service."
+msgstr "Nie udało się połączyć z usługą AI."
+
+#: includes/Domain/SiteBuilder/GatewayBlueprintGenerator.php:100
+msgid "The model did not return a site description."
+msgstr "Model nie zwrócił opisu witryny."
+
+#: includes/Domain/SiteBuilder/GatewayBlueprintGenerator.php:108
+msgid "The model’s response is too large."
+msgstr "Odpowiedź modelu jest zbyt duża."
+
+#: includes/Domain/SiteBuilder/GatewayBlueprintGenerator.php:115
+msgid "The model did not return valid JSON with a site description."
+msgstr "Model nie zwrócił poprawnego JSON-a z opisem witryny."
+
+#. translators: %s: validation error from the model's site description
+#: includes/Domain/SiteBuilder/GatewayBlueprintGenerator.php:128
+#, php-format
+msgid "The model’s site description is invalid: %s"
+msgstr "Opis witryny od modelu jest nieprawidłowy: %s"
+
+#. translators: %s: business name
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:57
+#, php-format
+msgid "%s — professional services for individual and business clients."
+msgstr "%s — profesjonalne usługi dla klientów indywidualnych i firm."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:60
+msgid "Get in touch"
+msgstr "Skontaktuj się"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:70
+msgid "What we do"
+msgstr "Co robimy"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:79
+msgid "Need a quote?"
+msgstr "Potrzebujesz wyceny?"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:80
+msgid "Describe what you need, and we will get back to you with a timeline and a price."
+msgstr "Opisz swój problem, a odpowiemy z propozycją terminu i kosztu."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:81
+msgid "Write to us"
+msgstr "Napisz do nas"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:94
+msgid "Contact"
+msgstr "Kontakt"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:97
+msgid "Write or call us"
+msgstr "Napisz lub zadzwoń"
+
+#. translators: %s: business name
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:100
+#, php-format
+msgid "We are happy to answer any questions about %s’s services."
+msgstr "Chętnie odpowiemy na pytania dotyczące usług firmy %s."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:116
+msgid "Below is an overview of our services. Every quote is prepared individually."
+msgstr "Poniżej znajdziesz zakres naszych usług. Każdą wycenę przygotowujemy indywidualnie."
+
+#. translators: %s: business name
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:131
+#, php-format
+msgid "%s is a team that values reliability and punctuality. This section is waiting for your own description — add the company’s history, experience and what sets you apart."
+msgstr "%s to zespół, który stawia na rzetelność i terminowość. Ta sekcja czeka na Twój opis — dodaj historię firmy, doświadczenie i to, co Was wyróżnia."
+
+#. translators: %s: page title
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:146
+#, php-format
+msgid "This page (“%s”) is waiting for content. You can fill it in now in the editor."
+msgstr "Ta strona („%s”) czeka na treść. Możesz ją teraz uzupełnić w edytorze."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:158
+msgid "Fast turnaround"
+msgstr "Szybka realizacja"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:159
+msgid "We take on urgent jobs and agree a firm date."
+msgstr "Podejmujemy się zleceń pilnych i umawiamy konkretny termin."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:162
+msgid "Experienced team"
+msgstr "Doświadczony zespół"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:163
+msgid "We work to established standards and best practice."
+msgstr "Pracujemy zgodnie ze sztuką i obowiązującymi normami."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:166
+msgid "Transparent pricing"
+msgstr "Przejrzysta wycena"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:167
+msgid "You know the cost before work starts — no surprises."
+msgstr "Koszt znasz przed rozpoczęciem prac — bez niespodzianek."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:172
+msgid "Fresh ingredients"
+msgstr "Świeże składniki"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:173
+msgid "Our menu is built around what is seasonal and local."
+msgstr "Menu układamy wokół tego, co sezonowe i lokalne."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:176
+msgid "A place to meet"
+msgstr "Miejsce na spotkania"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:177
+msgid "A dining room and reservations for larger groups."
+msgstr "Sala i rezerwacje dla większych grup."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:182
+msgid "Selected work"
+msgstr "Wybrane realizacje"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:183
+msgid "An overview of projects we have worked on."
+msgstr "Przegląd projektów, nad którymi pracowaliśmy."
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:186
+msgid "Process"
+msgstr "Proces"
+
+#: includes/Domain/SiteBuilder/Gutenberg/PageContentFactory.php:187
+msgid "How working together looks, step by step."
+msgstr "Jak wygląda współpraca krok po kroku."
+
+#: includes/Domain/SiteBuilder/Media/NullStockImageProvider.php:26
+#: includes/UI/SiteBuilderPage.php:56
+msgid "none"
+msgstr "brak"
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:67
+msgid "The image address is empty or too long."
+msgstr "Adres obrazu jest pusty lub zbyt długi."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:76
+msgid "The image address is not a valid URL."
+msgstr "Adres obrazu nie jest poprawnym URL-em."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:82
+msgid "Only https addresses are allowed."
+msgstr "Dozwolone są wyłącznie adresy https."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:88
+msgid "The image address must not contain login credentials."
+msgstr "Adres obrazu nie może zawierać danych logowania."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:92
+msgid "Only port 443 is allowed."
+msgstr "Dozwolony jest wyłącznie port 443."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:98
+msgid "The image address does not name a host."
+msgstr "Adres obrazu nie wskazuje hosta."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:106
+msgid "The image address must name a hostname, not an IP address."
+msgstr "Adres obrazu musi wskazywać nazwę hosta, nie adres IP."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:110
+msgid "The image address names an internal host."
+msgstr "Adres obrazu wskazuje nazwę wewnętrzną."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:116
+msgid "The image address must be a fully qualified domain name."
+msgstr "Adres obrazu musi wskazywać pełną nazwę domeny."
+
+#: includes/Domain/SiteBuilder/Media/RemoteImagePolicy.php:122
+msgid "The image address must point to an image file (jpg, png, webp, avif)."
+msgstr "Adres obrazu musi wskazywać plik obrazu (jpg, png, webp, avif)."
+
+#: includes/Domain/SiteBuilder/PlanExecutor.php:164
+msgid "The tool refused to run."
+msgstr "Narzędzie odmówiło wykonania."
+
+#. translators: 1: step sequence number, 2: internal tool name, 3: failure message
+#: includes/Domain/SiteBuilder/PlanExecutor.php:176
+#, php-format
+msgid "Step %1$d (%2$s) failed: %3$s"
+msgstr "Krok %1$d (%2$s) nie powiódł się: %3$s"
+
+#. translators: %s: verification failure detail
+#: includes/Domain/SiteBuilder/PlanExecutor.php:199
+#, php-format
+msgid "The write succeeded, but verifying WordPress’s state failed: %s"
+msgstr "Zapis wykonany, ale weryfikacja stanu WordPressa nie powiodła się: %s"
+
+#. translators: 1: step sequence number, 2: internal tool name, 3: failure message
+#: includes/Domain/SiteBuilder/PlanExecutor.php:206
+#, php-format
+msgid "Step %1$d (%2$s): %3$s"
+msgstr "Krok %1$d (%2$s): %3$s"
+
+#. translators: %s: internal tool name
+#: includes/Domain/SiteBuilder/PlanExecutor.php:455
+#, php-format
+msgid "Step “%s” does not declare a verification, so its effect cannot be confirmed."
+msgstr "Krok „%s” nie deklaruje weryfikacji, więc nie można potwierdzić jego skutku."
+
+#: includes/Domain/SiteBuilder/PlanRollbackService.php:108
+msgid "No reversible steps to undo."
+msgstr "Brak odwracalnych kroków do cofnięcia."
+
+#. translators: %s: page or resource title
+#: includes/Domain/SiteBuilder/ResourceResolution.php:87
+#, php-format
+msgid "Create “%s”."
+msgstr "Utwórz „%s”."
+
+#. translators: 1: page or resource title, 2: existing post/term ID
+#: includes/Domain/SiteBuilder/ResourceResolution.php:92
+#, php-format
+msgid "Use the existing page “%1$s” (id %2$d) without changing its content."
+msgstr "Użyj istniejącej strony „%1$s” (id %2$d) bez zmiany treści."
+
+#. translators: 1: page or resource title, 2: existing post/term ID
+#: includes/Domain/SiteBuilder/ResourceResolution.php:98
+#, php-format
+msgid "Update “%1$s” (id %2$d), previously created by the builder."
+msgstr "Zaktualizuj „%1$s” (id %2$d) utworzoną wcześniej przez kreator."
+
+#. translators: 1: page or resource title, 2: existing post/term ID
+#: includes/Domain/SiteBuilder/ResourceResolution.php:104
+#, php-format
+msgid "Conflict: “%1$s” (id %2$d) was edited by hand — the builder will not overwrite it."
+msgstr "Konflikt: „%1$s” (id %2$d) została zmieniona ręcznie — kreator jej nie nadpisze."
+
+#. translators: %d: total number of checks, repeated as both passed and total
+#: includes/Domain/SiteBuilder/SiteAuditReport.php:55
+#, php-format
+msgid "Final audit: %1$d/%2$d checks passed."
+msgstr "Audyt końcowy: %1$d/%2$d kontroli zaliczonych."
+
+#. translators: 1: number of failed checks, 2: total number of checks, 3: semicolon-separated list of failure details
+#: includes/Domain/SiteBuilder/SiteAuditReport.php:63
+#, php-format
+msgid "Final audit: %1$d of %2$d checks failed — %3$s"
+msgstr "Audyt końcowy: %1$d z %2$d kontroli nie powiodło się — %3$s"
+
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:116
+msgid "The blueprint must define at least one page."
+msgstr "Opis witryny musi zawierać przynajmniej jedną stronę."
+
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:133
+msgid "Site type “Store” requires store data: country, currency, at least one category and at least one product."
+msgstr "Rodzaj witryny „Sklep” wymaga danych sklepu: kraju, waluty, przynajmniej jednej kategorii i produktu."
+
+#. translators: 1: field name, 2: comma-separated list of allowed values
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:195
+#, php-format
+msgid "“%1$s” must be one of: %2$s."
+msgstr "„%1$s” musi być jedną z wartości: %2$s."
+
+#. translators: %s: field name
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:217
+#, php-format
+msgid "“%s” is required."
+msgstr "„%s” jest wymagane."
+
+#. translators: 1: field name, 2: maximum length in characters
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:227
+#, php-format
+msgid "“%1$s” exceeds %2$d characters."
+msgstr "„%1$s” przekracza %2$d znaków."
+
+#. translators: %s: field name
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:264
+#, php-format
+msgid "“%s” must be a list."
+msgstr "„%s” musi być listą."
+
+#. translators: %s: field name
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:276
+#, php-format
+msgid "“%s” must contain only strings."
+msgstr "„%s” może zawierać wyłącznie ciągi znaków."
+
+#. translators: 1: field name, 2: maximum number of entries
+#: includes/Domain/SiteBuilder/SiteBlueprint.php:301
+#, php-format
+msgid "“%1$s” is limited to %2$d entries."
+msgstr "„%1$s” jest ograniczone do %2$d elementów."
+
+#: includes/UI/ActivityPage.php:25
+msgid "Tool activity"
+msgstr "Aktywność narzędzi"
+
+#: includes/UI/ActivityPage.php:27
+msgid "Every tool call the operator attempted, including the ones that were refused. Secrets are never recorded here."
+msgstr "Każda próba wywołania narzędzia — również odrzucona. Sekrety nigdy nie są tu zapisywane."
+
+#: includes/UI/ActivityPage.php:33
+msgid "When"
+msgstr "Kiedy"
+
+#: includes/UI/ActivityPage.php:34
+msgid "User"
+msgstr "Użytkownik"
+
+#: includes/UI/ActivityPage.php:35
+#: includes/UI/SettingsPage.php:173
+msgid "Tool"
+msgstr "Narzędzie"
+
+#: includes/UI/ActivityPage.php:36
+msgid "Outcome"
+msgstr "Wynik"
+
+#: includes/UI/ActivityPage.php:37
+msgid "Reason"
+msgstr "Powód"
+
+#: includes/UI/ActivityPage.php:38
+msgid "Request ID"
+msgstr "Request ID"
+
+#: includes/UI/ActivityPage.php:43
+msgid "No activity recorded yet."
+msgstr "Brak zarejestrowanej aktywności."
+
+#: includes/UI/AdminMenu.php:41
+msgid "DoSieci AI"
+msgstr "DoSieci AI"
+
+#: includes/UI/AdminMenu.php:50
+msgid "Chat"
+msgstr "Czat"
+
+#: includes/UI/AdminMenu.php:51
+#: includes/UI/SiteBuilderPage.php:113
+msgid "Site Builder"
+msgstr "Kreator witryny"
+
+#: includes/UI/AdminMenu.php:52
+msgid "Connection"
+msgstr "Połączenie"
+
+#: includes/UI/AdminMenu.php:53
+msgid "History"
+msgstr "Historia"
+
+#: includes/UI/AdminMenu.php:54
+msgid "Activity"
+msgstr "Aktywność"
+
+#: includes/UI/AdminMenu.php:55
+#: includes/UI/ChatPage.php:116
+#: includes/UI/ChatPage.php:124
+#: includes/UI/ChatPage.php:132
+#: includes/UI/ChatPage.php:140
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: includes/UI/AdminMenu.php:117
+#: includes/UI/HistoryPage.php:48
+msgid "You"
+msgstr "Ty"
+
+#: includes/UI/AdminMenu.php:118
+#: includes/UI/HistoryPage.php:46
+msgid "Operator"
+msgstr "Operator"
+
+#: includes/UI/AdminMenu.php:119
+msgid "The operator is thinking…"
+msgstr "Operator myśli…"
+
+#: includes/UI/AdminMenu.php:120
+msgid "Applying the approved change…"
+msgstr "Wykonuję zatwierdzoną zmianę…"
+
+#: includes/UI/AdminMenu.php:121
+#: includes/UI/SiteBuilderPage.php:93
+msgid "Something went wrong."
+msgstr "Wystąpił błąd."
+
+#: includes/UI/AdminMenu.php:122
+msgid "Tool ran"
+msgstr "Wykonano narzędzie"
+
+#: includes/UI/AdminMenu.php:123
+msgid "Tool denied"
+msgstr "Odmówiono narzędzia"
+
+#: includes/UI/AdminMenu.php:124
+msgid "The operator is asking for approval to make a change."
+msgstr "Operator prosi o zgodę na zmianę."
+
+#: includes/UI/AdminMenu.php:125
+msgid "Approve this change to the site"
+msgstr "Zatwierdź zmianę na witrynie"
+
+#: includes/UI/AdminMenu.php:126
+msgid "Approve and run"
+msgstr "Zatwierdź i wykonaj"
+
+#: includes/UI/AdminMenu.php:127
+msgid "Reject"
+msgstr "Odrzuć"
+
+#: includes/UI/AdminMenu.php:128
+msgid "Note: this action removes content. It can be restored from the trash."
+msgstr "Uwaga: to działanie usuwa treść. Można ją przywrócić z kosza."
+
+#: includes/UI/AdminMenu.php:136
+#: includes/UI/AjaxController.php:185
+#: includes/UI/SettingsPage.php:246
+#: includes/UI/SiteBuilderAjaxController.php:411
+msgid "You are not allowed to do this."
+msgstr "Brak uprawnień."
+
+#: includes/UI/AdminMenu.php:182
+msgid "Enter both the Hub address and the pairing token."
+msgstr "Podaj adres Hub oraz token parowania."
+
+#: includes/UI/AdminMenu.php:194
+msgid "Connected to DoSieci."
+msgstr "Połączono z DoSieci."
+
+#: includes/UI/AdminMenu.php:205
+msgid "Disconnected locally. Remember to also revoke this site’s key in the DoSieci panel."
+msgstr "Rozłączono lokalnie. Pamiętaj, aby unieważnić klucz tej witryny również w panelu DoSieci."
+
+#: includes/UI/AjaxController.php:51
+msgid "The message is empty."
+msgstr "Pusta wiadomość."
+
+#: includes/UI/AjaxController.php:83
+msgid "There is no pending action to approve."
+msgstr "Nie ma oczekującej akcji do zatwierdzenia."
+
+#: includes/UI/AjaxController.php:99
+msgid "This action is out of date. Reload the page."
+msgstr "Ta akcja jest już nieaktualna. Odśwież stronę."
+
+#: includes/UI/ChatPage.php:52
+msgid "Mode:"
+msgstr "Tryb:"
+
+#. translators: 1: total tools, 2: write tools
+#: includes/UI/ChatPage.php:61
+#, php-format
+msgid "The operator has %1$d tools, %2$d of which can change the site. Every change needs your confirmation in the chat."
+msgstr "Operator ma %1$d narzędzi, w tym %2$d zmieniających witrynę. Każda zmiana wymaga Twojego potwierdzenia w czacie."
+
+#. translators: %d: number of available tools
+#: includes/UI/ChatPage.php:70
+#, php-format
+msgid "The operator has access to %d read-only tools. None of them change data on this site."
+msgstr "Operator ma dostęp do %d narzędzi tylko do odczytu. Żadne z nich nie zmienia danych na tej witrynie."
+
+#: includes/UI/ChatPage.php:75
+msgid "Allow changes to the site"
+msgstr "Włącz zmiany na witrynie"
+
+#: includes/UI/ChatPage.php:84
+msgid "Message to the operator"
+msgstr "Wiadomość do operatora"
+
+#: includes/UI/ChatPage.php:88
+msgid "e.g. Build a homepage with an about section and add it to the menu"
+msgstr "np. Zbuduj stronę główną z sekcją o firmie i dodaj ją do menu"
+
+#: includes/UI/ChatPage.php:89
+msgid "e.g. Check the site’s technical health and its largest autoloaded options"
+msgstr "np. Sprawdź stan techniczny witryny i największe autoloadowane opcje"
+
+#: includes/UI/ChatPage.php:91
+msgid "Send"
+msgstr "Wyślij"
+
+#. translators: 1: URL of the Connection screen, 2: URL of the Settings screen
+#: includes/UI/ChatPage.php:114
+#, php-format
+msgid "This site is not connected to DoSieci yet. %1$s or use your own AI key in %2$s."
+msgstr "Ta witryna nie jest jeszcze połączona z DoSieci. %1$s albo użyj własnego klucza API w %2$s."
+
+#: includes/UI/ChatPage.php:115
+msgid "Go to Connection"
+msgstr "Przejdź do połączenia"
+
+#. translators: %s: URL of the Settings screen
+#: includes/UI/ChatPage.php:123
+#, php-format
+msgid "WordPress AI connectors need WordPress 7.0 or later with AI features enabled, which this site does not have. Choose another mode in %s."
+msgstr "Łączniki AI WordPressa wymagają WordPressa 7.0 lub nowszego z włączonymi funkcjami AI, których ta witryna nie ma. Wybierz inny tryb w %s."
+
+#. translators: %s: URL of the Settings screen
+#: includes/UI/ChatPage.php:131
+#, php-format
+msgid "No AI provider is connected under Settings > Connectors yet. Connect one there, or choose another mode in %s."
+msgstr "Żaden dostawca AI nie jest jeszcze połączony w Ustawienia > Łączniki. Połącz go tam albo wybierz inny tryb w %s."
+
+#. translators: %s: URL of the Settings screen
+#: includes/UI/ChatPage.php:139
+#, php-format
+msgid "A provider with your own API key is selected, but no key is saved. Add it in %s."
+msgstr "Wybrano dostawcę z własnym kluczem API, ale żaden klucz nie został zapisany. Dodaj go w %s."
+
+#. translators: %s: comma-separated list of connected AI provider names
+#: includes/UI/ChatPage.php:153
+#, php-format
+msgid "WordPress AI connectors (%s) — your own key, no DoSieci credits used"
+msgstr "Łączniki AI WordPressa (%s) — własny klucz, kredyty DoSieci nie są zużywane"
+
+#. translators: %s: model name
+#: includes/UI/ChatPage.php:160
+#, php-format
+msgid "your own API key, model %s — no DoSieci credits used"
+msgstr "własny klucz API, model %s — kredyty DoSieci nie są zużywane"
+
+#: includes/UI/ChatPage.php:163
+msgid "DoSieci Hub — requests are billed from your plan’s credits"
+msgstr "DoSieci Hub — zapytania rozliczane z kredytów Twojego planu"
+
+#: includes/UI/ErrorMessages.php:23
+msgid "Your DoSieci plan has run out of AI credits. Top them up with DoSieci, or switch to your own AI key in the settings."
+msgstr "Wyczerpano kredyty AI w Twoim planie DoSieci. Doładuj je w panelu DoSieci lub przełącz wtyczkę na własny klucz API w Ustawieniach."
+
+#: includes/UI/ErrorMessages.php:24
+msgid "This site is not connected to DoSieci. Pair it on the Connection screen, or choose your own AI key in the settings."
+msgstr "Ta witryna nie jest połączona z DoSieci. Przejdź do zakładki Połączenie albo ustaw własny klucz API w Ustawieniach."
+
+#: includes/UI/ErrorMessages.php:25
+msgid "This site’s connection to DoSieci was revoked. Pair it again."
+msgstr "Połączenie tej witryny zostało unieważnione. Sparuj ją ponownie."
+
+#: includes/UI/ErrorMessages.php:26
+msgid "A provider with your own API key is selected, but no key is saved. Add it in the settings."
+msgstr "Wybrano własnego dostawcę AI, ale nie zapisano klucza API. Uzupełnij go w Ustawieniach."
+
+#: includes/UI/ErrorMessages.php:27
+msgid "The AI provider rejected your API key. Check that it is correct and active."
+msgstr "Dostawca AI odrzucił Twój klucz API. Sprawdź, czy jest poprawny i aktywny."
+
+#: includes/UI/ErrorMessages.php:28
+msgid "Your account with the AI provider has no funds left. Top it up with the provider."
+msgstr "Twoje konto u dostawcy AI nie ma środków. Doładuj je po stronie dostawcy."
+
+#: includes/UI/ErrorMessages.php:29
+msgid "Too many requests to the model. Try again in a moment."
+msgstr "Zbyt wiele zapytań do modelu. Spróbuj ponownie za chwilę."
+
+#: includes/UI/ErrorMessages.php:30
+msgid "The AI provider rejected the request. Check the model name in the settings."
+msgstr "Dostawca AI odrzucił zapytanie. Sprawdź nazwę modelu w Ustawieniach."
+
+#: includes/UI/ErrorMessages.php:32
+msgid "The AI model is temporarily unavailable. Try again in a moment."
+msgstr "Model AI jest chwilowo niedostępny. Spróbuj ponownie za chwilę."
+
+#: includes/UI/ErrorMessages.php:33
+msgid "The model reached its output limit before it finished answering. Try a shorter request, or split the task into steps."
+msgstr "Model osiągnął limit odpowiedzi, zanim skończył. Spróbuj krótszego zapytania albo podziel zadanie na kroki."
+
+#: includes/UI/ErrorMessages.php:34
+msgid "The DoSieci AI gateway is misconfigured. Contact DoSieci support."
+msgstr "Brama AI po stronie DoSieci jest niepoprawnie skonfigurowana. Skontaktuj się ze wsparciem."
+
+#: includes/UI/ErrorMessages.php:35
+msgid "WordPress AI connectors are not available on this site: they need WordPress 7.0 or later with AI features enabled. Choose another mode in the settings."
+msgstr "Łączniki AI WordPressa nie są dostępne na tej witrynie: wymagają WordPressa 7.0 lub nowszego z włączonymi funkcjami AI. Wybierz inny tryb w Ustawieniach."
+
+#: includes/UI/ErrorMessages.php:36
+msgid "None of the AI providers connected in Settings > Connectors has a model that can use tools. Connect a provider (for example OpenAI, Anthropic or Google), or choose another mode."
+msgstr "Żaden z dostawców AI połączonych w Ustawienia > Łączniki nie ma modelu obsługującego narzędzia. Połącz dostawcę (np. OpenAI, Anthropic lub Google) albo wybierz inny tryb."
+
+#: includes/UI/ErrorMessages.php:37
+msgid "Could not connect to the AI service. Check the site’s network connection."
+msgstr "Nie udało się połączyć z usługą AI. Sprawdź połączenie sieciowe witryny."
+
+#: includes/UI/ErrorMessages.php:46
+msgid "The AI service returned an error. Try again in a moment."
+msgstr "Usługa AI zwróciła błąd. Spróbuj ponownie za chwilę."
+
+#: includes/UI/HistoryPage.php:23
+msgid "History cleared."
+msgstr "Historia wyczyszczona."
+
+#: includes/UI/HistoryPage.php:29
+msgid "Conversation history"
+msgstr "Historia rozmów"
+
+#: includes/UI/HistoryPage.php:32
+msgid "No history is saved yet."
+msgstr "Brak zapisanej historii."
+
+#: includes/UI/HistoryPage.php:41
+msgid "Tool (request)"
+msgstr "Narzędzie (żądanie)"
+
+#: includes/UI/HistoryPage.php:44
+msgid "Tool (result)"
+msgstr "Narzędzie (wynik)"
+
+#: includes/UI/HistoryPage.php:61
+msgid "Clear my history"
+msgstr "Wyczyść moją historię"
+
+#: includes/UI/SettingsPage.php:32
+msgid "AI Operator settings"
+msgstr "Ustawienia AI Operator"
+
+#: includes/UI/SettingsPage.php:43
+msgid "AI provider"
+msgstr "Dostawca AI"
+
+#: includes/UI/SettingsPage.php:47
+msgid "Where the model comes from"
+msgstr "Skąd brać model"
+
+#: includes/UI/SettingsPage.php:59
+msgid "The DoSieci Hub mode spends credits from your DoSieci plan and needs no key of your own. Every other mode connects directly to the provider: no DoSieci credits are used, and you pay the provider directly."
+msgstr "Tryb DoSieci Hub zużywa kredyty z Twojego planu i nie wymaga własnego klucza. Pozostałe tryby łączą się bezpośrednio z dostawcą — nie zużywają kredytów DoSieci, a za zapytania płacisz bezpośrednio dostawcy."
+
+#: includes/UI/SettingsPage.php:69
+msgid "API key"
+msgstr "Klucz API"
+
+#: includes/UI/SettingsPage.php:73
+msgid "paste a key to set or change it"
+msgstr "wklej klucz, aby ustawić lub zmienić"
+
+#: includes/UI/SettingsPage.php:76
+msgid "Saved key:"
+msgstr "Zapisany klucz:"
+
+#: includes/UI/SettingsPage.php:81
+msgid "remove the saved key"
+msgstr "usuń zapisany klucz"
+
+#: includes/UI/SettingsPage.php:86
+msgid "Used only for the “Anthropic” and “OpenAI” modes above; the Hub and WordPress AI connectors modes ignore it. Empty = leave the current key unchanged. The key is stored in this site’s database and sent only to the chosen provider over HTTPS — never to DoSieci and never to the audit log."
+msgstr "Używany tylko dla trybów „Anthropic” i „OpenAI” powyżej; tryb Hub i Łączniki AI WordPressa go ignorują. Puste pole = zostaw obecny klucz bez zmian. Klucz jest zapisywany w bazie tej witryny i wysyłany wyłącznie do wybranego dostawcy po HTTPS — nie trafia do DoSieci ani do logu audytowego."
+
+#: includes/UI/SettingsPage.php:93
+msgid "Model"
+msgstr "Model"
+
+#: includes/UI/SettingsPage.php:101
+msgid "Empty = let WordPress pick a suitable model from your connected providers. Fill this in only to prefer a specific one."
+msgstr "Puste = WordPress sam wybierze odpowiedni model spośród połączonych dostawców. Wypełnij tylko, jeśli chcesz wskazać konkretny."
+
+#. translators: %s: model identifier
+#: includes/UI/SettingsPage.php:106
+#, php-format
+msgid "Empty = the default model for the chosen provider (currently: %s). Not used in Hub mode."
+msgstr "Puste = domyślny model dla wybranego dostawcy (teraz: %s). Nieużywane w trybie Hub."
+
+#: includes/UI/SettingsPage.php:116
+msgid "Changes to the site"
+msgstr "Zmiany na witrynie"
+
+#: includes/UI/SettingsPage.php:120
+msgid "Write tools"
+msgstr "Narzędzia zapisu"
+
+#: includes/UI/SettingsPage.php:124
+msgid "Let the operator change this site (create content, install themes and plugins, change settings)."
+msgstr "Pozwól operatorowi zmieniać tę witrynę (tworzyć treści, instalować motywy i wtyczki, zmieniać ustawienia)."
+
+#: includes/UI/SettingsPage.php:127
+msgid "Turning this on does NOT mean the operator acts without oversight."
+msgstr "Włączenie tej opcji NIE oznacza, że operator działa bez kontroli."
+
+#: includes/UI/SettingsPage.php:128
+msgid "Every single change still needs its own “Approve” click in the chat, and each one only acts within the logged-in WordPress user’s own permissions. Without this option, write tools are not even registered — the model does not know they exist."
+msgstr "Każda pojedyncza zmiana wymaga osobnego kliknięcia „Zatwierdź” w czacie, i każda działa wyłącznie w granicach uprawnień zalogowanego użytkownika WordPressa. Bez tej opcji narzędzia zapisu nie są w ogóle rejestrowane — model o nich nie wie."
+
+#: includes/UI/SettingsPage.php:134
+msgid "Plugin data"
+msgstr "Dane wtyczki"
+
+#: includes/UI/SettingsPage.php:138
+msgid "Data removal"
+msgstr "Usuwanie danych"
+
+#: includes/UI/SettingsPage.php:142
+msgid "Delete all of this plugin’s data when it is uninstalled (pairing, API key, history, audit log)."
+msgstr "Usuń wszystkie dane wtyczki przy jej odinstalowaniu (parowanie, klucz API, historia, log audytowy)."
+
+#: includes/UI/SettingsPage.php:145
+msgid "Off by default: deactivating or uninstalling the plugin does not delete data until you deliberately turn this on."
+msgstr "Domyślnie wyłączone: deaktywacja i odinstalowanie nie kasują danych, dopóki świadomie tego nie włączysz."
+
+#: includes/UI/SettingsPage.php:151
+msgid "Save"
+msgstr "Zapisz"
+
+#: includes/UI/SettingsPage.php:154
+msgid "Available tools"
+msgstr "Dostępne narzędzia"
+
+#. translators: 1: total tools, 2: write tools
+#: includes/UI/SettingsPage.php:159
+#, php-format
+msgid "Registered tools: %1$d, of which %2$d can change data."
+msgstr "Zarejestrowanych narzędzi: %1$d, w tym zmieniających dane: %2$d."
+
+#: includes/UI/SettingsPage.php:174
+#: includes/UI/SiteBuilderPage.php:189
+msgid "Description"
+msgstr "Opis"
+
+#: includes/UI/SettingsPage.php:175
+msgid "Required capability"
+msgstr "Wymagane uprawnienie"
+
+#: includes/UI/SettingsPage.php:176
+msgid "Risk level"
+msgstr "Poziom ryzyka"
+
+#: includes/UI/SettingsPage.php:205
+msgid "This site’s WordPress version does not support AI connectors (needs WordPress 7.0+ with AI features enabled)."
+msgstr "Wersja WordPressa tej witryny nie obsługuje Łączników AI (wymaga WordPressa 7.0+ z włączonymi funkcjami AI)."
+
+#. translators: %s: URL of the WordPress Settings > Connectors screen
+#: includes/UI/SettingsPage.php:213
+#, php-format
+msgid "No provider is connected yet. Add one under %s."
+msgstr "Żaden dostawca nie jest jeszcze połączony. Dodaj go w %s."
+
+#: includes/UI/SettingsPage.php:214
+msgid "Settings > Connectors"
+msgstr "Ustawienia > Łączniki"
+
+#. translators: %s: comma-separated list of connected AI provider names
+#: includes/UI/SettingsPage.php:220
+#, php-format
+msgid "Connected: %s."
+msgstr "Połączono: %s."
+
+#: includes/UI/SettingsPage.php:288
+msgid "Saved, but the chosen provider needs an API key — the chat will not work until you add one."
+msgstr "Zapisano, ale wybrany dostawca wymaga klucza API — czat nie zadziała, dopóki go nie uzupełnisz."
+
+#: includes/UI/SettingsPage.php:295
+msgid "Saved, but no AI provider is connected under Settings > Connectors yet — the chat will not work until you connect one."
+msgstr "Zapisano, ale żaden dostawca AI nie jest jeszcze połączony w Ustawienia > Łączniki — czat nie zadziała, dopóki go nie połączysz."
+
+#: includes/UI/SettingsPage.php:301
+msgid "Saved."
+msgstr "Zapisano."
+
+#: includes/UI/SiteBuilderAjaxController.php:102
+msgid "Describe the site you want to build."
+msgstr "Opisz witrynę, którą chcesz zbudować."
+
+#: includes/UI/SiteBuilderAjaxController.php:126
+msgid "Could not prepare the site description."
+msgstr "Nie udało się przygotować opisu witryny."
+
+#: includes/UI/SiteBuilderAjaxController.php:145
+msgid "Invalid site description."
+msgstr "Nieprawidłowy opis witryny."
+
+#: includes/UI/SiteBuilderAjaxController.php:162
+msgid "Site Builder mode requires write tools to be enabled in Settings."
+msgstr "Tryb budowania witryny wymaga włączenia narzędzi zapisu w Ustawieniach."
+
+#: includes/UI/SiteBuilderAjaxController.php:217
+msgid "This plan is out of date. Refresh the page and review it again."
+msgstr "Ten plan jest nieaktualny. Odśwież stronę i przejrzyj go ponownie."
+
+#: includes/UI/SiteBuilderAjaxController.php:302
+msgid "No plan ID given."
+msgstr "Brak identyfikatora planu."
+
+#: includes/UI/SiteBuilderAjaxController.php:314
+msgid "Plan not found."
+msgstr "Nie znaleziono planu."
+
+#: includes/UI/SiteBuilderPage.php:51
+msgid "What I understood"
+msgstr "Co zrozumiałem"
+
+#: includes/UI/SiteBuilderPage.php:52
+msgid "Business"
+msgstr "Firma"
+
+#: includes/UI/SiteBuilderPage.php:53
+msgid "Type"
+msgstr "Rodzaj"
+
+#: includes/UI/SiteBuilderPage.php:54
+#: includes/UI/SiteBuilderPage.php:183
+msgid "Pages"
+msgstr "Strony"
+
+#: includes/UI/SiteBuilderPage.php:55
+#: includes/UI/SiteBuilderPage.php:193
+msgid "Features"
+msgstr "Funkcje"
+
+#: includes/UI/SiteBuilderPage.php:57
+#: includes/UI/SiteBuilderPage.php:163
+msgid "Store"
+msgstr "Sklep"
+
+#. translators: %d: number of store categories (this is the "one" form, shown for exactly 1)
+#. translators: %d: number of store categories (this is the "few" form, shown for 2-4)
+#. translators: %d: number of store categories (this is the "many" form, shown for 5+)
+#: includes/UI/SiteBuilderPage.php:60
+#: includes/UI/SiteBuilderPage.php:62
+#: includes/UI/SiteBuilderPage.php:64
+#, php-format
+msgid "%d category"
+msgid_plural "%d categories"
+msgstr[0] "%d kategoria"
+msgstr[1] "%d kategorie"
+msgstr[2] "%d kategorii"
+
+#. translators: %d: number of store products (this is the "one" form, shown for exactly 1)
+#. translators: %d: number of store products (this is the "few" form, shown for 2-4)
+#. translators: %d: number of store products (this is the "many" form, shown for 5+)
+#: includes/UI/SiteBuilderPage.php:68
+#: includes/UI/SiteBuilderPage.php:70
+#: includes/UI/SiteBuilderPage.php:72
+#, php-format
+msgid "%d product"
+msgid_plural "%d products"
+msgstr[0] "%d produkt"
+msgstr[1] "%d produkty"
+msgstr[2] "%d produktów"
+
+#. translators: %d: number of steps in the build plan (this is the "one" form, shown for exactly 1)
+#. translators: %d: number of steps in the build plan (this is the "few" form, shown for 2-4)
+#. translators: %d: number of steps in the build plan (this is the "many" form, shown for 5+)
+#: includes/UI/SiteBuilderPage.php:76
+#: includes/UI/SiteBuilderPage.php:78
+#: includes/UI/SiteBuilderPage.php:80
+#, php-format
+msgid "Build plan — %d step"
+msgid_plural "Build plan — %d steps"
+msgstr[0] "Plan budowy — %d krok"
+msgstr[1] "Plan budowy — %d kroki"
+msgstr[2] "Plan budowy — %d kroków"
+
+#: includes/UI/SiteBuilderPage.php:82
+msgid "Review every step. You approve them together — nothing runs before that."
+msgstr "Przejrzyj wszystkie kroki. Zatwierdzasz je razem — nic nie wykona się wcześniej."
+
+#: includes/UI/SiteBuilderPage.php:83
+msgid " (irreversible)"
+msgstr " (nieodwracalne)"
+
+#: includes/UI/SiteBuilderPage.php:84
+msgid "Approve the whole plan"
+msgstr "Zatwierdź cały plan"
+
+#: includes/UI/SiteBuilderPage.php:85
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: includes/UI/SiteBuilderPage.php:86
+msgid "Final audit"
+msgstr "Audyt końcowy"
+
+#. translators: 1: literal token replaced client-side with the number of steps done, 2: literal token replaced client-side with the total number of steps -- kept as %1$d/%2$d so translators see real placeholders
+#: includes/UI/SiteBuilderPage.php:88
+#, php-format
+msgid "Progress — %1$d / %2$d"
+msgstr "Postęp — %1$d / %2$d"
+
+#: includes/UI/SiteBuilderPage.php:89
+msgid "Pause"
+msgstr "Wstrzymaj"
+
+#: includes/UI/SiteBuilderPage.php:90
+msgid "Stop"
+msgstr "Przerwij"
+
+#: includes/UI/SiteBuilderPage.php:91
+msgid "Resume"
+msgstr "Wznów"
+
+#: includes/UI/SiteBuilderPage.php:92
+msgid "Undo the changes made"
+msgstr "Cofnij wprowadzone zmiany"
+
+#: includes/UI/SiteBuilderPage.php:94
+msgid "Preparing…"
+msgstr "Przygotowuję…"
+
+#: includes/UI/SiteBuilderPage.php:95
+#: includes/UI/SiteBuilderPage.php:152
+msgid "Prepare description"
+msgstr "Przygotuj opis"
+
+#: includes/UI/SiteBuilderPage.php:96
+msgid "Site type “Store” is selected — fill in the store data below."
+msgstr "Wybrano rodzaj „Sklep” — uzupełnij dane sklepu poniżej."
+
+#: includes/UI/SiteBuilderPage.php:97
+msgid "Enter a valid store country code (e.g. PL)."
+msgstr "Podaj prawidłowy kod kraju sklepu (np. PL)."
+
+#: includes/UI/SiteBuilderPage.php:98
+msgid "Enter a valid currency code (e.g. PLN)."
+msgstr "Podaj prawidłowy kod waluty (np. PLN)."
+
+#: includes/UI/SiteBuilderPage.php:99
+msgid "Add at least one product category."
+msgstr "Dodaj przynajmniej jedną kategorię produktów."
+
+#: includes/UI/SiteBuilderPage.php:100
+msgid "Add at least one product."
+msgstr "Dodaj przynajmniej jeden produkt."
+
+#: includes/UI/SiteBuilderPage.php:101
+msgid "Every product must have a name."
+msgstr "Każdy produkt musi mieć nazwę."
+
+#. translators: %s: literal token replaced client-side with the product name -- kept as %s so translators see a real placeholder
+#: includes/UI/SiteBuilderPage.php:103
+#, php-format
+msgid "Product “%s” has an invalid price."
+msgstr "Produkt „%s” ma nieprawidłową cenę."
+
+#. translators: %s: literal token replaced client-side with the product name -- kept as %s so translators see a real placeholder
+#: includes/UI/SiteBuilderPage.php:105
+#, php-format
+msgid "Product “%s” has no assigned category."
+msgstr "Produkt „%s” nie ma przypisanej kategorii."
+
+#: includes/UI/SiteBuilderPage.php:117
+msgid "Site Builder requires write tools to be enabled in Settings. Without them, the AI can only read the site."
+msgstr "Kreator wymaga włączenia narzędzi zapisu w zakładce Ustawienia. Bez nich AI może tylko czytać witrynę."
+
+#: includes/UI/SiteBuilderPage.php:122
+msgid "Describe the site you want to build. You’ll see the full action plan and approve it with one click — no step runs before that."
+msgstr "Opisz witrynę, którą chcesz zbudować. Zobaczysz pełny plan działań i zatwierdzisz go jednym kliknięciem — żaden krok nie wykona się wcześniej."
+
+#: includes/UI/SiteBuilderPage.php:144
+msgid "Describe the site in your own words"
+msgstr "Opisz witrynę własnymi słowami"
+
+#: includes/UI/SiteBuilderPage.php:146
+msgid "Build me a professional website for HydroMax, a plumbing company in Warsaw. Pages: Home, Services, About, Our Work, Contact. Add a contact form. Colors: navy blue and white."
+msgstr "Zbuduj mi profesjonalną stronę firmy hydraulicznej HydroMax w Warszawie. Strony: Start, Oferta, O nas, Realizacje, Kontakt. Dodaj formularz kontaktowy. Kolory granatowy i biały."
+
+#: includes/UI/SiteBuilderPage.php:149
+msgid "The AI will only prepare a DESCRIPTION of the site for you to review. Nothing will be installed or changed at this stage."
+msgstr "AI przygotuje wyłącznie OPIS witryny do Twojej akceptacji. Nic nie zostanie zainstalowane ani zmienione na tym etapie."
+
+#: includes/UI/SiteBuilderPage.php:158
+msgid "Service business"
+msgstr "Firma usługowa"
+
+#: includes/UI/SiteBuilderPage.php:159
+msgid "Landing page"
+msgstr "Landing page"
+
+#: includes/UI/SiteBuilderPage.php:160
+msgid "Portfolio"
+msgstr "Portfolio"
+
+#: includes/UI/SiteBuilderPage.php:161
+msgid "Restaurant"
+msgstr "Restauracja"
+
+#: includes/UI/SiteBuilderPage.php:162
+msgid "Blog"
+msgstr "Blog"
+
+#: includes/UI/SiteBuilderPage.php:170
+msgid "Business name"
+msgstr "Nazwa firmy"
+
+#: includes/UI/SiteBuilderPage.php:175
+msgid "Site type"
+msgstr "Rodzaj witryny"
+
+#: includes/UI/SiteBuilderPage.php:185
+msgid "Separate with commas. The first page will become the homepage."
+msgstr "Oddziel przecinkami. Pierwsza strona zostanie stroną główną."
+
+#: includes/UI/SiteBuilderPage.php:195
+msgid "Contact form"
+msgstr "Formularz kontaktowy"
+
+#: includes/UI/SiteBuilderPage.php:203
+msgid "Prepare plan"
+msgstr "Przygotuj plan"
+
+#: includes/UI/SiteBuilderPage.php:219
+msgid "Store details"
+msgstr "Dane sklepu"
+
+#: includes/UI/SiteBuilderPage.php:223
+msgid "Country (ISO code, e.g. PL)"
+msgstr "Kraj (kod ISO, np. PL)"
+
+#: includes/UI/SiteBuilderPage.php:228
+msgid "Currency (e.g. PLN)"
+msgstr "Waluta (np. PLN)"
+
+#: includes/UI/SiteBuilderPage.php:233
+msgid "Weight unit"
+msgstr "Jednostka wagi"
+
+#: includes/UI/SiteBuilderPage.php:241
+msgid "Dimension unit"
+msgstr "Jednostka wymiaru"
+
+#: includes/UI/SiteBuilderPage.php:250
+msgid "Categories"
+msgstr "Kategorie"
+
+#: includes/UI/SiteBuilderPage.php:252
+#: includes/UI/SiteBuilderPage.php:260
+msgid "Name"
+msgstr "Nazwa"
+
+#: includes/UI/SiteBuilderPage.php:256
+msgid "+ Add category"
+msgstr "+ Dodaj kategorię"
+
+#: includes/UI/SiteBuilderPage.php:258
+msgid "Products"
+msgstr "Produkty"
+
+#: includes/UI/SiteBuilderPage.php:261
+msgid "Price"
+msgstr "Cena"
+
+#: includes/UI/SiteBuilderPage.php:262
+msgid "Category"
+msgstr "Kategoria"
+
+#: includes/UI/SiteBuilderPage.php:266
+msgid "+ Add product"
+msgstr "+ Dodaj produkt"
+
+#: includes/UI/StatusPage.php:31
+msgid "Connection to DoSieci"
+msgstr "Połączenie z DoSieci"
+
+#: includes/UI/StatusPage.php:39
+msgid "Status"
+msgstr "Status"
+
+#: includes/UI/StatusPage.php:40
+msgid "Connected"
+msgstr "Połączono"
+
+#: includes/UI/StatusPage.php:43
+#: includes/UI/StatusPage.php:108
+msgid "Hub address"
+msgstr "Adres Hub"
+
+#: includes/UI/StatusPage.php:47
+msgid "Site ID"
+msgstr "Identyfikator witryny"
+
+#: includes/UI/StatusPage.php:51
+msgid "Key ID"
+msgstr "Identyfikator klucza"
+
+#: includes/UI/StatusPage.php:55
+msgid "Paired"
+msgstr "Sparowano"
+
+#: includes/UI/StatusPage.php:70
+msgid "The plugin never displays or returns this site’s signing secret. If you suspect it has leaked, ask DoSieci to revoke the key and pair the site again."
+msgstr "Sekret podpisujący tej witryny nigdy nie jest wyświetlany ani zwracany przez wtyczkę. Jeśli podejrzewasz jego wyciek, unieważnij klucz w panelu DoSieci i sparuj witrynę ponownie."
+
+#: includes/UI/StatusPage.php:77
+msgid "Disconnect this site"
+msgstr "Rozłącz tę witrynę"
+
+#: includes/UI/StatusPage.php:81
+msgid "Pair this site with DoSieci to use the AI credits from your DoSieci plan: no AI provider account or API key of your own is needed. DoSieci gives you a one-time pairing token; paste it below."
+msgstr "Sparuj tę witrynę z DoSieci, aby korzystać z kredytów AI Twojego planu DoSieci: nie potrzebujesz konta u dostawcy AI ani własnego klucza API. DoSieci przekazuje jednorazowy token parowania; wklej go poniżej."
+
+#. translators: 1: URL of the AI Operator page at dosieci.pl, 2: URL of the plugin settings screen
+#: includes/UI/StatusPage.php:87
+#, php-format
+msgid "<a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">How to get a pairing token</a>. Prefer your own AI key (WordPress AI connectors, OpenAI or Anthropic)? Choose it in the <a href=\"%2$s\">settings</a>; no pairing is needed then."
+msgstr "<a href=\"%1$s\" target=\"_blank\" rel=\"noopener\">Jak zdobyć token parowania</a>. Wolisz własny klucz AI (Łączniki AI WordPressa, OpenAI albo Anthropic)? Wybierz go w <a href=\"%2$s\">ustawieniach</a>; wtedy parowanie nie jest potrzebne."
+
+#: includes/UI/StatusPage.php:112
+msgid "Must start with https://"
+msgstr "Musi zaczynać się od https://"
+
+#: includes/UI/StatusPage.php:116
+msgid "Pairing token"
+msgstr "Token parowania"
+
+#: includes/UI/StatusPage.php:120
+msgid "The token works once and expires soon after it is issued."
+msgstr "Token jest jednorazowy i krótko ważny."
+
+#: includes/UI/StatusPage.php:125
+msgid "Connect to DoSieci"
+msgstr "Połącz z DoSieci"
+
