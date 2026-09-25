@@ -53,7 +53,7 @@ final class WriteToolFactory {
 		return array(
 			new ToolDefinition(
 				'create_post',
-				'Tworzy nową stronę lub wpis. Zwraca id i adres URL. Treść przyjmuje HTML lub bloki Gutenberga.',
+				__( 'Creates a new page or post. Returns its id and URL. Content accepts HTML or Gutenberg blocks.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -73,7 +73,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'update_post',
-				'Aktualizuje istniejącą stronę lub wpis (tytuł, treść, status, wyimek).',
+				__( 'Updates an existing page or post (title, content, status, excerpt).', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -92,7 +92,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'trash_post',
-				'Przenosi stronę lub wpis do kosza. Nie kasuje trwale — treść można przywrócić z kosza.',
+				__( 'Moves a page or post to the trash. Not a permanent delete — the content can be restored from the trash.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array( 'post_id' => array( 'type' => 'integer' ) ),
@@ -105,7 +105,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'set_site_option',
-				'Zmienia jedno ustawienie witryny z listy dozwolonych (nazwa, opis, strefa czasowa, odnośniki, komentarze, widoczność).',
+				__( 'Changes one site setting from the allowed list (title, description, timezone, permalinks, comments, visibility).', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -121,7 +121,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'set_homepage',
-				'Ustawia wskazaną stronę jako stronę główną witryny, opcjonalnie także stronę wpisów.',
+				__( 'Sets the given page as the site’s homepage, optionally also the posts page.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -137,7 +137,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'install_plugin',
-				'Instaluje wtyczkę z oficjalnego katalogu WordPress.org po jej slugu (np. "contact-form-7") i opcjonalnie ją aktywuje.',
+				__( 'Installs a plugin from the official WordPress.org directory by its slug (e.g. "contact-form-7") and optionally activates it.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -153,7 +153,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'activate_plugin',
-				'Aktywuje już zainstalowaną wtyczkę po jej slugu.',
+				__( 'Activates an already-installed plugin by its slug.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array( 'slug' => array( 'type' => 'string' ) ),
@@ -166,7 +166,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'deactivate_plugin',
-				'Dezaktywuje wtyczkę po jej slugu. Nie usuwa jej plików ani danych.',
+				__( 'Deactivates a plugin by its slug. Does not remove its files or data.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array( 'slug' => array( 'type' => 'string' ) ),
@@ -179,7 +179,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'install_theme',
-				'Instaluje motyw z oficjalnego katalogu WordPress.org po jego slugu (np. "twentytwentyfour") i opcjonalnie go włącza.',
+				__( 'Installs a theme from the official WordPress.org directory by its slug (e.g. "twentytwentyfour") and optionally activates it.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -195,7 +195,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'activate_theme',
-				'Włącza już zainstalowany motyw po jego slugu.',
+				__( 'Activates an already-installed theme by its slug.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array( 'slug' => array( 'type' => 'string' ) ),
@@ -208,7 +208,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'create_menu',
-				'Tworzy menu nawigacyjne z podanych pozycji (strony po id lub własne linki) i opcjonalnie przypisuje je do lokalizacji w motywie.',
+				__( 'Creates a navigation menu from the given items (pages by id or custom links) and optionally assigns it to a location in the theme.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -235,7 +235,7 @@ final class WriteToolFactory {
 			),
 			new ToolDefinition(
 				'create_term',
-				'Tworzy kategorię, tag lub inny termin taksonomii.',
+				__( 'Creates a category, tag or other taxonomy term.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -266,7 +266,7 @@ final class WriteToolFactory {
 		$postType = isset( $args['post_type'] ) ? (string) $args['post_type'] : 'page';
 
 		if ( ! in_array( $postType, array( 'page', 'post' ), true ) ) {
-			return $this->failure( 'Dozwolone typy to "page" i "post".' );
+			return $this->failure( __( 'Allowed types are "page" and "post".', 'dosieci-ai-operator' ) );
 		}
 
 		// wp_insert_post() with wp_error => true reports WHY it refused,
@@ -307,14 +307,14 @@ final class WriteToolFactory {
 		$post   = get_post( $postId );
 
 		if ( ! $post instanceof \WP_Post ) {
-			return $this->failure( sprintf( 'Nie ma wpisu o id %d.', $postId ) );
+			return $this->failure( sprintf( /* translators: %d: post id */ __( 'There is no post with id %d.', 'dosieci-ai-operator' ), $postId ) );
 		}
 
 		// The tool-level capability (edit_pages) is not enough on its own:
 		// it does not imply the right to edit THIS post, which may belong
 		// to somebody else or be locked.
 		if ( ! current_user_can( 'edit_post', $postId ) ) {
-			return $this->failure( 'Bieżący użytkownik nie może edytować tego wpisu.' );
+			return $this->failure( __( 'The current user cannot edit this post.', 'dosieci-ai-operator' ) );
 		}
 
 		$update = array( 'ID' => $postId );
@@ -333,7 +333,7 @@ final class WriteToolFactory {
 		}
 
 		if ( 1 === count( $update ) ) {
-			return $this->failure( 'Nie podano żadnego pola do zmiany.' );
+			return $this->failure( __( 'No field to change was given.', 'dosieci-ai-operator' ) );
 		}
 
 		$result = wp_update_post( $update, true );
@@ -361,11 +361,11 @@ final class WriteToolFactory {
 		$post   = get_post( $postId );
 
 		if ( ! $post instanceof \WP_Post ) {
-			return $this->failure( sprintf( 'Nie ma wpisu o id %d.', $postId ) );
+			return $this->failure( sprintf( /* translators: %d: post id */ __( 'There is no post with id %d.', 'dosieci-ai-operator' ), $postId ) );
 		}
 
 		if ( ! current_user_can( 'delete_post', $postId ) ) {
-			return $this->failure( 'Bieżący użytkownik nie może usunąć tego wpisu.' );
+			return $this->failure( __( 'The current user cannot delete this post.', 'dosieci-ai-operator' ) );
 		}
 
 		// Trash, never wp_delete_post( force = true ): the human who
@@ -373,7 +373,7 @@ final class WriteToolFactory {
 		$result = wp_trash_post( $postId );
 
 		if ( ! $result ) {
-			return $this->failure( 'WordPress odmówił przeniesienia wpisu do kosza.' );
+			return $this->failure( __( 'WordPress refused to move the post to the trash.', 'dosieci-ai-operator' ) );
 		}
 
 		return array(
@@ -429,13 +429,13 @@ final class WriteToolFactory {
 		$page   = get_post( $pageId );
 
 		if ( ! $page instanceof \WP_Post || 'page' !== $page->post_type ) {
-			return $this->failure( sprintf( 'Id %d nie wskazuje na stronę.', $pageId ) );
+			return $this->failure( sprintf( /* translators: %d: post id */ __( 'Id %d does not point to a page.', 'dosieci-ai-operator' ), $pageId ) );
 		}
 
 		if ( 'publish' !== $page->post_status ) {
 			// A draft set as the front page produces a blank site for
 			// logged-out visitors, which looks like an outage.
-			return $this->failure( 'Strona główna musi być opublikowana. Opublikuj ją najpierw.' );
+			return $this->failure( __( 'The homepage must be published. Publish it first.', 'dosieci-ai-operator' ) );
 		}
 
 		update_option( 'show_on_front', 'page' );
@@ -468,7 +468,7 @@ final class WriteToolFactory {
 		$slug = $this->slug( $args['slug'] ?? '' );
 
 		if ( '' === $slug ) {
-			return $this->failure( 'Nieprawidłowy slug wtyczki.' );
+			return $this->failure( __( 'Invalid plugin slug.', 'dosieci-ai-operator' ) );
 		}
 
 		$this->requireUpgraderFiles();
@@ -485,7 +485,7 @@ final class WriteToolFactory {
 			);
 
 			if ( is_wp_error( $api ) ) {
-				return $this->failure( sprintf( 'Nie znaleziono wtyczki "%s" w katalogu WordPress.org: %s', $slug, $api->get_error_message() ) );
+				return $this->failure( sprintf( /* translators: 1: plugin slug, 2: error message from WordPress.org */ __( 'Plugin "%1\$s" was not found in the WordPress.org directory: %2\$s', 'dosieci-ai-operator' ), $slug, $api->get_error_message() ) );
 			}
 
 			// The package URL comes from the official API response, never
@@ -499,14 +499,14 @@ final class WriteToolFactory {
 			}
 
 			if ( true !== $result ) {
-				return $this->failure( 'Instalacja wtyczki nie powiodła się.' );
+				return $this->failure( __( 'The plugin installation failed.', 'dosieci-ai-operator' ) );
 			}
 
 			$existing = $this->findPluginFile( $slug );
 		}
 
 		if ( null === $existing ) {
-			return $this->failure( 'Wtyczka zainstalowana, ale nie udało się odnaleźć jej pliku głównego.' );
+			return $this->failure( __( 'The plugin was installed, but its main file could not be found.', 'dosieci-ai-operator' ) );
 		}
 
 		$activated = false;
@@ -545,7 +545,7 @@ final class WriteToolFactory {
 		$file = $this->findPluginFile( $slug );
 
 		if ( null === $file ) {
-			return $this->failure( sprintf( 'Wtyczka "%s" nie jest zainstalowana.', $slug ) );
+			return $this->failure( sprintf( /* translators: %s: plugin slug */ __( 'Plugin "%s" is not installed.', 'dosieci-ai-operator' ), $slug ) );
 		}
 
 		if ( is_plugin_active( $file ) ) {
@@ -580,14 +580,14 @@ final class WriteToolFactory {
 		$file = $this->findPluginFile( $slug );
 
 		if ( null === $file ) {
-			return $this->failure( sprintf( 'Wtyczka "%s" nie jest zainstalowana.', $slug ) );
+			return $this->failure( sprintf( /* translators: %s: plugin slug */ __( 'Plugin "%s" is not installed.', 'dosieci-ai-operator' ), $slug ) );
 		}
 
 		// Refusing to deactivate ourselves is not vanity: doing so would
 		// kill the request mid-flight and leave the chat with no way to
 		// report what happened.
 		if ( str_contains( $file, 'dosieci-ai-operator' ) ) {
-			return $this->failure( 'AI Operator nie może dezaktywować sam siebie.' );
+			return $this->failure( __( 'AI Operator cannot deactivate itself.', 'dosieci-ai-operator' ) );
 		}
 
 		deactivate_plugins( $file );
@@ -607,7 +607,7 @@ final class WriteToolFactory {
 		$slug = $this->slug( $args['slug'] ?? '' );
 
 		if ( '' === $slug ) {
-			return $this->failure( 'Nieprawidłowy slug motywu.' );
+			return $this->failure( __( 'Invalid theme slug.', 'dosieci-ai-operator' ) );
 		}
 
 		$this->requireUpgraderFiles();
@@ -622,7 +622,7 @@ final class WriteToolFactory {
 			);
 
 			if ( is_wp_error( $api ) ) {
-				return $this->failure( sprintf( 'Nie znaleziono motywu "%s" w katalogu WordPress.org: %s', $slug, $api->get_error_message() ) );
+				return $this->failure( sprintf( /* translators: 1: theme slug, 2: error message from WordPress.org */ __( 'Theme "%1\$s" was not found in the WordPress.org directory: %2\$s', 'dosieci-ai-operator' ), $slug, $api->get_error_message() ) );
 			}
 
 			$upgrader = new \Theme_Upgrader( new \Automatic_Upgrader_Skin() );
@@ -633,14 +633,14 @@ final class WriteToolFactory {
 			}
 
 			if ( true !== $result ) {
-				return $this->failure( 'Instalacja motywu nie powiodła się.' );
+				return $this->failure( __( 'The theme installation failed.', 'dosieci-ai-operator' ) );
 			}
 		}
 
 		$theme = wp_get_theme( $slug );
 
 		if ( ! $theme->exists() ) {
-			return $this->failure( 'Motyw zainstalowany, ale nie udało się go odnaleźć.' );
+			return $this->failure( __( 'The theme was installed, but could not be found.', 'dosieci-ai-operator' ) );
 		}
 
 		$activated = false;
@@ -696,7 +696,7 @@ final class WriteToolFactory {
 		$menuId   = $existing ? (int) $existing->term_id : (int) wp_create_nav_menu( $name );
 
 		if ( is_wp_error( $menuId ) || 0 === $menuId ) {
-			return $this->failure( 'Nie udało się utworzyć menu.' );
+			return $this->failure( __( 'Could not create the menu.', 'dosieci-ai-operator' ) );
 		}
 
 		// What the menu already links, so a second call updates those entries
@@ -780,7 +780,7 @@ final class WriteToolFactory {
 					'menu_id'             => $menuId,
 					'items_added'         => $added,
 					'assigned_location'   => null,
-					'location_error'      => sprintf( 'Motyw nie ma lokalizacji "%s".', $location ),
+					'location_error'      => sprintf( /* translators: %s: theme navigation menu location */ __( 'The theme has no “%s” location.', 'dosieci-ai-operator' ), $location ),
 					'available_locations' => array_keys( $registered ),
 				);
 			}
@@ -810,7 +810,7 @@ final class WriteToolFactory {
 		$taxonomy = isset( $args['taxonomy'] ) ? (string) $args['taxonomy'] : 'category';
 
 		if ( ! taxonomy_exists( $taxonomy ) ) {
-			return $this->failure( sprintf( 'Taksonomia "%s" nie istnieje.', $taxonomy ) );
+			return $this->failure( sprintf( /* translators: %s: taxonomy name */ __( 'The taxonomy "%s" does not exist.', 'dosieci-ai-operator' ), $taxonomy ) );
 		}
 
 		$result = wp_insert_term(

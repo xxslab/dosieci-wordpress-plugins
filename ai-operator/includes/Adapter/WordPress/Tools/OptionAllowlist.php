@@ -31,64 +31,64 @@ final class OptionAllowlist {
 	public static function all(): array {
 		return array(
 			'blogname' => array(
-				'label' => 'Nazwa witryny',
+				'label' => __( 'Site title', 'dosieci-ai-operator' ),
 				'type'  => 'string',
 				'max'   => 200,
 			),
 			'blogdescription' => array(
-				'label' => 'Opis / tagline witryny',
+				'label' => __( 'Site tagline / description', 'dosieci-ai-operator' ),
 				'type'  => 'string',
 				'max'   => 300,
 			),
 			'start_of_week' => array(
-				'label' => 'Pierwszy dzień tygodnia',
+				'label' => __( 'Week starts on', 'dosieci-ai-operator' ),
 				'type'  => 'int',
 				'min'   => 0,
 				'max'   => 6,
 			),
 			'timezone_string' => array(
-				'label' => 'Strefa czasowa',
+				'label' => __( 'Timezone', 'dosieci-ai-operator' ),
 				'type'  => 'timezone',
 			),
 			'date_format' => array(
-				'label' => 'Format daty',
+				'label' => __( 'Date format', 'dosieci-ai-operator' ),
 				'type'  => 'string',
 				'max'   => 40,
 			),
 			'time_format' => array(
-				'label' => 'Format godziny',
+				'label' => __( 'Time format', 'dosieci-ai-operator' ),
 				'type'  => 'string',
 				'max'   => 40,
 			),
 			'posts_per_page' => array(
-				'label' => 'Wpisów na stronę',
+				'label' => __( 'Posts per page', 'dosieci-ai-operator' ),
 				'type'  => 'int',
 				'min'   => 1,
 				'max'   => 100,
 			),
 			'default_comment_status' => array(
-				'label' => 'Domyślny status komentarzy',
+				'label' => __( 'Default comment status', 'dosieci-ai-operator' ),
 				'type'  => 'enum',
 				'values' => array( 'open', 'closed' ),
 			),
 			'comment_registration' => array(
-				'label' => 'Komentarze tylko dla zalogowanych',
+				'label' => __( 'Comments require a logged-in user', 'dosieci-ai-operator' ),
 				'type'  => 'bool',
 			),
 			'comment_moderation' => array(
-				'label' => 'Moderacja komentarzy',
+				'label' => __( 'Comment moderation', 'dosieci-ai-operator' ),
 				'type'  => 'bool',
 			),
 			'blog_public' => array(
-				'label' => 'Widoczność dla wyszukiwarek',
+				'label' => __( 'Search engine visibility', 'dosieci-ai-operator' ),
 				'type'  => 'bool',
 			),
 			'permalink_structure' => array(
-				'label' => 'Struktura bezpośrednich odnośników',
+				'label' => __( 'Permalink structure', 'dosieci-ai-operator' ),
 				'type'  => 'permalink',
 			),
 			'show_on_front' => array(
-				'label' => 'Co pokazywać na stronie głównej',
+				'label' => __( 'What to show on the front page', 'dosieci-ai-operator' ),
 				'type'  => 'enum',
 				'values' => array( 'posts', 'page' ),
 			),
@@ -119,7 +119,8 @@ final class OptionAllowlist {
 			return array(
 				'ok'    => false,
 				'value' => null,
-				'error' => sprintf( 'Opcja "%s" nie jest dozwolona do zapisu.', $option ),
+				/* translators: %s: option name */
+				'error' => sprintf( esc_html__( 'The option “%s” is not allowed to be written.', 'dosieci-ai-operator' ), esc_html( $option ) ),
 			);
 		}
 
@@ -127,18 +128,20 @@ final class OptionAllowlist {
 			case 'string':
 				$clean = sanitize_text_field( (string) $value );
 				if ( strlen( $clean ) > (int) $rules['max'] ) {
-					return self::error( sprintf( 'Wartość jest dłuższa niż %d znaków.', (int) $rules['max'] ) );
+					/* translators: %d: maximum length in characters */
+					return self::error( sprintf( esc_html__( 'The value is longer than %d characters.', 'dosieci-ai-operator' ), (int) $rules['max'] ) );
 				}
 
 				return self::ok( $clean );
 
 			case 'int':
 				if ( ! is_numeric( $value ) ) {
-					return self::error( 'Oczekiwano liczby.' );
+					return self::error( esc_html__( 'A number was expected.', 'dosieci-ai-operator' ) );
 				}
 				$int = (int) $value;
 				if ( $int < (int) $rules['min'] || $int > (int) $rules['max'] ) {
-					return self::error( sprintf( 'Wartość musi mieścić się w zakresie %d-%d.', (int) $rules['min'], (int) $rules['max'] ) );
+					/* translators: 1: minimum value, 2: maximum value */
+					return self::error( sprintf( esc_html__( 'The value must be between %1$d and %2$d.', 'dosieci-ai-operator' ), (int) $rules['min'], (int) $rules['max'] ) );
 				}
 
 				return self::ok( $int );
@@ -151,7 +154,8 @@ final class OptionAllowlist {
 			case 'enum':
 				$clean = (string) $value;
 				if ( ! in_array( $clean, (array) $rules['values'], true ) ) {
-					return self::error( sprintf( 'Dozwolone wartości: %s.', implode( ', ', (array) $rules['values'] ) ) );
+					/* translators: %s: comma-separated list of allowed values */
+					return self::error( sprintf( esc_html__( 'Allowed values: %s.', 'dosieci-ai-operator' ), esc_html( implode( ', ', (array) $rules['values'] ) ) ) );
 				}
 
 				return self::ok( $clean );
@@ -159,7 +163,7 @@ final class OptionAllowlist {
 			case 'timezone':
 				$clean = (string) $value;
 				if ( ! in_array( $clean, timezone_identifiers_list(), true ) ) {
-					return self::error( 'Nieznana strefa czasowa.' );
+					return self::error( esc_html__( 'Unknown timezone.', 'dosieci-ai-operator' ) );
 				}
 
 				return self::ok( $clean );
@@ -177,13 +181,13 @@ final class OptionAllowlist {
 				// interpolated into rewrite rules, so an unconstrained
 				// value is not merely a cosmetic setting.
 				if ( 1 !== preg_match( '#^/[A-Za-z0-9%/_\-\.]*$#', $clean ) ) {
-					return self::error( 'Nieprawidłowa struktura odnośników.' );
+					return self::error( esc_html__( 'Invalid permalink structure.', 'dosieci-ai-operator' ) );
 				}
 
 				return self::ok( $clean );
 		}
 
-		return self::error( 'Nieobsługiwany typ opcji.' );
+		return self::error( esc_html__( 'Unsupported option type.', 'dosieci-ai-operator' ) );
 	}
 
 	private static function truthy( mixed $value ): bool {
