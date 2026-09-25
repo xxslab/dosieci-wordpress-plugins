@@ -87,6 +87,7 @@ final class Plugin {
 	}
 
 	public function boot(): void {
+		// phpcs:ignore PluginCheck.CodeAnalysis.DiscouragedFunctions.load_plugin_textdomainFound -- this call is what makes the bundled languages/*-pl_PL.mo load at all; WordPress.org's own auto-loading (the reason this is discouraged) only applies to language packs it distributes, not to translations shipped inside the plugin.
 		load_plugin_textdomain( 'dosieci-ai-operator', false, dirname( plugin_basename( DOSIECI_AI_OPERATOR_FILE ) ) . '/languages' );
 
 		if ( is_admin() ) {

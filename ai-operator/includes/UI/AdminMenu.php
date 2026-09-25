@@ -10,11 +10,11 @@ use DoSieci\AiOperator\Plugin;
  * The wp-admin surface.
  *
  * Only the screens with a real backend behind them are registered. The
- * architecture document also lists "Zadania" (Tasks) and "Harmonogramy"
- * (Schedules); those are deliberately ABSENT here rather than added as
- * empty placeholders -- shipping a menu item that opens an empty page
- * misrepresents what the product does, and this repository's release
- * discipline treats that as worse than a shorter menu.
+ * architecture document also lists "Tasks" and "Schedules"; those are
+ * deliberately ABSENT here rather than added as empty placeholders --
+ * shipping a menu item that opens an empty page misrepresents what the
+ * product does, and this repository's release discipline treats that as
+ * worse than a shorter menu.
  *
  * Every page requires 'manage_options'. That is the outer gate; individual
  * tools additionally require their own, narrower capability at execution
@@ -47,12 +47,12 @@ final class AdminMenu {
 		);
 
 		$pages = array(
-			self::SLUG              => array( __( 'Czat', 'dosieci-ai-operator' ), array( $this, 'renderChat' ) ),
-			self::SLUG . '-builder' => array( __( 'Kreator witryny', 'dosieci-ai-operator' ), array( $this, 'renderSiteBuilder' ) ),
-			self::SLUG . '-status'  => array( __( 'Połączenie', 'dosieci-ai-operator' ), array( $this, 'renderStatus' ) ),
-			self::SLUG . '-history' => array( __( 'Historia', 'dosieci-ai-operator' ), array( $this, 'renderHistory' ) ),
-			self::SLUG . '-activity'=> array( __( 'Aktywność', 'dosieci-ai-operator' ), array( $this, 'renderActivity' ) ),
-			self::SLUG . '-settings'=> array( __( 'Ustawienia', 'dosieci-ai-operator' ), array( $this, 'renderSettings' ) ),
+			self::SLUG              => array( __( 'Chat', 'dosieci-ai-operator' ), array( $this, 'renderChat' ) ),
+			self::SLUG . '-builder' => array( __( 'Site Builder', 'dosieci-ai-operator' ), array( $this, 'renderSiteBuilder' ) ),
+			self::SLUG . '-status'  => array( __( 'Connection', 'dosieci-ai-operator' ), array( $this, 'renderStatus' ) ),
+			self::SLUG . '-history' => array( __( 'History', 'dosieci-ai-operator' ), array( $this, 'renderHistory' ) ),
+			self::SLUG . '-activity'=> array( __( 'Activity', 'dosieci-ai-operator' ), array( $this, 'renderActivity' ) ),
+			self::SLUG . '-settings'=> array( __( 'Settings', 'dosieci-ai-operator' ), array( $this, 'renderSettings' ) ),
 		);
 
 		foreach ( $pages as $slug => $page ) {
@@ -114,18 +114,18 @@ final class AdminMenu {
 				// nonce action.
 				'builderNonce' => wp_create_nonce( SiteBuilderAjaxController::NONCE_ACTION ),
 				'strings' => array(
-					'youLabel'      => __( 'Ty', 'dosieci-ai-operator' ),
+					'youLabel'      => __( 'You', 'dosieci-ai-operator' ),
 					'operatorLabel' => __( 'Operator', 'dosieci-ai-operator' ),
-					'thinking'      => __( 'Operator myśli…', 'dosieci-ai-operator' ),
-					'applying'      => __( 'Wykonuję zatwierdzoną zmianę…', 'dosieci-ai-operator' ),
-					'error'         => __( 'Wystąpił błąd.', 'dosieci-ai-operator' ),
-					'toolRan'       => __( 'Wykonano narzędzie', 'dosieci-ai-operator' ),
-					'toolDenied'    => __( 'Odmówiono narzędzia', 'dosieci-ai-operator' ),
-					'confirmNeeded' => __( 'Operator prosi o zgodę na zmianę.', 'dosieci-ai-operator' ),
-					'confirmTitle'  => __( 'Zatwierdź zmianę na witrynie', 'dosieci-ai-operator' ),
-					'confirmApprove'=> __( 'Zatwierdź i wykonaj', 'dosieci-ai-operator' ),
-					'confirmReject' => __( 'Odrzuć', 'dosieci-ai-operator' ),
-					'confirmDestructive' => __( 'Uwaga: to działanie usuwa treść. Można ją przywrócić z kosza.', 'dosieci-ai-operator' ),
+					'thinking'      => __( 'The operator is thinking…', 'dosieci-ai-operator' ),
+					'applying'      => __( 'Applying the approved change…', 'dosieci-ai-operator' ),
+					'error'         => __( 'Something went wrong.', 'dosieci-ai-operator' ),
+					'toolRan'       => __( 'Tool ran', 'dosieci-ai-operator' ),
+					'toolDenied'    => __( 'Tool denied', 'dosieci-ai-operator' ),
+					'confirmNeeded' => __( 'The operator is asking for approval to make a change.', 'dosieci-ai-operator' ),
+					'confirmTitle'  => __( 'Approve this change to the site', 'dosieci-ai-operator' ),
+					'confirmApprove'=> __( 'Approve and run', 'dosieci-ai-operator' ),
+					'confirmReject' => __( 'Reject', 'dosieci-ai-operator' ),
+					'confirmDestructive' => __( 'Note: this action removes content. It can be restored from the trash.', 'dosieci-ai-operator' ),
 				),
 			)
 		);
@@ -133,7 +133,7 @@ final class AdminMenu {
 
 	private function assertCapability(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'Brak uprawnień.', 'dosieci-ai-operator' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You are not allowed to do this.', 'dosieci-ai-operator' ), '', array( 'response' => 403 ) );
 		}
 	}
 
@@ -168,7 +168,7 @@ final class AdminMenu {
 	}
 
 	/**
-	 * Handles the "Połącz z DoSieci" form: exchanges the one-time pairing
+	 * Handles the "Connect to DoSieci" form: exchanges the one-time pairing
 	 * token for this installation's permanent identity.
 	 */
 	public function handlePairing(): void {
@@ -179,7 +179,7 @@ final class AdminMenu {
 		$token  = isset( $_POST['pairing_token'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['pairing_token'] ) ) : '';
 
 		if ( '' === $hubUrl || '' === $token ) {
-			$this->redirectToStatus( 'error', __( 'Podaj adres Hub oraz token parowania.', 'dosieci-ai-operator' ) );
+			$this->redirectToStatus( 'error', __( 'Enter both the Hub address and the pairing token.', 'dosieci-ai-operator' ) );
 		}
 
 		try {
@@ -188,10 +188,10 @@ final class AdminMenu {
 		} catch ( \Throwable $e ) {
 			// The exception text can name the Hub error code but never a
 			// credential -- the token the user typed is not echoed back.
-			$this->redirectToStatus( 'error', $e->getMessage() );
+			$this->redirectToStatus( 'error', wp_specialchars_decode( $e->getMessage(), ENT_QUOTES ) );
 		}
 
-		$this->redirectToStatus( 'success', __( 'Połączono z DoSieci.', 'dosieci-ai-operator' ) );
+		$this->redirectToStatus( 'success', __( 'Connected to DoSieci.', 'dosieci-ai-operator' ) );
 	}
 
 	public function handleDisconnect(): void {
@@ -202,7 +202,7 @@ final class AdminMenu {
 
 		$this->redirectToStatus(
 			'success',
-			__( 'Rozłączono lokalnie. Pamiętaj, aby unieważnić klucz tej witryny również w panelu DoSieci.', 'dosieci-ai-operator' )
+			__( 'Disconnected locally. Remember to also revoke this site’s key in the DoSieci panel.', 'dosieci-ai-operator' )
 		);
 	}
 

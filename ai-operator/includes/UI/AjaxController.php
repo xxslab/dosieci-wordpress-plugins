@@ -45,9 +45,10 @@ final class AjaxController {
 	public function handleChat(): void {
 		$this->assertAllowed();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in assertAllowed().
 		$message = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( (string) $_POST['message'] ) ) : '';
 		if ( '' === $message ) {
-			wp_send_json_error( array( 'message' => __( 'Pusta wiadomość.', 'dosieci-ai-operator' ) ), 400 );
+			wp_send_json_error( array( 'message' => __( 'The message is empty.', 'dosieci-ai-operator' ) ), 400 );
 		}
 
 		$this->respond(
@@ -79,13 +80,14 @@ final class AjaxController {
 		if ( null === $pending ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Nie ma oczekującej akcji do zatwierdzenia.', 'dosieci-ai-operator' ),
+					'message' => __( 'There is no pending action to approve.', 'dosieci-ai-operator' ),
 					'code'    => 'no_pending_action',
 				),
 				409
 			);
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in assertAllowed().
 		$toolUseId = isset( $_POST['tool_use_id'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['tool_use_id'] ) ) : '';
 
 		if ( ! hash_equals( (string) $pending['tool_use_id'], $toolUseId ) ) {
@@ -94,14 +96,15 @@ final class AjaxController {
 			// looking at.
 			wp_send_json_error(
 				array(
-					'message' => __( 'Ta akcja jest już nieaktualna. Odśwież stronę.', 'dosieci-ai-operator' ),
+					'message' => __( 'This action is out of date. Reload the page.', 'dosieci-ai-operator' ),
 					'code'    => 'stale_pending_action',
 				),
 				409
 			);
 		}
 
-		$approved = isset( $_POST['approved'] ) && '1' === (string) $_POST['approved'];
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified in assertAllowed().
+		$approved = isset( $_POST['approved'] ) && '1' === sanitize_text_field( wp_unslash( (string) $_POST['approved'] ) );
 
 		$this->clearPending();
 
@@ -135,7 +138,7 @@ final class AjaxController {
 			// inline, never a fatal.
 			wp_send_json_error(
 				array(
-					'message'   => $this->humanise( $e ),
+					'message'   => ErrorMessages::forCodeOrGeneric( $e->errorCode ),
 					'code'      => $e->errorCode,
 					'retryable' => $e->retryable,
 				),
@@ -144,7 +147,7 @@ final class AjaxController {
 		} catch ( TransportException $e ) {
 			wp_send_json_error(
 				array(
-					'message'   => __( 'Nie udało się połączyć z usługą AI. Sprawdź połączenie sieciowe witryny.', 'dosieci-ai-operator' ),
+					'message'   => ErrorMessages::forCodeOrGeneric( 'transport_error' ),
 					'code'      => 'transport_error',
 					'retryable' => true,
 				),
@@ -179,25 +182,8 @@ final class AjaxController {
 		check_ajax_referer( self::NONCE_ACTION, 'nonce' );
 
 		if ( ! current_user_can( AdminMenu::CAPABILITY ) ) {
-			wp_send_json_error( array( 'message' => __( 'Brak uprawnień.', 'dosieci-ai-operator' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not allowed to do this.', 'dosieci-ai-operator' ) ), 403 );
 		}
-	}
-
-	private function humanise( HubException $e ): string {
-		return match ( $e->errorCode ) {
-			'insufficient_credits'   => __( 'Wyczerpano kredyty AI w Twoim planie DoSieci. Doładuj je w panelu DoSieci lub przełącz wtyczkę na własny klucz API w Ustawieniach.', 'dosieci-ai-operator' ),
-			'not_connected'          => __( 'Ta witryna nie jest połączona z DoSieci. Przejdź do zakładki Połączenie albo ustaw własny klucz API.', 'dosieci-ai-operator' ),
-			'site_not_active'        => __( 'Połączenie tej witryny zostało unieważnione. Sparuj ją ponownie.', 'dosieci-ai-operator' ),
-			'byok_key_missing'       => __( 'Wybrano własnego dostawcę AI, ale nie zapisano klucza API. Uzupełnij go w Ustawieniach.', 'dosieci-ai-operator' ),
-			'byok_key_rejected'      => __( 'Dostawca AI odrzucił Twój klucz API. Sprawdź, czy jest poprawny i aktywny.', 'dosieci-ai-operator' ),
-			'byok_quota_exhausted'   => __( 'Twoje konto u dostawcy AI nie ma środków. Doładuj je po stronie dostawcy.', 'dosieci-ai-operator' ),
-			'provider_rate_limited'  => __( 'Zbyt wiele zapytań do modelu. Spróbuj ponownie za chwilę.', 'dosieci-ai-operator' ),
-			'provider_bad_request'   => __( 'Dostawca AI odrzucił zapytanie. Sprawdź nazwę modelu w Ustawieniach.', 'dosieci-ai-operator' ),
-			'provider_timeout',
-			'provider_unavailable'   => __( 'Model AI jest chwilowo niedostępny. Spróbuj ponownie za chwilę.', 'dosieci-ai-operator' ),
-			'ai_gateway_misconfigured' => __( 'Brama AI po stronie DoSieci jest niepoprawnie skonfigurowana. Skontaktuj się ze wsparciem.', 'dosieci-ai-operator' ),
-			default                  => __( 'Błąd komunikacji z usługą AI.', 'dosieci-ai-operator' ),
-		};
 	}
 
 	/**
