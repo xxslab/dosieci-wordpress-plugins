@@ -16,7 +16,7 @@ Hub](https://github.com/xxslab/Laravel-License-Plugin-Hub-WP-AI-Operator)
 | DoSieci SEO Doctor | `seo-doctor-free` | `dosieci-seo-doctor` | 1.0.0 | ✅ gotowa na WordPress.org | 22 ✅ |
 | DoSieci Translator | `translator-free` | `dosieci-translator` | 1.0.0 | ✅ gotowa na WordPress.org | 13 ✅ |
 | DoSieci eBay Connector | `ebay-connector-free` | `dosieci-ebay-connector` | 1.0.0 | ✅ gotowa na WordPress.org | 14 ✅ |
-| DoSieci AI Operator | `ai-operator` | — | 1.2.0-dev | 🧪 rozwojowa — patrz [niżej](#dosieci-ai-operator-120-dev) | 330 ✅ |
+| DoSieci AI Operator | `ai-operator` | — | 1.2.0-dev | ✅ EN+PL, 0 błędów Plugin Check — patrz [niżej](#dosieci-ai-operator-120-dev) | 336 ✅ |
 | `*-pro` (6 wtyczek) | `*-pro` | — | 0.0.1-dev | 🚧 puste szkielety, bez logiki | — |
 
 Wtyczki darmowe mają angielskie teksty źródłowe (wymóg WordPress.org) i
@@ -90,10 +90,48 @@ SEO Doctor wymuszał odpowiedzi po polsku. Szczegóły w historii commitów.
 Na `master` monorepo Huba ta wtyczka ma 1.1.0; tu jest wersja z niescalonego
 brancha `claude/ai-operator-site-builder-1.2` (commit `f74efe9`), bo to ścisłe
 rozszerzenie 1.1.0 (tryb planu zbiorczego z rollbackiem, kreator sklepu
-WooCommerce), 330/330 testów zielonych. Nieukończone: import mediów, adapter
-Elementora, import demo motywu. Wymaga jeszcze domknięcia trybu „klucz
-DoSieci przez Hub” i BYOK (w tym Łączników WordPressa 7.0+) oraz testu na
-stagingu, zanim trafi do klientów.
+WooCommerce). Nieukończone: import mediów, adapter Elementora, import demo
+motywu.
+
+Stan po przejściu 2026-09-25 (gałąź `ai-operator-release`, commity od
+`6c9a662` do `ab4a4ea`, w tym 5 commitów `worktree-agent-afce099efccdf7dcf`
+scalonych osobnym subagentem dla `includes/Domain/SiteBuilder/**` i
+`includes/Adapter/WordPress/SiteBuilder/**`):
+
+- **Trzy tryby dostawcy AI**, wybierane w Ustawieniach: **DoSieci Hub**
+  (domyślny, kredyty z planu), **Łączniki AI WordPressa** (nowość — BYOK
+  przez `wp_ai_client_prompt()` WordPressa 7.0+, klucz trzyma i zarządza nim
+  sam WordPress w Ustawienia → Łączniki), i bezpośredni **BYOK**
+  OpenAI/Anthropic z własnym kluczem w bazie wtyczki. Zweryfikowane
+  end-to-end na testbedzie (parowanie z lokalnym Hubem, wywołanie narzędzia,
+  zatwierdzenie, zapis do WordPressa) przed jednym z resetów środowiska;
+  tryb Łączników zweryfikowany ponownie po scaleniu z lokalnym fałszywym
+  OpenAI.
+- **Angielskie teksty źródłowe w całej wtyczce** (wymóg WordPress.org) +
+  dołączone tłumaczenie polskie (`languages/dosieci-ai-operator-pl_PL.po/
+  .mo/.l10n.php`, 526 komunikatów), zweryfikowane na żywo przełączeniem
+  testbedu na `pl_PL`.
+- **Plugin Check 2.1.0**: **0 błędów** (start tej rundy: ~137 wpisów, z tego
+  ~99 błędów). Zostało 11 ostrzeżeń, wszystkie świadome: bezpośrednie
+  zapytania do własnych tabel wtyczki (log audytowy, plan Site Buildera,
+  diagnostyka tylko do odczytu) i bezpośrednia integracja z Anthropic/OpenAI
+  w trybach BYOK (zapasowa wobec Łączników WordPressa).
+- Przy okazji znaleziony i naprawiony **prawdziwy błąd runtime**: literalny
+  `\` przed `$` w dwóch formatach `sprintf()` (`WriteToolFactory`) powodował
+  `Uncaught ValueError` przy każdej próbie instalacji nieistniejącego sluga
+  wtyczki/motywu z WordPress.org — wychwycony dopiero przez generowanie
+  `.pot`/`.po` i walidację placeholderów, nie przez istniejące testy.
+- `uninstall.php` sprząta teraz też tabele i opcje Site Buildera (wcześniej
+  czyścił tylko log audytowy i opcje z wersji 1.0).
+- 336/336 testów PHPUnit, 8/8 testów Node (`assets/site-builder.js`).
+
+Wymaga jeszcze przed trafieniem do klientów: testu end-to-end na prawdziwym
+stagingu Huba (license-staging.dosieci.pl) z realnym parowaniem i realnym
+kluczem Anthropic — poprzednia weryfikacja szła przez lokalny fałszywy Hub w
+scratchpadzie, który padł ofiarą resetu środowiska w trakcie tej rundy;
+decyzji, czy/kiedy zgłaszać na WordPress.org (płatna/BYOK wtyczka — inny
+proces niż sześć darmowych powyżej) i podbicia wersji z `1.2.0-dev` na
+`1.2.0` przy realnym wydaniu.
 
 ## Pochodzenie
 
