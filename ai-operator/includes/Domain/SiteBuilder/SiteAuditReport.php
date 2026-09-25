@@ -50,11 +50,17 @@ final class SiteAuditReport {
 		$failed = count( $this->failures() );
 
 		if ( 0 === $failed ) {
-			return sprintf( 'Audyt końcowy: %d/%d kontroli zaliczonych.', $total, $total );
+			return sprintf(
+				/* translators: %d: total number of checks, repeated as both passed and total */
+				__( 'Final audit: %1$d/%2$d checks passed.', 'dosieci-ai-operator' ),
+				$total,
+				$total
+			);
 		}
 
 		return sprintf(
-			'Audyt końcowy: %d z %d kontroli nie powiodło się — %s',
+			/* translators: 1: number of failed checks, 2: total number of checks, 3: semicolon-separated list of failure details */
+			__( 'Final audit: %1$d of %2$d checks failed — %3$s', 'dosieci-ai-operator' ),
 			$failed,
 			$total,
 			implode( '; ', array_map( static fn( array $c ): string => (string) $c['detail'], $this->failures() ) )

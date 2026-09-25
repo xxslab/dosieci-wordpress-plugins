@@ -54,11 +54,11 @@ final class StoreProduct {
 		$name = trim( (string) ( $raw['name'] ?? '' ) );
 
 		if ( '' === $name ) {
-			throw new BlueprintValidationException( 'Produkt musi mieć nazwę.' );
+			throw new BlueprintValidationException( esc_html__( 'A product must have a name.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( mb_strlen( $name ) > 120 ) {
-			throw new BlueprintValidationException( 'Nazwa produktu jest zbyt długa.' );
+			throw new BlueprintValidationException( esc_html__( 'The product name is too long.', 'dosieci-ai-operator' ) );
 		}
 
 		$role = trim( (string) ( $raw['logical_role'] ?? $name ) );
@@ -70,7 +70,11 @@ final class StoreProduct {
 		// different one is how "no images please" becomes an image.
 		if ( ! in_array( $imageStrategy, array( self::IMAGE_NONE, self::IMAGE_LIBRARY ), true ) ) {
 			throw new BlueprintValidationException(
-				sprintf( 'Nieznana strategia obrazu produktu: "%s".', $imageStrategy )
+				sprintf(
+					/* translators: %s: the unrecognised image strategy */
+					esc_html__( 'Unknown product image strategy: “%s”.', 'dosieci-ai-operator' ),
+					esc_html( $imageStrategy )
+				)
 			);
 		}
 
@@ -107,7 +111,7 @@ final class StoreProduct {
 	 */
 	public static function price( mixed $raw ): string {
 		if ( null === $raw || '' === $raw ) {
-			throw new BlueprintValidationException( 'Produkt musi mieć cenę.' );
+			throw new BlueprintValidationException( esc_html__( 'A product must have a price.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( is_int( $raw ) || is_float( $raw ) ) {
@@ -118,7 +122,11 @@ final class StoreProduct {
 
 			if ( 1 !== preg_match( '/^\d{1,7}(\.\d{1,2})?$/', $text ) ) {
 				throw new BlueprintValidationException(
-					sprintf( 'Cena "%s" nie jest poprawną liczbą.', (string) $raw )
+					sprintf(
+						/* translators: %s: the invalid price value */
+						esc_html__( 'The price “%s” is not a valid number.', 'dosieci-ai-operator' ),
+						esc_html( (string) $raw )
+					)
 				);
 			}
 
@@ -126,11 +134,11 @@ final class StoreProduct {
 		}
 
 		if ( $value < 0 ) {
-			throw new BlueprintValidationException( 'Cena nie może być ujemna.' );
+			throw new BlueprintValidationException( esc_html__( 'The price cannot be negative.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( $value > self::MAX_PRICE ) {
-			throw new BlueprintValidationException( 'Cena przekracza dopuszczalny limit.' );
+			throw new BlueprintValidationException( esc_html__( 'The price exceeds the allowed limit.', 'dosieci-ai-operator' ) );
 		}
 
 		return number_format( $value, 2, '.', '' );

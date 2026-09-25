@@ -38,6 +38,25 @@ if ( ! function_exists( 'sanitize_key' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_parse_url' ) ) {
+	/**
+	 * Used by RemoteImagePolicy (Domain code, so it may not call WordPress
+	 * functions directly except the handful stubbed in this file) instead of
+	 * PHP's own parse_url(), which WordPress.org's Plugin Check flags.
+	 *
+	 * Real behaviour: core's wp_parse_url() is parse_url() plus fixes for
+	 * PHP parse_url() quirks (e.g. a scheme-less "//host/path"). Every URL
+	 * RemoteImagePolicy is ever asked about already carries an explicit
+	 * scheme (it refuses anything that does not), so a plain delegation
+	 * matches core closely enough for what this class checks.
+	 *
+	 * @return array<string, int|string>|false
+	 */
+	function wp_parse_url( string $url ): array|false {
+		return parse_url( $url );
+	}
+}
+
 /*
  * Translation and escaping. User-facing messages are written as
  * __( 'English', 'dosieci-ai-operator' ) even in Domain classes, and

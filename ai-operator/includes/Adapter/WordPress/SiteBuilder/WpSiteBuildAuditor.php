@@ -97,7 +97,12 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			}
 
 			if ( 'publish' !== $page->post_status ) {
-				$missing[] = sprintf( '%s (status: %s)', $title, $page->post_status );
+				$missing[] = sprintf(
+					/* translators: 1: page title, 2: actual post status */
+					__( '%1$s (status: %2$s)', 'dosieci-ai-operator' ),
+					$title,
+					$page->post_status
+				);
 			}
 		}
 
@@ -105,8 +110,16 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			'pages_exist',
 			array() === $missing,
 			array() === $missing
-				? sprintf( 'Wszystkie %d stron istnieje i jest opublikowanych.', count( $blueprint->pages ) )
-				: 'Brakuje opublikowanych stron: ' . implode( ', ', $missing )
+				? sprintf(
+					/* translators: %d: number of pages */
+					__( 'All %d pages exist and are published.', 'dosieci-ai-operator' ),
+					count( $blueprint->pages )
+				)
+				: sprintf(
+					/* translators: %s: comma-separated list of page titles */
+					__( 'Missing published pages: %s', 'dosieci-ai-operator' ),
+					implode( ', ', $missing )
+				)
 		);
 	}
 
@@ -133,7 +146,11 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			// the parsed blocks does not reproduce the stored markup, the
 			// editor will flag the block as invalid when a human opens it.
 			if ( serialize_blocks( $blocks ) !== $page->post_content ) {
-				$broken[] = sprintf( '%s (nieprawidłowy markup bloków)', $title );
+				$broken[] = sprintf(
+					/* translators: %s: page title */
+					__( '%s (invalid block markup)', 'dosieci-ai-operator' ),
+					$title
+				);
 			}
 		}
 
@@ -141,8 +158,12 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			'gutenberg_valid',
 			array() === $broken,
 			array() === $broken
-				? 'Treść wszystkich stron poprawnie parsuje się do bloków Gutenberga.'
-				: 'Strony z nieprawidłową treścią blokową: ' . implode( ', ', $broken )
+				? __( 'The content of every page parses correctly into Gutenberg blocks.', 'dosieci-ai-operator' )
+				: sprintf(
+					/* translators: %s: comma-separated list of page titles */
+					__( 'Pages with invalid block content: %s', 'dosieci-ai-operator' ),
+					implode( ', ', $broken )
+				)
 		);
 	}
 
@@ -154,8 +175,12 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			'theme_active',
 			$theme->exists(),
 			$theme->exists()
-				? sprintf( 'Aktywny motyw: %s.', $theme->get( 'Name' ) )
-				: 'Aktywny motyw nie istnieje.'
+				? sprintf(
+					/* translators: %s: active theme name */
+					__( 'Active theme: %s.', 'dosieci-ai-operator' ),
+					$theme->get( 'Name' )
+				)
+				: __( 'The active theme does not exist.', 'dosieci-ai-operator' )
 		);
 	}
 
@@ -166,18 +191,32 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 		$expected    = $this->pageByTitle( $blueprint->pages[0] ?? '' );
 
 		if ( 'page' !== $showOnFront || $frontId <= 0 ) {
-			return $this->row( 'homepage', false, 'Witryna nie ma ustawionej strony głównej.' );
+			return $this->row( 'homepage', false, __( 'The site has no homepage set.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( $expected instanceof \WP_Post && $expected->ID !== $frontId ) {
 			return $this->row(
 				'homepage',
 				false,
-				sprintf( 'Stroną główną jest id %d, oczekiwano „%s” (id %d).', $frontId, $expected->post_title, $expected->ID )
+				sprintf(
+					/* translators: 1: actual front page ID, 2: expected page title, 3: expected page ID */
+					__( 'The homepage is id %1$d, expected “%2$s” (id %3$d).', 'dosieci-ai-operator' ),
+					$frontId,
+					$expected->post_title,
+					$expected->ID
+				)
 			);
 		}
 
-		return $this->row( 'homepage', true, sprintf( 'Strona główna wskazuje na id %d.', $frontId ) );
+		return $this->row(
+			'homepage',
+			true,
+			sprintf(
+				/* translators: %d: front page ID */
+				__( 'The homepage points at id %d.', 'dosieci-ai-operator' ),
+				$frontId
+			)
+		);
 	}
 
 	/** @return array<string, mixed> */
@@ -189,8 +228,17 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			'site_title',
 			$actual === $want,
 			$actual === $want
-				? sprintf( 'Nazwa witryny: „%s”.', $actual )
-				: sprintf( 'Nazwa witryny to „%s”, oczekiwano „%s”.', $actual, $want )
+				? sprintf(
+					/* translators: %s: site title */
+					__( 'Site title: “%s”.', 'dosieci-ai-operator' ),
+					$actual
+				)
+				: sprintf(
+					/* translators: 1: actual site title, 2: expected site title */
+					__( 'The site title is “%1$s”, expected “%2$s”.', 'dosieci-ai-operator' ),
+					$actual,
+					$want
+				)
 		);
 	}
 
@@ -199,7 +247,7 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 		$menus = wp_get_nav_menus();
 
 		if ( ! is_array( $menus ) || array() === $menus ) {
-			return array( $this->row( 'navigation', false, 'Witryna nie ma żadnego menu.' ) );
+			return array( $this->row( 'navigation', false, __( 'The site has no menu at all.', 'dosieci-ai-operator' ) ) );
 		}
 
 		$linked = array();
@@ -223,15 +271,23 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 				'navigation_exists',
 				array() !== $linked,
 				array() !== $linked
-					? sprintf( 'Menu zawiera %d pozycji.', count( $linked ) )
-					: 'Menu istnieje, ale nie zawiera żadnych pozycji.'
+					? sprintf(
+						/* translators: %d: number of menu items */
+						__( 'The menu contains %d item(s).', 'dosieci-ai-operator' ),
+						count( $linked )
+					)
+					: __( 'The menu exists, but contains no items.', 'dosieci-ai-operator' )
 			),
 			$this->row(
 				'navigation_targets',
 				array() === $missing,
 				array() === $missing
-					? 'Menu zawiera odnośniki do wszystkich stron z planu.'
-					: 'Brak w menu odnośników do: ' . implode( ', ', $missing )
+					? __( 'The menu links to every page in the plan.', 'dosieci-ai-operator' )
+					: sprintf(
+						/* translators: %s: comma-separated list of page titles */
+						__( 'The menu has no link to: %s', 'dosieci-ai-operator' ),
+						implode( ', ', $missing )
+					)
 			),
 		);
 	}
@@ -243,7 +299,9 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 		return $this->row(
 			'contact_form_plugin',
 			$active,
-			$active ? 'Contact Form 7 jest aktywny.' : 'Contact Form 7 nie jest aktywny.'
+			$active
+				? __( 'Contact Form 7 is active.', 'dosieci-ai-operator' )
+				: __( 'Contact Form 7 is not active.', 'dosieci-ai-operator' )
 		);
 	}
 
@@ -259,14 +317,14 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 		}
 
 		if ( ! $page instanceof \WP_Post ) {
-			return $this->row( 'contact_form_embedded', false, 'Nie znaleziono strony kontaktowej.' );
+			return $this->row( 'contact_form_embedded', false, __( 'No contact page was found.', 'dosieci-ai-operator' ) );
 		}
 
 		// Look for a real CF7 reference, and confirm the form it names
 		// actually exists -- a shortcode pointing at a deleted form renders
 		// as an error message to visitors, which is worse than no form.
 		if ( 1 !== preg_match( '/\[contact-form-7[^\]]*id="?([A-Za-z0-9]+)"?/', $page->post_content, $match ) ) {
-			return $this->row( 'contact_form_embedded', false, 'Strona kontaktowa nie zawiera formularza.' );
+			return $this->row( 'contact_form_embedded', false, __( 'The contact page does not contain the form.', 'dosieci-ai-operator' ) );
 		}
 
 		// CF7 6.x emits a HASH in the shortcode's id attribute, not the post
@@ -281,8 +339,16 @@ final class WpSiteBuildAuditor implements SiteBuildAuditorInterface {
 			'contact_form_embedded',
 			null !== $formId,
 			null !== $formId
-				? sprintf( 'Strona kontaktowa osadza istniejący formularz (id %d).', $formId )
-				: sprintf( 'Strona kontaktowa odwołuje się do nieistniejącego formularza ("%s").', $reference )
+				? sprintf(
+					/* translators: %d: contact form post ID */
+					__( 'The contact page embeds an existing form (id %d).', 'dosieci-ai-operator' ),
+					$formId
+				)
+				: sprintf(
+					/* translators: %s: form reference (hash or ID) found in the shortcode */
+					__( 'The contact page refers to a form that does not exist (“%s”).', 'dosieci-ai-operator' ),
+					$reference
+				)
 		);
 	}
 

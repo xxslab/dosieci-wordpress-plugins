@@ -29,17 +29,17 @@ final class StoreCategory {
 		}
 
 		if ( ! is_array( $raw ) ) {
-			throw new BlueprintValidationException( 'Kategoria musi być nazwą albo obiektem.' );
+			throw new BlueprintValidationException( esc_html__( 'A category must be a name or an object.', 'dosieci-ai-operator' ) );
 		}
 
 		$name = trim( (string) ( $raw['name'] ?? '' ) );
 
 		if ( '' === $name ) {
-			throw new BlueprintValidationException( 'Kategoria musi mieć nazwę.' );
+			throw new BlueprintValidationException( esc_html__( 'A category must have a name.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( mb_strlen( $name ) > 100 ) {
-			throw new BlueprintValidationException( 'Nazwa kategorii jest zbyt długa.' );
+			throw new BlueprintValidationException( esc_html__( 'The category name is too long.', 'dosieci-ai-operator' ) );
 		}
 
 		return new self(

@@ -23,6 +23,6 @@ final class NullStockImageProvider implements StockImageProviderInterface {
 	}
 
 	public function label(): string {
-		return 'brak';
+		return __( 'none', 'dosieci-ai-operator' );
 	}
 }

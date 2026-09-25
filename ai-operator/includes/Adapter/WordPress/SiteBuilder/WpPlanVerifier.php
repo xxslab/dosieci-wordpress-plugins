@@ -81,7 +81,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 			// nobody can confirm what it did, and green-by-default is
 			// exactly the failure mode this class exists to remove.
 			default             => VerificationResult::failed(
-				sprintf( 'Brak weryfikatora dla narzędzia "%s".', $action->toolName ),
+				sprintf(
+					/* translators: %s: internal tool name */
+					__( 'No verifier for tool “%s”.', 'dosieci-ai-operator' ),
+					$action->toolName
+				),
 				array( 'tool' => $action->toolName ),
 				null
 			),
@@ -138,7 +142,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		);
 
 		if ( $postId <= 0 ) {
-			return VerificationResult::failed( 'Narzędzie nie zwróciło identyfikatora wpisu.', $expected, null );
+			return VerificationResult::failed( __( 'The tool did not return a post ID.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		// The id comes from the write, but everything compared below comes
@@ -147,7 +151,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( ! $post instanceof \WP_Post ) {
 			return VerificationResult::failed(
-				sprintf( 'Wpis o id %d nie istnieje w WordPressie.', $postId ),
+				sprintf(
+					/* translators: %d: post ID */
+					__( 'Post ID %d does not exist in WordPress.', 'dosieci-ai-operator' ),
+					$postId
+				),
 				$expected,
 				array( 'post_id' => $postId, 'exists' => false )
 			);
@@ -161,12 +169,17 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		);
 
 		if ( $post->post_type !== $expected['post_type'] ) {
-			return VerificationResult::failed( 'Utworzono inny typ treści niż zaplanowano.', $expected, $actual );
+			return VerificationResult::failed( __( 'A different content type was created than planned.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		if ( $post->post_status !== $expected['status'] ) {
 			return VerificationResult::failed(
-				sprintf( 'Status wpisu to "%s", oczekiwano "%s".', $post->post_status, $expected['status'] ),
+				sprintf(
+					/* translators: 1: actual post status, 2: expected post status */
+					__( 'The post status is “%1$s”, expected “%2$s”.', 'dosieci-ai-operator' ),
+					$post->post_status,
+					$expected['status']
+				),
 				$expected,
 				$actual
 			);
@@ -176,14 +189,14 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		// the requested title through sanitize_text_field() -- comparing
 		// raw input would fail on any title WordPress legitimately altered.
 		if ( sanitize_text_field( $expected['title'] ) !== $post->post_title ) {
-			return VerificationResult::failed( 'Tytuł strony nie zgadza się z planem.', $expected, $actual );
+			return VerificationResult::failed( __( 'The page title does not match the plan.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		if ( isset( $arguments['content'] ) && '' !== (string) $arguments['content'] && '' === trim( $post->post_content ) ) {
-			return VerificationResult::failed( 'Strona istnieje, ale jest pusta.', $expected, $actual );
+			return VerificationResult::failed( __( 'The page exists, but is empty.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
-		return VerificationResult::passed( 'Strona istnieje z oczekiwanym tytułem i statusem.', $expected, $actual );
+		return VerificationResult::passed( __( 'The page exists with the expected title and status.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -192,7 +205,15 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$post   = $postId > 0 ? get_post( $postId ) : null;
 
 		if ( ! $post instanceof \WP_Post ) {
-			return VerificationResult::failed( sprintf( 'Wpis %d nie istnieje.', $postId ), $arguments, null );
+			return VerificationResult::failed(
+				sprintf(
+					/* translators: %d: post ID */
+					__( 'Post %d does not exist.', 'dosieci-ai-operator' ),
+					$postId
+				),
+				$arguments,
+				null
+			);
 		}
 
 		$expected = array();
@@ -212,14 +233,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 			if ( $post->{$field} !== $want ) {
 				return VerificationResult::failed(
-					sprintf( 'Pole "%s" nie zostało zaktualizowane.', $field ),
+					sprintf(
+						/* translators: %s: internal field name */
+						__( 'Field “%s” was not updated.', 'dosieci-ai-operator' ),
+						$field
+					),
 					$expected,
 					$actual
 				);
 			}
 		}
 
-		return VerificationResult::passed( 'Wpis zawiera oczekiwane zmiany.', $expected, $actual );
+		return VerificationResult::passed( __( 'The post contains the expected changes.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -231,8 +256,8 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$actual   = array( 'post_id' => $postId, 'status' => false === $status ? null : $status );
 
 		return 'trash' === $status
-			? VerificationResult::passed( 'Wpis jest w koszu.', $expected, $actual )
-			: VerificationResult::failed( 'Wpis nie trafił do kosza.', $expected, $actual );
+			? VerificationResult::passed( __( 'The post is in the trash.', 'dosieci-ai-operator' ), $expected, $actual )
+			: VerificationResult::failed( __( 'The post was not moved to the trash.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	// -----------------------------------------------------------------
@@ -248,7 +273,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( null === $file ) {
 			return VerificationResult::failed(
-				sprintf( 'Wtyczka "%s" nie jest zainstalowana.', $slug ),
+				sprintf(
+					/* translators: %s: plugin slug */
+					__( 'Plugin “%s” is not installed.', 'dosieci-ai-operator' ),
+					$slug
+				),
 				$expected,
 				array( 'slug' => $slug, 'installed' => false )
 			);
@@ -263,13 +292,17 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 			$expected['active'] = true;
 
 			return VerificationResult::failed(
-				sprintf( 'Wtyczka "%s" jest zainstalowana, ale nieaktywna.', $slug ),
+				sprintf(
+					/* translators: %s: plugin slug */
+					__( 'Plugin “%s” is installed, but not active.', 'dosieci-ai-operator' ),
+					$slug
+				),
 				$expected,
 				$actual
 			);
 		}
 
-		return VerificationResult::passed( 'Wtyczka jest zainstalowana zgodnie z planem.', $expected, $actual );
+		return VerificationResult::passed( __( 'The plugin is installed as planned.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -281,7 +314,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( null === $file ) {
 			return VerificationResult::failed(
-				sprintf( 'Wtyczka "%s" nie jest zainstalowana.', $slug ),
+				sprintf(
+					/* translators: %s: plugin slug */
+					__( 'Plugin “%s” is not installed.', 'dosieci-ai-operator' ),
+					$slug
+				),
 				$expected,
 				array( 'slug' => $slug, 'installed' => false )
 			);
@@ -291,8 +328,8 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$actual   = array( 'slug' => $slug, 'active' => $isActive );
 
 		return $isActive === $shouldBeActive
-			? VerificationResult::passed( 'Stan wtyczki zgodny z planem.', $expected, $actual )
-			: VerificationResult::failed( 'Stan aktywacji wtyczki nie zgadza się z planem.', $expected, $actual );
+			? VerificationResult::passed( __( 'The plugin’s state matches the plan.', 'dosieci-ai-operator' ), $expected, $actual )
+			: VerificationResult::failed( __( 'The plugin’s activation state does not match the plan.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -304,7 +341,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( ! $theme->exists() ) {
 			return VerificationResult::failed(
-				sprintf( 'Motyw "%s" nie jest zainstalowany.', $slug ),
+				sprintf(
+					/* translators: %s: theme slug */
+					__( 'Theme “%s” is not installed.', 'dosieci-ai-operator' ),
+					$slug
+				),
 				$expected,
 				array( 'slug' => $slug, 'installed' => false )
 			);
@@ -317,13 +358,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 			$expected['active_stylesheet'] = $slug;
 
 			return VerificationResult::failed(
-				sprintf( 'Motyw "%s" jest zainstalowany, ale aktywny jest "%s".', $slug, $activeStylesheet ),
+				sprintf(
+					/* translators: 1: planned theme slug, 2: actually active theme slug */
+					__( 'Theme “%1$s” is installed, but “%2$s” is active.', 'dosieci-ai-operator' ),
+					$slug,
+					$activeStylesheet
+				),
 				$expected,
 				$actual
 			);
 		}
 
-		return VerificationResult::passed( 'Motyw jest zainstalowany zgodnie z planem.', $expected, $actual );
+		return VerificationResult::passed( __( 'The theme is installed as planned.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -335,8 +381,8 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$actual   = array( 'active_stylesheet' => $active );
 
 		return $active === $slug
-			? VerificationResult::passed( 'Motyw jest aktywny.', $expected, $actual )
-			: VerificationResult::failed( 'Aktywny jest inny motyw niż zaplanowany.', $expected, $actual );
+			? VerificationResult::passed( __( 'The theme is active.', 'dosieci-ai-operator' ), $expected, $actual )
+			: VerificationResult::failed( __( 'A different theme than planned is active.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	// -----------------------------------------------------------------
@@ -365,7 +411,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( ! $menu instanceof \WP_Term ) {
 			return VerificationResult::failed(
-				sprintf( 'Menu "%s" nie istnieje.', $name ),
+				sprintf(
+					/* translators: %s: menu name */
+					__( 'Menu “%s” does not exist.', 'dosieci-ai-operator' ),
+					$name
+				),
 				$expected,
 				array( 'exists' => false )
 			);
@@ -383,7 +433,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		if ( $expectedItems > 0 && array() === $items ) {
 			// The exact bug the real build hit: menu created, zero links.
 			return VerificationResult::failed(
-				sprintf( 'Menu "%s" istnieje, ale nie zawiera żadnych pozycji.', $name ),
+				sprintf(
+					/* translators: %s: menu name */
+					__( 'Menu “%s” exists, but contains no items.', 'dosieci-ai-operator' ),
+					$name
+				),
 				$expected,
 				$actual
 			);
@@ -391,7 +445,12 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( count( $items ) < $expectedItems ) {
 			return VerificationResult::failed(
-				sprintf( 'Menu zawiera %d pozycji, oczekiwano %d.', count( $items ), $expectedItems ),
+				sprintf(
+					/* translators: 1: actual item count, 2: expected item count */
+					__( 'The menu contains %1$d item(s), expected %2$d.', 'dosieci-ai-operator' ),
+					count( $items ),
+					$expectedItems
+				),
 				$expected,
 				$actual
 			);
@@ -409,14 +468,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 				$actual['linked_object_ids'] = $linkedObjectIds;
 
 				return VerificationResult::failed(
-					sprintf( 'Menu nie zawiera odnośnika do strony o id %d.', $pageId ),
+					sprintf(
+						/* translators: %d: page ID */
+						__( 'The menu has no link to the page with ID %d.', 'dosieci-ai-operator' ),
+						$pageId
+					),
 					$expected,
 					$actual
 				);
 			}
 		}
 
-		return VerificationResult::passed( 'Menu istnieje i zawiera oczekiwane odnośniki.', $expected, $actual );
+		return VerificationResult::passed( __( 'The menu exists and contains the expected links.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	private function expectedMenuItemCount( PlanAction $action ): int {
@@ -462,23 +525,23 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'show_on_front' => 'page', 'page_on_front' => $expectedPage );
 
 		if ( 'page' !== $actual['show_on_front'] ) {
-			return VerificationResult::failed( 'Witryna nadal wyświetla wpisy na stronie głównej.', $expected, $actual );
+			return VerificationResult::failed( __( 'The site still shows posts on the homepage.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		if ( $expectedPage > 0 && $actual['page_on_front'] !== $expectedPage ) {
-			return VerificationResult::failed( 'Jako strona główna ustawiona jest inna strona.', $expected, $actual );
+			return VerificationResult::failed( __( 'A different page is set as the homepage.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		if ( $actual['page_on_front'] <= 0 ) {
-			return VerificationResult::failed( 'Nie ustawiono strony głównej.', $expected, $actual );
+			return VerificationResult::failed( __( 'No homepage is set.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		// A front page that is not published is a blank site for visitors.
 		if ( 'publish' !== get_post_status( $actual['page_on_front'] ) ) {
-			return VerificationResult::failed( 'Strona główna nie jest opublikowana.', $expected, $actual );
+			return VerificationResult::failed( __( 'The homepage is not published.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
-		return VerificationResult::passed( 'Strona główna jest ustawiona i opublikowana.', $expected, $actual );
+		return VerificationResult::passed( __( 'The homepage is set and published.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -486,7 +549,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$option = (string) ( $arguments['option'] ?? '' );
 
 		if ( '' === $option || ! OptionAllowlist::has( $option ) ) {
-			return VerificationResult::failed( 'Opcja spoza dozwolonej listy.', array( 'option' => $option ), null );
+			return VerificationResult::failed( __( 'Option outside the allowed list.', 'dosieci-ai-operator' ), array( 'option' => $option ), null );
 		}
 
 		// Compared against the SANITISED expectation: set_site_option runs
@@ -503,8 +566,8 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		// Loose comparison on purpose: WordPress stores everything as
 		// strings, so (int) 10 and '10' are the same stored option.
 		return (string) $want === (string) $current
-			? VerificationResult::passed( 'Opcja ma oczekiwaną wartość.', $expected, $actual )
-			: VerificationResult::failed( 'Opcja nie ma oczekiwanej wartości.', $expected, $actual );
+			? VerificationResult::passed( __( 'The option has the expected value.', 'dosieci-ai-operator' ), $expected, $actual )
+			: VerificationResult::failed( __( 'The option does not have the expected value.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $result */
@@ -515,14 +578,14 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'term_id' => $termId, 'taxonomy' => $taxonomy );
 
 		if ( $termId <= 0 || '' === $taxonomy ) {
-			return VerificationResult::failed( 'Narzędzie nie zwróciło identyfikatora terminu.', $expected, null );
+			return VerificationResult::failed( __( 'The tool did not return a term ID.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		$term = get_term( $termId, $taxonomy );
 
 		return $term instanceof \WP_Term
-			? VerificationResult::passed( 'Termin istnieje.', $expected, array( 'term_id' => (int) $term->term_id, 'taxonomy' => $term->taxonomy ) )
-			: VerificationResult::failed( 'Termin nie istnieje.', $expected, array( 'exists' => false ) );
+			? VerificationResult::passed( __( 'The term exists.', 'dosieci-ai-operator' ), $expected, array( 'term_id' => (int) $term->term_id, 'taxonomy' => $term->taxonomy ) )
+			: VerificationResult::failed( __( 'The term does not exist.', 'dosieci-ai-operator' ), $expected, array( 'exists' => false ) );
 	}
 
 	/**
@@ -538,7 +601,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'form_exists' => true );
 
 		if ( $formId <= 0 ) {
-			return VerificationResult::failed( 'Nie utworzono formularza.', $expected, null );
+			return VerificationResult::failed( __( 'No form was created.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		$post   = get_post( $formId );
@@ -549,14 +612,14 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		);
 
 		if ( ! $post instanceof \WP_Post || 'wpcf7_contact_form' !== $post->post_type ) {
-			return VerificationResult::failed( 'Formularz nie istnieje w WordPressie.', $expected, $actual );
+			return VerificationResult::failed( __( 'The form does not exist in WordPress.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		if ( '' === $shortcode ) {
-			return VerificationResult::failed( 'Formularz istnieje, ale nie zwrócono shortcode.', $expected, $actual );
+			return VerificationResult::failed( __( 'The form exists, but no shortcode was returned.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
-		return VerificationResult::passed( 'Formularz kontaktowy istnieje.', $expected, $actual );
+		return VerificationResult::passed( __( 'The contact form exists.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/**
@@ -574,14 +637,14 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'page_id' => $pageId, 'contains_form' => true );
 
 		if ( ! $page instanceof \WP_Post ) {
-			return VerificationResult::failed( 'Strona kontaktowa nie istnieje.', $expected, null );
+			return VerificationResult::failed( __( 'The contact page does not exist.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		$hasShortcode = str_contains( $page->post_content, '[contact-form-7' );
 		$actual       = array( 'page_id' => $pageId, 'contains_form' => $hasShortcode );
 
 		if ( ! $hasShortcode ) {
-			return VerificationResult::failed( 'Strona kontaktowa nie zawiera formularza.', $expected, $actual );
+			return VerificationResult::failed( __( 'The contact page does not contain the form.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		// Re-parse the page as blocks: an embed that broke the block
@@ -590,10 +653,10 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		if ( serialize_blocks( $blocks ) !== $page->post_content ) {
 			$actual['blocks_valid'] = false;
 
-			return VerificationResult::failed( 'Osadzenie formularza uszkodziło strukturę bloków.', $expected, $actual );
+			return VerificationResult::failed( __( 'Embedding the form broke the block structure.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
-		return VerificationResult::passed( 'Strona kontaktowa zawiera formularz.', $expected, $actual );
+		return VerificationResult::passed( __( 'The contact page contains the form.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/**
@@ -609,7 +672,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'item_count' => count( (array) ( $arguments['items'] ?? array() ) ) );
 
 		if ( $navId <= 0 || 'wp_navigation' !== get_post_type( $navId ) ) {
-			return VerificationResult::failed( 'Nie utworzono wpisu nawigacji.', $expected, null );
+			return VerificationResult::failed( __( 'No navigation post was created.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		$post   = get_post( $navId );
@@ -625,7 +688,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		);
 
 		if ( count( $links ) < $expected['item_count'] ) {
-			return VerificationResult::failed( 'Nawigacja zawiera mniej pozycji niż zaplanowano.', $expected, $actual );
+			return VerificationResult::failed( __( 'The navigation contains fewer items than planned.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		// Read it back the way the theme will: core resolves a ref-less
@@ -640,7 +703,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 			foreach ( $actual['labels'] as $label ) {
 				if ( '' !== $label && ! in_array( $label, $rendered, true ) ) {
 					return VerificationResult::failed(
-						sprintf( 'Nawigacja istnieje, ale motyw jej nie renderuje (brak „%s”).', $label ),
+						sprintf(
+							/* translators: %s: navigation link label */
+							__( 'The navigation exists, but the theme does not render it (missing “%s”).', 'dosieci-ai-operator' ),
+							$label
+						),
 						$expected,
 						$actual
 					);
@@ -648,7 +715,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 			}
 		}
 
-		return VerificationResult::passed( 'Nawigacja motywu blokowego zawiera oczekiwane odnośniki.', $expected, $actual );
+		return VerificationResult::passed( __( 'The block theme navigation contains the expected links.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/**
@@ -662,7 +729,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'page_id' => $pageId, 'attachment_id' => $attachmentId );
 
 		if ( $pageId <= 0 || $attachmentId <= 0 ) {
-			return VerificationResult::failed( 'Krok nie wskazał strony lub załącznika.', $expected, null );
+			return VerificationResult::failed( __( 'The step did not name a page or an attachment.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		// Read back from WordPress, not from the handler's own result: the
@@ -678,7 +745,13 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( $actualId !== $attachmentId ) {
 			return VerificationResult::failed(
-				sprintf( 'Obrazek wyróżniający strony %d to %d, oczekiwano %d.', $pageId, $actualId, $attachmentId ),
+				sprintf(
+					/* translators: 1: page ID, 2: actual attachment ID, 3: expected attachment ID */
+					__( 'The featured image of page %1$d is %2$d, expected %3$d.', 'dosieci-ai-operator' ),
+					$pageId,
+					$actualId,
+					$attachmentId
+				),
 				$expected,
 				$actual
 			);
@@ -688,7 +761,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		// so "the meta is set" is not enough on its own.
 		if ( ! get_post( $attachmentId ) instanceof \WP_Post ) {
 			return VerificationResult::failed(
-				sprintf( 'Załącznik %d nie istnieje.', $attachmentId ),
+				sprintf(
+					/* translators: %d: attachment ID */
+					__( 'Attachment %d does not exist.', 'dosieci-ai-operator' ),
+					$attachmentId
+				),
 				$expected,
 				$actual
 			);
@@ -696,7 +773,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		$actual['url'] = (string) wp_get_attachment_url( $attachmentId );
 
-		return VerificationResult::passed( 'Strona ma ustawiony oczekiwany obrazek wyróżniający.', $expected, $actual );
+		return VerificationResult::passed( __( 'The page has the expected featured image set.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	// -----------------------------------------------------------------
@@ -707,11 +784,11 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$woo = new WooCommerceAdapter();
 
 		if ( ! $woo->isAvailable() ) {
-			return VerificationResult::failed( 'WooCommerce nie jest aktywny.', array( 'woocommerce' => true ), null );
+			return VerificationResult::failed( __( 'WooCommerce is not active.', 'dosieci-ai-operator' ), array( 'woocommerce' => true ), null );
 		}
 
 		$state    = $woo->corePageState();
-		$expected = array( 'pages' => array_keys( WooCommerceAdapter::CORE_PAGES ) );
+		$expected = array( 'pages' => WooCommerceAdapter::CORE_PAGE_SLUGS );
 
 		$missing = array();
 		foreach ( $state as $slug => $page ) {
@@ -726,13 +803,17 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( array() !== $missing ) {
 			return VerificationResult::failed(
-				sprintf( 'Brakuje działających stron sklepu: %s.', implode( ', ', $missing ) ),
+				sprintf(
+					/* translators: %s: comma-separated list of missing store page slugs */
+					__( 'Missing working store pages: %s.', 'dosieci-ai-operator' ),
+					implode( ', ', $missing )
+				),
 				$expected,
 				$actual
 			);
 		}
 
-		return VerificationResult::passed( 'Wszystkie strony sklepu istnieją i są przypisane.', $expected, $actual );
+		return VerificationResult::passed( __( 'All store pages exist and are assigned.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/** @param array<string, mixed> $arguments */
@@ -740,7 +821,7 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$woo = new WooCommerceAdapter();
 
 		if ( ! $woo->isAvailable() ) {
-			return VerificationResult::failed( 'WooCommerce nie jest aktywny.', array(), null );
+			return VerificationResult::failed( __( 'WooCommerce is not active.', 'dosieci-ai-operator' ), array(), null );
 		}
 
 		$expected = array(
@@ -761,14 +842,20 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 			if ( strcasecmp( $want, (string) ( $actual[ $field ] ?? '' ) ) !== 0 ) {
 				return VerificationResult::failed(
-					sprintf( 'Ustawienie „%s” to „%s”, oczekiwano „%s”.', $field, (string) ( $actual[ $field ] ?? '' ), $want ),
+					sprintf(
+						/* translators: 1: setting name, 2: actual value, 3: expected value */
+						__( 'Setting “%1$s” is “%2$s”, expected “%3$s”.', 'dosieci-ai-operator' ),
+						$field,
+						(string) ( $actual[ $field ] ?? '' ),
+						$want
+					),
 					$expected,
 					$actual
 				);
 			}
 		}
 
-		return VerificationResult::passed( 'Podstawowe ustawienia sklepu są zgodne z planem.', $expected, $actual );
+		return VerificationResult::passed( __( 'The basic store settings match the plan.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/**
@@ -780,14 +867,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		$expected = array( 'name' => (string) ( $arguments['name'] ?? '' ), 'taxonomy' => WooCommerceAdapter::TAXONOMY );
 
 		if ( $termId <= 0 ) {
-			return VerificationResult::failed( 'Narzędzie nie zwróciło identyfikatora kategorii.', $expected, null );
+			return VerificationResult::failed( __( 'The tool did not return a category ID.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		$category = ( new WooCommerceAdapter() )->readCategory( $termId );
 
 		if ( null === $category ) {
 			return VerificationResult::failed(
-				sprintf( 'Kategoria %d nie istnieje w taksonomii produktów.', $termId ),
+				sprintf(
+					/* translators: %d: category term ID */
+					__( 'Category %d does not exist in the product taxonomy.', 'dosieci-ai-operator' ),
+					$termId
+				),
 				$expected,
 				array( 'term_id' => $termId, 'exists' => false )
 			);
@@ -795,13 +886,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 
 		if ( $category['name'] !== $expected['name'] ) {
 			return VerificationResult::failed(
-				sprintf( 'Kategoria nazywa się „%s”, oczekiwano „%s”.', $category['name'], $expected['name'] ),
+				sprintf(
+					/* translators: 1: actual category name, 2: expected category name */
+					__( 'The category is named “%1$s”, expected “%2$s”.', 'dosieci-ai-operator' ),
+					$category['name'],
+					$expected['name']
+				),
 				$expected,
 				$category
 			);
 		}
 
-		return VerificationResult::passed( 'Kategoria produktów istnieje z oczekiwaną nazwą.', $expected, $category );
+		return VerificationResult::passed( __( 'The product category exists with the expected name.', 'dosieci-ai-operator' ), $expected, $category );
 	}
 
 	/**
@@ -823,14 +919,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		);
 
 		if ( $productId <= 0 ) {
-			return VerificationResult::failed( 'Narzędzie nie zwróciło identyfikatora produktu.', $expected, null );
+			return VerificationResult::failed( __( 'The tool did not return a product ID.', 'dosieci-ai-operator' ), $expected, null );
 		}
 
 		$product = ( new WooCommerceAdapter() )->readProduct( $productId );
 
 		if ( null === $product ) {
 			return VerificationResult::failed(
-				sprintf( 'Produkt %d nie istnieje.', $productId ),
+				sprintf(
+					/* translators: %d: product ID */
+					__( 'Product %d does not exist.', 'dosieci-ai-operator' ),
+					$productId
+				),
 				$expected,
 				array( 'product_id' => $productId, 'exists' => false )
 			);
@@ -852,14 +952,18 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		// anybody approving publication.
 		if ( 'draft' !== $actual['status'] ) {
 			return VerificationResult::failed(
-				sprintf( 'Produkt ma status „%s”, a musi pozostać szkicem.', $actual['status'] ),
+				sprintf(
+					/* translators: %s: actual product status */
+					__( 'The product has status “%s”, but must remain a draft.', 'dosieci-ai-operator' ),
+					$actual['status']
+				),
 				$expected,
 				$actual
 			);
 		}
 
 		if ( $actual['name'] !== $expected['name'] ) {
-			return VerificationResult::failed( 'Nazwa produktu nie zgadza się z planem.', $expected, $actual );
+			return VerificationResult::failed( __( 'The product name does not match the plan.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		// Both sides are normalised to the same canonical decimal string
@@ -868,21 +972,26 @@ final class WpPlanVerifier implements PlanVerifierInterface {
 		// perfectly correct step.
 		if ( $this->canonicalPrice( $actual['regular_price'] ) !== $this->canonicalPrice( $expected['regular_price'] ) ) {
 			return VerificationResult::failed(
-				sprintf( 'Cena to %s, oczekiwano %s.', $actual['regular_price'], $expected['regular_price'] ),
+				sprintf(
+					/* translators: 1: actual price, 2: expected price */
+					__( 'The price is %1$s, expected %2$s.', 'dosieci-ai-operator' ),
+					$actual['regular_price'],
+					$expected['regular_price']
+				),
 				$expected,
 				$actual
 			);
 		}
 
 		if ( $expectedCategories !== $actualCategories ) {
-			return VerificationResult::failed( 'Kategorie produktu nie zgadzają się z planem.', $expected, $actual );
+			return VerificationResult::failed( __( 'The product’s categories do not match the plan.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
 		if ( $expected['image_id'] > 0 && $actual['image_id'] !== $expected['image_id'] ) {
-			return VerificationResult::failed( 'Obrazek produktu nie zgadza się z planem.', $expected, $actual );
+			return VerificationResult::failed( __( 'The product image does not match the plan.', 'dosieci-ai-operator' ), $expected, $actual );
 		}
 
-		return VerificationResult::passed( 'Produkt istnieje jako szkic z oczekiwaną ceną.', $expected, $actual );
+		return VerificationResult::passed( __( 'The product exists as a draft with the expected price.', 'dosieci-ai-operator' ), $expected, $actual );
 	}
 
 	/**

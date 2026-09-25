@@ -70,7 +70,7 @@ final class PlanStatus {
 	public static function assertTransition( string $from, string $to ): void {
 		if ( ! self::canTransition( $from, $to ) ) {
 			throw new PlanStateException(
-				sprintf( 'Cannot move a plan from "%s" to "%s".', $from, $to )
+				sprintf( 'Cannot move a plan from “%s” to “%s”.', esc_html( $from ), esc_html( $to ) )
 			);
 		}
 	}

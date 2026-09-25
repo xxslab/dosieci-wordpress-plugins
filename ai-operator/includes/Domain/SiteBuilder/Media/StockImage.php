@@ -36,11 +36,13 @@ final class StockImage {
 		$reason = ( $policy ?? new RemoteImagePolicy() )->rejectionReason( $url );
 
 		if ( null !== $reason ) {
-			throw new \InvalidArgumentException( $reason );
+			// $reason is translatable text from RemoteImagePolicy; escaped
+			// here because it is dynamic from this class's own point of view.
+			throw new \InvalidArgumentException( esc_html( $reason ) );
 		}
 
 		if ( '' === trim( $licence ) ) {
-			throw new \InvalidArgumentException( 'Obraz ze źródła zewnętrznego musi mieć określoną licencję.' );
+			throw new \InvalidArgumentException( 'A remote-source image must declare a licence.' );
 		}
 	}
 

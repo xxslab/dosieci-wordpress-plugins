@@ -85,7 +85,7 @@ final class PlanRecord {
 	public function assertExecutable( int $userId, int $now ): void {
 		if ( ! PlanStatus::isExecutable( $this->status ) ) {
 			throw new PlanStateException(
-				sprintf( 'A plan in state "%s" cannot execute steps.', $this->status )
+				sprintf( 'A plan in state “%s” cannot execute steps.', esc_html( $this->status ) )
 			);
 		}
 

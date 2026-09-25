@@ -7,7 +7,7 @@
  * describe() response reached the review form, but the form's submit
  * handler built a brand-new blueprint containing only generic fields --
  * WooCommerce, store settings, categories and products were silently
- * dropped between "Przygotuj opis" and "Przygotuj plan". These tests run
+ * dropped between "Prepare description" and "Prepare plan". These tests run
  * with no DOM and no WordPress: they exercise only the data transform, the
  * same boundary the browser crosses on every real click.
  *
@@ -205,7 +205,7 @@ test( 'a product missing a category assignment fails closed', () => {
 
 	const check = validateFormState( formState );
 	assert.equal( check.valid, false );
-	assert.match( check.message, /kategori/i );
+	assert.match( check.message, /categor/i );
 } );
 
 test( 'a malformed price fails closed before the request is sent', () => {

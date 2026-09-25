@@ -89,7 +89,7 @@ final class CommerceToolFactory {
 		return array(
 			new ToolDefinition(
 				'ensure_store_pages',
-				'Sprawdza strony sklepu (Sklep, Koszyk, Zamówienie, Moje konto) i odtwarza tylko te, których faktycznie brakuje.',
+				__( 'Checks the store pages (Shop, Cart, Checkout, My account) and recreates only the ones that are actually missing.', 'dosieci-ai-operator' ),
 				array( 'type' => 'object', 'properties' => array(), 'required' => array() ),
 				'manage_options',
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
@@ -98,7 +98,7 @@ final class CommerceToolFactory {
 			),
 			new ToolDefinition(
 				'set_store_basics',
-				'Ustawia kraj, walutę i jednostki sklepu. Nie może zmienić żadnego innego ustawienia WooCommerce.',
+				__( 'Sets the store’s country, currency and units. Cannot change any other WooCommerce setting.', 'dosieci-ai-operator' ),
 				array(
 					'type'       => 'object',
 					'properties' => array(
@@ -116,7 +116,7 @@ final class CommerceToolFactory {
 			),
 			new ToolDefinition(
 				'create_product_category',
-				'Tworzy kategorię produktów.',
+				__( 'Creates a product category.', 'dosieci-ai-operator' ),
 				$categorySchema,
 				'manage_product_terms',
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
@@ -125,7 +125,7 @@ final class CommerceToolFactory {
 			),
 			new ToolDefinition(
 				'update_product_category',
-				'Aktualizuje kategorię produktów utworzoną wcześniej przez kreator.',
+				__( 'Updates a product category previously created by the builder.', 'dosieci-ai-operator' ),
 				$categorySchema,
 				'manage_product_terms',
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
@@ -134,7 +134,7 @@ final class CommerceToolFactory {
 			),
 			new ToolDefinition(
 				'create_product_draft',
-				'Tworzy produkt jako SZKIC. Nie publikuje go.',
+				__( 'Creates a product as a DRAFT. Does not publish it.', 'dosieci-ai-operator' ),
 				$productSchema,
 				'publish_products',
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
@@ -143,7 +143,7 @@ final class CommerceToolFactory {
 			),
 			new ToolDefinition(
 				'update_product_draft',
-				'Aktualizuje szkic produktu utworzony wcześniej przez kreator. Nie publikuje go.',
+				__( 'Updates a product draft previously created by the builder. Does not publish it.', 'dosieci-ai-operator' ),
 				$productSchema,
 				'edit_products',
 				ToolDefinition::RISK_REVERSIBLE_WRITE,
@@ -165,7 +165,7 @@ final class CommerceToolFactory {
 			// through that half-built state produces objects WordPress
 			// cannot read back. Failing here stops the plan cleanly and the
 			// user resumes into a request where the shop is really up.
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded yet in this request.', 'dosieci-ai-operator' ) );
 		}
 
 		return $this->woo->ensureCorePages();
@@ -183,7 +183,7 @@ final class CommerceToolFactory {
 			// through that half-built state produces objects WordPress
 			// cannot read back. Failing here stops the plan cleanly and the
 			// user resumes into a request where the shop is really up.
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded yet in this request.', 'dosieci-ai-operator' ) );
 		}
 
 		$country  = strtoupper( trim( (string) ( $args['country'] ?? '' ) ) );
@@ -193,11 +193,25 @@ final class CommerceToolFactory {
 		// The blueprint validated shape; only the running plugin knows
 		// which codes it actually accepts.
 		if ( ! $this->woo->supportsCountry( $country ) ) {
-			return array( 'success' => false, 'error' => sprintf( 'WooCommerce nie zna kraju "%s".', $country ) );
+			return array(
+				'success' => false,
+				'error'   => sprintf(
+					/* translators: %s: country code */
+					__( 'WooCommerce does not recognise the country “%s”.', 'dosieci-ai-operator' ),
+					$country
+				),
+			);
 		}
 
 		if ( ! $this->woo->supportsCurrency( $currency ) ) {
-			return array( 'success' => false, 'error' => sprintf( 'WooCommerce nie zna waluty "%s".', $currency ) );
+			return array(
+				'success' => false,
+				'error'   => sprintf(
+					/* translators: %s: currency code */
+					__( 'WooCommerce does not recognise the currency “%s”.', 'dosieci-ai-operator' ),
+					$currency
+				),
+			);
 		}
 
 		$weight    = strtolower( trim( (string) ( $args['weight_unit'] ?? 'kg' ) ) );
@@ -205,7 +219,7 @@ final class CommerceToolFactory {
 
 		if ( ! in_array( $weight, StoreBlueprint::WEIGHT_UNITS, true )
 			|| ! in_array( $dimension, StoreBlueprint::DIMENSION_UNITS, true ) ) {
-			return array( 'success' => false, 'error' => 'Nieobsługiwana jednostka.' );
+			return array( 'success' => false, 'error' => __( 'Unsupported unit.', 'dosieci-ai-operator' ) );
 		}
 
 		return $this->woo->applyStoreSettings(
@@ -230,7 +244,7 @@ final class CommerceToolFactory {
 			// through that half-built state produces objects WordPress
 			// cannot read back. Failing here stops the plan cleanly and the
 			// user resumes into a request where the shop is really up.
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded yet in this request.', 'dosieci-ai-operator' ) );
 		}
 
 		return $this->woo->createCategory(
@@ -255,13 +269,13 @@ final class CommerceToolFactory {
 			// through that half-built state produces objects WordPress
 			// cannot read back. Failing here stops the plan cleanly and the
 			// user resumes into a request where the shop is really up.
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded yet in this request.', 'dosieci-ai-operator' ) );
 		}
 
 		$termId = (int) ( $args['term_id'] ?? 0 );
 
 		if ( $termId <= 0 ) {
-			return array( 'success' => false, 'error' => 'Brak identyfikatora kategorii.' );
+			return array( 'success' => false, 'error' => __( 'No category ID given.', 'dosieci-ai-operator' ) );
 		}
 
 		return $this->woo->updateCategory(
@@ -283,13 +297,13 @@ final class CommerceToolFactory {
 			// through that half-built state produces objects WordPress
 			// cannot read back. Failing here stops the plan cleanly and the
 			// user resumes into a request where the shop is really up.
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded yet in this request.', 'dosieci-ai-operator' ) );
 		}
 
 		$price = $this->price( $args );
 
 		if ( null === $price ) {
-			return array( 'success' => false, 'error' => 'Nieprawidłowa cena produktu.' );
+			return array( 'success' => false, 'error' => __( 'Invalid product price.', 'dosieci-ai-operator' ) );
 		}
 
 		return $this->woo->createDraftProduct(
@@ -314,18 +328,18 @@ final class CommerceToolFactory {
 			// through that half-built state produces objects WordPress
 			// cannot read back. Failing here stops the plan cleanly and the
 			// user resumes into a request where the shop is really up.
-			return array( 'success' => false, 'error' => 'WooCommerce nie jest jeszcze w pełni załadowany w tym żądaniu.' );
+			return array( 'success' => false, 'error' => __( 'WooCommerce is not fully loaded yet in this request.', 'dosieci-ai-operator' ) );
 		}
 
 		$productId = (int) ( $args['product_id'] ?? 0 );
 		$price     = $this->price( $args );
 
 		if ( $productId <= 0 ) {
-			return array( 'success' => false, 'error' => 'Brak identyfikatora produktu.' );
+			return array( 'success' => false, 'error' => __( 'No product ID given.', 'dosieci-ai-operator' ) );
 		}
 
 		if ( null === $price ) {
-			return array( 'success' => false, 'error' => 'Nieprawidłowa cena produktu.' );
+			return array( 'success' => false, 'error' => __( 'Invalid product price.', 'dosieci-ai-operator' ) );
 		}
 
 		return $this->woo->updateDraftProduct(

@@ -66,7 +66,7 @@ final class ContactForm7Adapter implements PluginConfiguratorInterface {
 	 */
 	public function configure( SiteBlueprint $blueprint, string $planId ): array {
 		if ( ! $this->isAvailable() ) {
-			throw new PluginConfigurationException( 'Contact Form 7 nie jest aktywny.' );
+			throw new PluginConfigurationException( esc_html__( 'Contact Form 7 is not active.', 'dosieci-ai-operator' ) );
 		}
 
 		$existing = $this->findGeneratedForm();
@@ -88,7 +88,7 @@ final class ContactForm7Adapter implements PluginConfiguratorInterface {
 		$form = \WPCF7_ContactForm::get_template( array( 'locale' => $this->locale( $blueprint ) ) );
 
 		if ( ! $form instanceof \WPCF7_ContactForm ) {
-			throw new PluginConfigurationException( 'Nie udało się utworzyć szablonu formularza.' );
+			throw new PluginConfigurationException( esc_html__( 'Could not create the form template.', 'dosieci-ai-operator' ) );
 		}
 
 		$form->set_title( $this->formTitle( $blueprint ) );
@@ -108,7 +108,7 @@ final class ContactForm7Adapter implements PluginConfiguratorInterface {
 		$formId = $form->save();
 
 		if ( ! is_int( $formId ) || $formId <= 0 ) {
-			throw new PluginConfigurationException( 'Contact Form 7 nie zapisał formularza.' );
+			throw new PluginConfigurationException( esc_html__( 'Contact Form 7 did not save the form.', 'dosieci-ai-operator' ) );
 		}
 
 		update_post_meta( $formId, self::META_MARKER, '1' );
@@ -133,7 +133,12 @@ final class ContactForm7Adapter implements PluginConfiguratorInterface {
 				'post_type'        => 'wpcf7_contact_form',
 				'post_status'      => 'any',
 				'posts_per_page'   => 1,
+				// Bounded to 1 result, on a meta key exclusive to this plugin's
+				// own generated forms; there are at most a handful of contact
+				// forms on any real site.
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
 				'meta_key'         => self::META_MARKER,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 				'meta_value'       => '1',
 				'fields'           => 'ids',
 				'suppress_filters' => false,
@@ -186,7 +191,11 @@ final class ContactForm7Adapter implements PluginConfiguratorInterface {
 	}
 
 	private function formTitle( SiteBlueprint $blueprint ): string {
-		return sprintf( '%s — formularz kontaktowy', $blueprint->businessName );
+		return sprintf(
+			/* translators: %s: business name */
+			__( '%s — contact form', 'dosieci-ai-operator' ),
+			$blueprint->businessName
+		);
 	}
 
 	private function locale( SiteBlueprint $blueprint ): string {

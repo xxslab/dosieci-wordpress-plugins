@@ -64,35 +64,38 @@ final class RemoteImagePolicy {
 		$url = trim( $url );
 
 		if ( '' === $url || strlen( $url ) > 2048 ) {
-			return 'Adres obrazu jest pusty lub zbyt długi.';
+			return __( 'The image address is empty or too long.', 'dosieci-ai-operator' );
 		}
 
-		$parts = parse_url( $url );
+		// wp_parse_url() rather than PHP's own parse_url(): WordPress.org's
+		// Plugin Check flags the bare function, and a stub mirroring core
+		// closely enough keeps this class testable with no WordPress loaded.
+		$parts = wp_parse_url( $url );
 
 		if ( ! is_array( $parts ) || ! isset( $parts['scheme'], $parts['host'] ) ) {
-			return 'Adres obrazu nie jest poprawnym URL-em.';
+			return __( 'The image address is not a valid URL.', 'dosieci-ai-operator' );
 		}
 
 		// Plaintext would let anything on the path swap the image, and a
 		// stock provider that cannot serve TLS is not one worth supporting.
 		if ( 'https' !== strtolower( (string) $parts['scheme'] ) ) {
-			return 'Dozwolone są wyłącznie adresy https.';
+			return __( 'Only https addresses are allowed.', 'dosieci-ai-operator' );
 		}
 
 		// user:pass@host is a classic way to make a URL read as one host to
 		// a human and resolve as another to a parser.
 		if ( isset( $parts['user'] ) || isset( $parts['pass'] ) ) {
-			return 'Adres obrazu nie może zawierać danych logowania.';
+			return __( 'The image address must not contain login credentials.', 'dosieci-ai-operator' );
 		}
 
 		if ( isset( $parts['port'] ) && 443 !== (int) $parts['port'] ) {
-			return 'Dozwolony jest wyłącznie port 443.';
+			return __( 'Only port 443 is allowed.', 'dosieci-ai-operator' );
 		}
 
 		$host = strtolower( rtrim( (string) $parts['host'], '.' ) );
 
 		if ( '' === $host ) {
-			return 'Adres obrazu nie wskazuje hosta.';
+			return __( 'The image address does not name a host.', 'dosieci-ai-operator' );
 		}
 
 		// Literal addresses are refused outright rather than by enumerating
@@ -100,23 +103,23 @@ final class RemoteImagePolicy {
 		// "is this IP internal" has more edge cases (IPv6 mapped v4,
 		// octal notation, 0.0.0.0) than a blocklist reliably covers.
 		if ( $this->isIpLiteral( $host ) ) {
-			return 'Adres obrazu musi wskazywać nazwę hosta, nie adres IP.';
+			return __( 'The image address must name a hostname, not an IP address.', 'dosieci-ai-operator' );
 		}
 
 		if ( $this->isInternalName( $host ) ) {
-			return 'Adres obrazu wskazuje nazwę wewnętrzną.';
+			return __( 'The image address names an internal host.', 'dosieci-ai-operator' );
 		}
 
 		// A public name must have a dot: bare "intranet-server" is a
 		// single-label name that resolves through the local search domain.
 		if ( ! str_contains( $host, '.' ) ) {
-			return 'Adres obrazu musi wskazywać pełną nazwę domeny.';
+			return __( 'The image address must be a fully qualified domain name.', 'dosieci-ai-operator' );
 		}
 
 		$path = isset( $parts['path'] ) ? (string) $parts['path'] : '';
 
 		if ( ! $this->hasImageExtension( $path ) ) {
-			return 'Adres obrazu musi wskazywać plik obrazu (jpg, png, webp, avif).';
+			return __( 'The image address must point to an image file (jpg, png, webp, avif).', 'dosieci-ai-operator' );
 		}
 
 		return null;

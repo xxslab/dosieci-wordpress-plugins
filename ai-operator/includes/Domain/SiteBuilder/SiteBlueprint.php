@@ -113,7 +113,7 @@ final class SiteBlueprint {
 		$features = self::stringList( $raw, 'features', self::MAX_FEATURES, 60 );
 
 		if ( array() === $pages ) {
-			throw new BlueprintValidationException( 'Blueprint must define at least one page.' );
+			throw new BlueprintValidationException( esc_html__( 'The blueprint must define at least one page.', 'dosieci-ai-operator' ) );
 		}
 
 		// A store is validated STRICTLY, here, at the same moment as the
@@ -130,7 +130,7 @@ final class SiteBlueprint {
 		// WooCommerce.
 		if ( self::TYPE_STORE === $siteType && null === $store ) {
 			throw new BlueprintValidationException(
-				'Rodzaj witryny „Sklep” wymaga danych sklepu: kraju, waluty, przynajmniej jednej kategorii i produktu.'
+				esc_html__( 'Site type “Store” requires store data: country, currency, at least one category and at least one product.', 'dosieci-ai-operator' )
 			);
 		}
 
@@ -190,7 +190,12 @@ final class SiteBlueprint {
 
 		if ( ! in_array( $value, $allowed, true ) ) {
 			throw new BlueprintValidationException(
-				sprintf( '"%s" must be one of: %s.', $key, implode( ', ', $allowed ) )
+				sprintf(
+					/* translators: 1: field name, 2: comma-separated list of allowed values */
+					esc_html__( '“%1$s” must be one of: %2$s.', 'dosieci-ai-operator' ),
+					esc_html( $key ),
+					esc_html( implode( ', ', $allowed ) )
+				)
 			);
 		}
 
@@ -206,11 +211,24 @@ final class SiteBlueprint {
 		$value = trim( isset( $raw[ $key ] ) ? (string) $raw[ $key ] : '' );
 
 		if ( '' === $value ) {
-			throw new BlueprintValidationException( sprintf( '"%s" is required.', $key ) );
+			throw new BlueprintValidationException(
+				sprintf(
+					/* translators: %s: field name */
+					esc_html__( '“%s” is required.', 'dosieci-ai-operator' ),
+					esc_html( $key )
+				)
+			);
 		}
 
 		if ( mb_strlen( $value ) > $max ) {
-			throw new BlueprintValidationException( sprintf( '"%s" exceeds %d characters.', $key, $max ) );
+			throw new BlueprintValidationException(
+				sprintf(
+					/* translators: 1: field name, 2: maximum length in characters */
+					esc_html__( '“%1$s” exceeds %2$d characters.', 'dosieci-ai-operator' ),
+					esc_html( $key ),
+					(int) $max
+				)
+			);
 		}
 
 		return $value;
@@ -240,13 +258,25 @@ final class SiteBlueprint {
 		}
 
 		if ( ! is_array( $raw[ $key ] ) ) {
-			throw new BlueprintValidationException( sprintf( '"%s" must be a list.', $key ) );
+			throw new BlueprintValidationException(
+				sprintf(
+					/* translators: %s: field name */
+					esc_html__( '“%s” must be a list.', 'dosieci-ai-operator' ),
+					esc_html( $key )
+				)
+			);
 		}
 
 		$out = array();
 		foreach ( $raw[ $key ] as $item ) {
 			if ( ! is_string( $item ) ) {
-				throw new BlueprintValidationException( sprintf( '"%s" must contain only strings.', $key ) );
+				throw new BlueprintValidationException(
+					sprintf(
+						/* translators: %s: field name */
+						esc_html__( '“%s” must contain only strings.', 'dosieci-ai-operator' ),
+						esc_html( $key )
+					)
+				);
 			}
 
 			$item = trim( $item );
@@ -265,7 +295,14 @@ final class SiteBlueprint {
 		}
 
 		if ( count( $out ) > $maxItems ) {
-			throw new BlueprintValidationException( sprintf( '"%s" is limited to %d entries.', $key, $maxItems ) );
+			throw new BlueprintValidationException(
+				sprintf(
+					/* translators: 1: field name, 2: maximum number of entries */
+					esc_html__( '“%1$s” is limited to %2$d entries.', 'dosieci-ai-operator' ),
+					esc_html( $key ),
+					(int) $maxItems
+				)
+			);
 		}
 
 		return $out;

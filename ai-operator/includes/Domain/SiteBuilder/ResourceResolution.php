@@ -82,10 +82,29 @@ final class ResourceResolution {
 	 */
 	public function describe( string $subject ): string {
 		return match ( $this->decision ) {
-			self::CREATE         => sprintf( 'Utwórz „%s”.', $subject ),
-			self::REUSE          => sprintf( 'Użyj istniejącej strony „%s” (id %d) bez zmiany treści.', $subject, (int) $this->existingId ),
-			self::UPDATE_MANAGED => sprintf( 'Zaktualizuj „%s” (id %d) utworzoną wcześniej przez kreator.', $subject, (int) $this->existingId ),
-			self::CONFLICT       => sprintf( 'Konflikt: „%s” (id %d) została zmieniona ręcznie — kreator jej nie nadpisze.', $subject, (int) $this->existingId ),
+			self::CREATE         => sprintf(
+				/* translators: %s: page or resource title */
+				__( 'Create “%s”.', 'dosieci-ai-operator' ),
+				$subject
+			),
+			self::REUSE          => sprintf(
+				/* translators: 1: page or resource title, 2: existing post/term ID */
+				__( 'Use the existing page “%1$s” (id %2$d) without changing its content.', 'dosieci-ai-operator' ),
+				$subject,
+				(int) $this->existingId
+			),
+			self::UPDATE_MANAGED => sprintf(
+				/* translators: 1: page or resource title, 2: existing post/term ID */
+				__( 'Update “%1$s” (id %2$d), previously created by the builder.', 'dosieci-ai-operator' ),
+				$subject,
+				(int) $this->existingId
+			),
+			self::CONFLICT       => sprintf(
+				/* translators: 1: page or resource title, 2: existing post/term ID */
+				__( 'Conflict: “%1$s” (id %2$d) was edited by hand — the builder will not overwrite it.', 'dosieci-ai-operator' ),
+				$subject,
+				(int) $this->existingId
+			),
 			default              => $subject,
 		};
 	}

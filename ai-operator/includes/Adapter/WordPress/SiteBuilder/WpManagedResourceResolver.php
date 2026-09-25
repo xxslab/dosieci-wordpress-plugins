@@ -87,14 +87,15 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 					$key,
 					$unmanaged,
 					sprintf(
-						'Na witrynie istnieje już strona o tej nazwie (id %d), której kreator nie tworzył.',
+						/* translators: %d: post ID of the unmanaged page */
+						__( 'This site already has a page with this name (id %d) that the builder did not create.', 'dosieci-ai-operator' ),
 						$unmanaged
 					)
 				);
 			}
 		}
 
-		return ResourceResolution::create( $key, 'Brak istniejącego zasobu.' );
+		return ResourceResolution::create( $key, __( 'No existing resource.', 'dosieci-ai-operator' ) );
 	}
 
 	/**
@@ -117,7 +118,7 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 		if ( '' === $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
 			// The taxonomy is not registered, which on a store build means
 			// WooCommerce is not loaded yet. Nothing to reconcile against.
-			return ResourceResolution::create( $key, 'Taksonomia nie jest jeszcze dostępna.' );
+			return ResourceResolution::create( $key, __( 'The taxonomy is not available yet.', 'dosieci-ai-operator' ) );
 		}
 
 		$existing = $this->findManagedTerm( $resource, $projectId, $taxonomy );
@@ -133,19 +134,20 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 					$key,
 					$unmanaged,
 					sprintf(
-						'Istnieje już kategoria o tej nazwie (id %d), której kreator nie tworzył.',
+						/* translators: %d: term ID of the unmanaged category */
+						__( 'A category with this name (id %d) already exists and the builder did not create it.', 'dosieci-ai-operator' ),
 						$unmanaged
 					)
 				);
 			}
 
-			return ResourceResolution::create( $key, 'Brak istniejącego zasobu.' );
+			return ResourceResolution::create( $key, __( 'No existing resource.', 'dosieci-ai-operator' ) );
 		}
 
 		$term = get_term( $existing, $taxonomy );
 
 		if ( ! $term instanceof \WP_Term ) {
-			return ResourceResolution::create( $key, 'Poprzedni zasób został usunięty.' );
+			return ResourceResolution::create( $key, __( 'The previous resource was deleted.', 'dosieci-ai-operator' ) );
 		}
 
 		$recorded = (string) get_term_meta( $existing, self::META_FINGERPRINT, true );
@@ -155,7 +157,7 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 			return ResourceResolution::conflict(
 				$key,
 				$existing,
-				'Kategoria została zmieniona ręcznie po ostatniej zmianie kreatora.'
+				__( 'The category was edited by hand after the builder’s last change.', 'dosieci-ai-operator' )
 			);
 		}
 
@@ -163,10 +165,10 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 		$baseline = '' !== $authored ? $authored : $current;
 
 		if ( hash_equals( $baseline, ManagedResource::fingerprint( $desiredContent ) ) ) {
-			return ResourceResolution::reuse( $key, $existing, 'Kategoria jest już zgodna z planem.', true );
+			return ResourceResolution::reuse( $key, $existing, __( 'The category already matches the plan.', 'dosieci-ai-operator' ), true );
 		}
 
-		return ResourceResolution::updateManaged( $key, $existing, 'Kategoria utworzona przez kreator, bez ręcznych zmian.' );
+		return ResourceResolution::updateManaged( $key, $existing, __( 'Category created by the builder, with no manual changes.', 'dosieci-ai-operator' ) );
 	}
 
 	/**
@@ -189,7 +191,7 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 			// Ours once, but gone or trashed. Treat the identity as vacant
 			// rather than trying to resurrect it -- an untrash would restore
 			// content the user deliberately removed.
-			return ResourceResolution::create( $key, 'Poprzedni zasób został usunięty.' );
+			return ResourceResolution::create( $key, __( 'The previous resource was deleted.', 'dosieci-ai-operator' ) );
 		}
 
 		$recorded = (string) get_post_meta( $postId, self::META_FINGERPRINT, true );
@@ -203,7 +205,7 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 			return ResourceResolution::conflict(
 				$key,
 				$postId,
-				'Treść została zmieniona ręcznie po ostatniej zmianie kreatora.'
+				__( 'The content was edited by hand after the builder’s last change.', 'dosieci-ai-operator' )
 			);
 		}
 
@@ -216,10 +218,10 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 		$baseline = '' !== $authored ? $authored : $current;
 
 		if ( hash_equals( $baseline, ManagedResource::fingerprint( $desiredContent ) ) ) {
-			return ResourceResolution::reuse( $key, $postId, 'Treść jest już zgodna z planem.', true );
+			return ResourceResolution::reuse( $key, $postId, __( 'The content already matches the plan.', 'dosieci-ai-operator' ), true );
 		}
 
-		return ResourceResolution::updateManaged( $key, $postId, 'Zasób utworzony przez kreator, bez ręcznych zmian.' );
+		return ResourceResolution::updateManaged( $key, $postId, __( 'Resource created by the builder, with no manual changes.', 'dosieci-ai-operator' ) );
 	}
 
 	public function markManaged(
@@ -261,6 +263,7 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 				'hide_empty' => false,
 				'number'     => 1,
 				'fields'     => 'ids',
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- bounded to 1 result; a resource key is unique per project by construction.
 				'meta_query' => array(
 					'relation' => 'AND',
 					array( 'key' => self::META_KEY, 'value' => $resource->key() ),
@@ -314,6 +317,7 @@ final class WpManagedResourceResolver implements ManagedResourceResolverInterfac
 				'posts_per_page'   => 1,
 				'fields'           => 'ids',
 				'suppress_filters' => false,
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- bounded to 1 result; a resource key is unique per project by construction.
 				'meta_query'       => array(
 					'relation' => 'AND',
 					array( 'key' => self::META_KEY, 'value' => $resource->key() ),

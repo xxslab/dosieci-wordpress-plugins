@@ -105,7 +105,7 @@ final class PlanRollbackService {
 		if ( 0 === $attempted ) {
 			// Nothing was reversible. Still a legitimate terminal state, but
 			// say so rather than implying work was undone.
-			$record->failureReason = 'Brak odwracalnych kroków do cofnięcia.';
+			$record->failureReason = __( 'No reversible steps to undo.', 'dosieci-ai-operator' );
 		}
 
 		$this->plans->save( $record );
